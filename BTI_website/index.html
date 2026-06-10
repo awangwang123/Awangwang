@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!--
+版本变更记录：
+v3.7 (2026-06-05)
+  - 移除：结果页"分享解锁人格图鉴"限制，改为直接查看
+
+v3.6 (2026-06-04)
+  - 精简：首页内容重新排列，"开始测试"按钮首屏可见
+  - 精简："什么是 BTI"缩减到 50 字以内，四维标签改为 2x2 网格
+  - 精简：人格预览从 6 张缩减为 3 张横向滑动卡片
+  - 精简：卖点从 3 个大卡片改为 1 行 3 列紧凑布局
+  - 优化：整体模块 padding、字号缩小，更适配手机屏幕
+
+v3.5 (2026-06-04)
+  - 新增：顶部导航栏（Logo + 人格图鉴/关于我们/隐私政策链接）
+  - 新增：首页内容模块（什么是 BTI、12 种人格预览、3 个卖点）
+  - 替换：底部广告位预留为互动提示
+  - 新增：全局页脚含 ICP 备案号占位
+  - 优化：免责声明表述更专业
+  - 优化：meta description 更完整
+  - 修复：移除死代码（qrious.js 加载、二维码生成函数）
+  - 修复：build.js 版本号替换正则过于激进的问题
+  - 修复：pack.py 重复目录过滤逻辑
+  - 修复：Nginx 配置添加 charset utf-8，解决中文乱码
+  - 优化：charset meta 标签前置，移除 UTF-8 BOM
+
+v3.4 (2026-06-01)
+  - 修复：结果页人格字母解码区、警示栏、输入框颜色对比度不足
+  - 修复：分享卡片链接改为可点击超链接
+  - 移除：分享卡片二维码（生成不稳定）
+  - 新增：分享卡片底部链接复制区（一键复制发给好友）
+  - 移除：默契度对比页"生成对比卡片"和"我也测一个"按钮
+  - 修复：对比页分享链接改为可点击超链接
+  - 修复：shareCard 截图后清理 shareArea 残留内联样式
+
+v3.2 (之前版本)
+  - 加深结果页多处浅色文字，提升可读性
+  - 新增人格字母解码说明 + 结果页免责声明
+-->
+
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BTI 反差人格测试，基于热力/冷力、外向/内向、理性/感性、掌控/随性四维模型，16 题测出你的主人格与隐藏人格。">
+<!-- 页面最顶部定义：确保按钮点击100%有效，即使JS还没加载完 -->
+<script>
+window.BTI_PENDING = false;
+window.goTest = function() {
+    if (typeof startQuiz === 'function') {
+        startQuiz();
+    } else {
+        window.BTI_PENDING = true;
+        // JS还没加载完，静默等待，不改按钮文字
+    }
+};
+</script>
+<!-- 百度联盟网站验证 -->
+<meta name="baidu_union_verify" content="417603a14bda94bb6756f214f93ff4ba">
+<title>BTI 反差人格测试 v3.6</title>
+<meta property="og:title" content="我测出了【%人格名称%】，你是什么反差人格？">
+<meta property="og:description" content="BTI 反差人格测试：16 题测出你的主人格与隐藏人格，探索人格图鉴中的 12 种反差类型。">
+  <meta property="og:image" content="http://wangwangtt.top/bti/images/share-cover.jpg">
+<meta property="og:url" content="http://wangwangtt.top/bti">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1a1625">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+<style>
+/* 顶部导航栏 */
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(26,22,37,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06);margin:-20px -20px 0 -20px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:16px;font-weight:700;color:#f0eef6;text-decoration:none;display:flex;align-items:center;gap:6px}
+.nav-logo:hover{color:#a78bfa}
+.nav-links{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.nav-link{color:#d1d5db;text-decoration:none;font-size:13px;padding:6px 10px;border-radius:8px;transition:all .2s;white-space:nowrap}
+.nav-link:hover{background:rgba(167,139,250,.15);color:#fff}
+@media(max-width:360px){.nav-link{font-size:12px;padding:5px 8px}}
+
+/* 首页新增内容模块 — 精简版 */
+.home-section{text-align:left;margin:16px 0}
+.home-section-title{font-size:15px;font-weight:700;color:#f0eef6;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.home-intro-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px 14px;line-height:1.7;font-size:13px;color:#d1d5db}
+.home-intro-card p{margin-bottom:0}
+.home-dims{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.home-dim{display:inline-block;background:rgba(167,139,250,.1);color:#c4b5fd;border:1px solid rgba(167,139,250,.2);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:500;text-align:center}
+
+/* 人格预览 — 横向滑动 */
+.type-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-top:10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.type-scroll::-webkit-scrollbar{display:none}
+.type-preview-card{flex:0 0 140px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px 10px;transition:all .2s;text-align:center;min-height:152px;display:flex;flex-direction:column;justify-content:flex-start}
+.type-preview-card:hover{background:rgba(255,255,255,.07)}
+.type-preview-code{font-size:11px;color:#a78bfa;font-weight:700;letter-spacing:1px;margin-bottom:3px}
+.type-preview-name{font-size:13px;font-weight:700;color:#f0eef6;margin-bottom:3px}
+.type-preview-desc{font-size:11px;color:#9ca3af;line-height:1.5}
+.btn-text-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;color:#a78bfa;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s}
+.btn-text-link:hover{color:#c4b5fd;gap:10px}
+
+/* 卖点 — 1行3列紧凑 */
+.selling-row{display:flex;gap:8px;margin-top:10px}
+.selling-item{flex:1;text-align:center;padding:10px 6px}
+.selling-emoji{font-size:18px;margin-bottom:3px}
+.selling-title{font-size:12px;font-weight:700;color:#f0eef6;margin-bottom:2px}
+.selling-desc{font-size:11px;color:#9ca3af;line-height:1.4}
+
+/* 全局页脚 */
+.site-footer{text-align:center;padding:24px 16px;margin-top:20px;border-top:1px solid rgba(255,255,255,.08)}
+.footer-links{margin-bottom:8px}
+.footer-links a{color:#a78bfa;text-decoration:none;margin:0 8px;font-size:13px;transition:color .2s}
+.footer-links a:hover{color:#c4b5fd}
+.footer-icp{font-size:12px;color:#6b7280}
+.footer-icp a{color:#6b7280;text-decoration:none}
+.footer-icp a:hover{color:#9ca3af}
+
+/* 微信浅色模式适配 */
+@media (prefers-color-scheme: light) {
+  .top-nav{background:rgba(250,250,252,.9);border-bottom-color:rgba(0,0,0,.06)}
+  .nav-logo{color:#1f2937}
+  .nav-logo:hover{color:#7c3aed}
+  .nav-link{color:#4b5563}
+  .nav-link:hover{background:rgba(167,139,250,.12);color:#1f2937}
+  .home-section-title{color:#1f2937}
+  .home-intro-card{background:#f9fafb;border-color:#e5e7eb;color:#4b5563}
+  .type-preview-card{background:#f9fafb;border-color:#e5e7eb}
+  .type-preview-card:hover{background:#f3f4f6}
+  .type-preview-name{color:#1f2937}
+  .type-preview-desc{color:#6b7280}
+  .selling-item{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px}
+  .selling-title{color:#1f2937}
+  .selling-desc{color:#6b7280}
+  .site-footer{border-top-color:#e5e7eb}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<!-- 顶部导航栏 -->
+<nav class="top-nav">
+  <a href="index.html" class="nav-logo">🔮 BTI</a>
+  <div class="nav-links">
+    <!-- 人格图鉴已从导航移除，改为测试结果页专属入口 -->
+    <a href="about.html" class="nav-link">关于我们</a>
+    <a href="privacy.html" class="nav-link">隐私政策</a>
+  </div>
+</nav>
+
+<div class="header"><h1>🔥 BTI 反差人格测试</h1><p>Battle Type Indicator</p></div>
+
+<div id="home">
+<div class="subtitle">你的反差是哪一种？<br>你到底是哪种主导生命体？<br><span style="color:#ff6b81;">测测就知道了！</span></div>
+
+<!-- 开始测试按钮 — 首屏可见 -->
+<div id="inviteTip" style="display:none;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:12px 16px;margin:0 auto 16px;max-width:320px;text-align:center;font-size:14px;color:#ffd700;"></div>
+<button class="btn-start" onclick="goTest()">开始测试</button>
+<footer style="margin-bottom:16px;">共 16 题 · 约 1 分钟 · 无需注册 · v3.6</footer>
+
+<!-- 什么是 BTI — 精简版 -->
+<div class="home-section">
+  <div class="home-section-title">🔮 什么是 BTI？</div>
+  <div class="home-intro-card">
+    <p>BTI 反差人格测试，聚焦"表面行为 vs 内在模式"的差异。16 道情境题，定位你的主人格与隐藏人格。</p>
+    <div class="home-dims">
+      <span class="home-dim">热力 / 冷力</span>
+      <span class="home-dim">外向 / 内向</span>
+      <span class="home-dim">理性 / 感性</span>
+      <span class="home-dim">掌控 / 随性</span>
+    </div>
+  </div>
+</div>
+
+<!-- 卖点 — 1行3列紧凑 -->
+<div class="home-section">
+  <div class="home-section-title">✨ 为什么测？</div>
+  <div class="selling-row">
+    <div class="selling-item">
+      <div class="selling-emoji">⚡</div>
+      <div class="selling-title">16 题 · 1 分钟</div>
+      <div class="selling-desc">碎片时间即可完成</div>
+    </div>
+    <div class="selling-item">
+      <div class="selling-emoji">🔒</div>
+      <div class="selling-title">无需注册</div>
+      <div class="selling-desc">测完即走零负担</div>
+    </div>
+    <div class="selling-item">
+      <div class="selling-emoji">🧬</div>
+      <div class="selling-title">四维模型</div>
+      <div class="selling-desc">科学拆解人格</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="quiz" style="display:none">
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div id="quizContent"></div>
+</div>
+
+<!-- 结果加载动效 -->
+<div id="resultLoading" style="display:none">
+  <div class="loading-circle"></div>
+  <div class="loading-text">正在分析你的人格...</div>
+  <div class="loading-sub">马上揭晓你的反差人格</div>
+</div>
+
+<div id="result" style="display:none">
+<div style="padding:20px 16px 40px">
+<!-- 核心冲突3：被邀请用户结果页顶部横幅 -->
+<div id="inviteBanner" style="display:none;text-align:center;margin:0 0 16px 0;padding:12px 16px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,170,0,.08));border-radius:12px;border:1px solid rgba(255,215,0,.2);">
+  <div style="font-size:14px;color:#ffd700;font-weight:600;margin-bottom:4px;">👋 你朋友邀你测的</div>
+  <div style="font-size:12px;color:rgba(255,255,255,.85);margin-bottom:8px;">测完啦！看看你们默契度如何</div>
+  <button onclick="showCompare()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;border:none;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:bold;">查看你们默契度 →</button>
+</div>
+<!-- 翻转卡片：正面=主人格，背面=隐藏人格 -->
+<div class="flip-card" id="flipCard" onclick="toggleFlipCard()">
+  <div class="flip-card-inner" id="flipCardInner">
+    <div class="flip-card-front">
+      <img id="flipFrontImg" class="flip-front-img" src="" alt="">
+      <div id="flipFrontPlaceholder" class="flip-front-placeholder"></div>
+      <div class="flip-front-name" id="flipFrontName"></div>
+      <div class="flip-front-slogan" id="flipFrontSlogan"></div>
+      <div class="flip-front-code" id="flipFrontCode"></div>
+      <div class="flip-front-rarity" id="flipFrontRarity"></div>
+      <div id="unlockBtn" style="margin-top:auto;width:100%;text-align:center;display:none;">
+        <button onclick="event.stopPropagation();unlockHidden()" style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,170,0,.1));color:#ffd700;border:1px solid rgba(255,215,0,.3);padding:12px 32px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold;transition:all .3s;letter-spacing:1px;width:100%;max-width:220px;">🔒 解锁隐藏人格</button>
+      </div>
+      <div id="flipFrontHint" class="flip-front-hint" style="display:none;">
+        <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        点击查看隐藏人格
+      </div>
+    </div>
+    <div class="flip-card-back" id="flipCardBack">
+      <div class="flip-back-content" id="flipBackContent">
+        <img id="flipBackImg" class="flip-back-img" src="" alt="" style="display:none;">
+        <div id="flipBackPlaceholder" class="flip-back-placeholder"></div>
+        <div class="flip-back-name" id="flipBackName"></div>
+        <div class="flip-back-slogan" id="flipBackSlogan"></div>
+        <div class="flip-back-code" id="flipBackCode"></div>
+        <div class="flip-back-rarity" id="flipBackRarity"></div>
+        <div id="flipBackExtra" style="width:100%;margin-top:4px;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 隐藏人格专属模块（默认隐藏，解锁后显示） -->
+<div id="hiddenModules" style="display:none;opacity:0;transition:opacity .6s ease;">
+  <div id="hiddenDesc" class="desc-box" style="border-left-color:#a78bfa;"></div>
+  <div class="roast-box" id="hiddenRoastBox" style="background:rgba(167,139,250,.08);border-left-color:#a78bfa;">
+    <p class="roast-label" style="color:#a78bfa;">💬 隐藏吐槽</p>
+    <p class="roast-text" id="hiddenRoast" style="color:#c4b5fd;"></p>
+  </div>
+  <div class="heal-box" id="hiddenHealBox" style="background:rgba(72,219,251,.08);border-left-color:#48dbfb;">
+    <p class="heal-label" style="color:#48dbfb;">✨ 隐藏治愈</p>
+    <p class="heal-text" id="hiddenHeal" style="color:#81ecec;"></p>
+  </div>
+  <div class="tags-row" id="hiddenTags"></div>
+</div>
+
+<div class="dim-breakdown" id="dimBreakdown"></div>
+<div id="resultDesc" class="desc-box"></div>
+<div class="roast-box" id="mainRoastBox">
+<p class="roast-label">一句话吐槽</p>
+<p class="roast-text" id="resultRoast"></p>
+</div>
+<div class="heal-box" id="mainHealBox">
+<p class="heal-label">反转治愈</p>
+<p class="heal-text" id="resultHeal"></p>
+</div>
+<div class="tags-row" id="resultTags"></div>
+<div id="resultMatch"></div>
+<!-- 你的人格图鉴 — 直达入口 -->
+<div id="myTypeBox" style="text-align:center;margin:20px 0;padding:18px 16px;background:rgba(167,139,250,.08);border-radius:16px;border:1px solid rgba(167,139,250,.2);">
+  <div style="font-size:14px;color:#a78bfa;font-weight:600;margin-bottom:10px;">📖 你的人格图鉴</div>
+  <button onclick="goToTypeGuide()" style="display:inline-block;background:linear-gradient(135deg,#a78bfa,#8b5cf6);color:#fff;border:none;padding:12px 32px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold;box-shadow:0 4px 15px rgba(167,139,250,.3);transition:all .2s;">
+    查看 <span id="myTypeName" style="color:#ffd700;">你的人格</span> 详细图鉴 →
+  </button>
+</div>
+
+<!-- 分享与重测 -->
+<div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0;">
+  <button class="btn-share" onclick="shareCard()">分享测试结果</button>
+  <button class="btn-start" onclick="sessionStorage.removeItem('bti_result_code');sessionStorage.removeItem('bti_result_scores');sessionStorage.removeItem('bti_result_choices');location.reload();" style="padding:14px 44px;font-size:17px">再测一次</button>
+</div>
+<div style="text-align:center;margin-bottom:12px;">
+  <span class="longpress-hint">👉 长按保存结果卡片分享到朋友圈</span>
+</div>
+
+<!-- 朋友默契度 -->
+<div id="manualCompareBox" style="text-align:center;margin-top:12px;">
+  <input type="text" id="friendCodeInput" placeholder="输入朋友的人格代码（如 HFLX）" maxlength="4" style="background:#2e2642;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;color:#fff;font-size:14px;width:200px;text-align:center;text-transform:uppercase;letter-spacing:2px;">
+  <style>#friendCodeInput::placeholder{color:#9ca3af;font-size:13px}#friendCodeInput::-webkit-input-placeholder{color:#9ca3af;font-size:13px}</style>
+  <button onclick="manualCompare()" style="background:linear-gradient(135deg,#5f6cff,#7c5cfc);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;cursor:pointer;margin-left:6px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.3);">👥 查看默契度</button>
+</div>
+<div id="compareBtnWrap" style="display:none;text-align:center;margin-top:12px;">
+  <button class="btn-start" onclick="showCompare()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;padding:12px 36px;font-size:15px;">👥 发给共同好友，看看TA站谁</button>
+</div>
+
+<!-- 裂变引导 -->
+<div id="fissureBox" style="text-align:center;margin-top:12px;padding:10px 14px;background:rgba(255,215,0,.06);border-radius:10px;border:1px solid rgba(255,215,0,.15);">
+  <p id="fissureMain" style="font-size:12px;color:#d97706;margin:0;font-weight:600;">🏠 拉个朋友来测，看看谁的隐藏人格更刺激</p>
+  <p id="fissureSub" style="font-size:11px;color:rgba(255,255,255,.85);margin:6px 0 0 0;display:none;"></p>
+</div>
+
+<!-- 免责声明 -->
+<div class="result-disclaimer" style="text-align:center;margin-top:12px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid rgba(255,255,255,.08);">
+  <span style="font-size:10px;color:rgba(255,255,255,.5);line-height:1.5;">
+    BTI 测试基于行为倾向分析模型，仅供自我探索参考，不构成专业建议。
+  </span>
+</div>
+</div>
+</div>
+
+<!-- 默契度对比页 -->
+<div id="comparePage" style="display:none;padding:20px 16px 40px;text-align:center;">
+<!-- 功能缺失4：返回按钮 -->
+<div style="text-align:left;margin-bottom:16px;">
+  <button onclick="backToResult()" style="background:none;border:none;color:#888;font-size:14px;cursor:pointer;padding:0;">← 返回我的结果</button>
+</div>
+<div style="margin-bottom:24px;">
+<div style="font-size:13px;color:#888;margin-bottom:8px;">默契度大揭秘</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px;">
+<div id="compareSelf" style="flex:1;text-align:center;"></div>
+<div style="font-size:28px;color:#ffd700;font-weight:bold;">VS</div>
+<div id="compareFriend" style="flex:1;text-align:center;"></div>
+</div>
+<div id="compareScore" style="font-size:48px;font-weight:800;background:linear-gradient(90deg,#ff6b81,#feca57,#48dbfb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0;"></div>
+<div id="compareLabel" style="font-size:15px;color:#ffd700;font-weight:600;margin-bottom:8px;"></div>
+<div id="compareDesc" style="font-size:13px;color:#aaa;line-height:1.6;max-width:320px;margin:0 auto;"></div>
+
+<!-- 功能缺失2：四维能量条并排对比 -->
+<div id="compareDimBars" style="margin:24px 0;text-align:left;"></div>
+
+<!-- 功能缺失2：隐藏人格对比 -->
+<div id="compareHidden" style="margin:24px 0;text-align:left;"></div>
+
+<!-- 功能缺失2+5：关系深度解读（含传播钩子） -->
+<div id="compareRelation" style="margin:24px 0;padding:16px;background:rgba(255,255,255,.03);border-radius:12px;text-align:left;"></div>
+</div>
+<!-- P0-3: 对比页分享链接 -->
+<div id="compareShareBox" style="text-align:center;margin-top:16px;padding:10px 14px;background:rgba(95,108,255,.06);border-radius:10px;border:1px solid rgba(95,108,255,.15);display:none;">
+  <p style="font-size:12px;color:#888;margin:0 0 6px 0;">分享这个链接，让朋友来测你和TA的默契度</p>
+  <a id="compareShareUrl" href="#" target="_blank" style="font-size:12px;color:#5f6cff;margin:0;word-break:break-all;text-decoration:underline;"></a>
+</div>
+</div>
+
+<!-- 分享卡片隐藏渲染区 -->
+<div id="shareArea">
+<!-- 顶部渐变条 -->
+<div class="scard-top-bar"></div>
+
+<!-- 品牌区 -->
+<div class="scard-brand">
+<div class="scard-brand-icon">🔮</div>
+<div class="scard-brand-title">BTI 反差人格测试</div>
+<div class="scard-brand-sub">BATTLE TYPE INDICATOR</div>
+</div>
+
+<!-- 主视觉区 -->
+<div class="scard-visual">
+<div class="scard-img-wrap">
+<img class="scard-img" id="shareImg" src="" alt="">
+</div>
+<div class="scard-name-wrap">
+<h3 id="shareName"></h3>
+<p id="shareSlogan"></p>
+<div id="shareRarity" class="rarity-mini"></div>
+<p id="shareCode" class="code-mini"></p>
+</div>
+</div>
+
+<!-- 悬念钩子 -->
+<div class="scard-suspense" id="shareSuspense">
+<div class="scard-suspense-inner">
+<div class="scard-suspense-icon">🔮</div>
+<p class="scard-suspense-text" id="shareSuspenseText">我的隐藏人格是「???」</p>
+<p class="scard-suspense-hint" id="shareSuspenseHint">来测测你的隐藏人格</p>
+</div>
+</div>
+
+<!-- CTA -->
+<div class="scard-cta" id="shareCta">👉 邀请好友一起测</div>
+
+<!-- 分享链接复制 -->
+<div class="scard-link-section">
+  <p class="scard-link-label">复制链接发给好友 👇</p>
+  <div class="scard-link-box">
+    <span class="scard-link-text" id="shareLinkText">http://wangwangtt.top/bti</span>
+    <button class="scard-link-btn" id="shareLinkBtn" onclick="copyShareLink()">📋 复制</button>
+  </div>
+</div>
+
+<!-- 底部品牌 -->
+<div class="scard-footer">
+<span>🔮 BTI 反差人格测试 · 发现隐藏的你 🔮</span>
+</div>
+</div>
+</div>
+
+<!-- 全局页脚 -->
+<div class="site-footer">
+  <p class="footer-links">
+    <a href="about.html">关于我们</a>
+    <a href="privacy.html">隐私政策</a>
+  </p>
+  <p class="footer-icp">
+    © 2026 BTI 反差人格测试 ·
+    <a href="https://beian.miit.gov.cn/" target="_blank">鄂ICP备2026026859号-1</a>
+  </p>
+</div>
+
+<!-- 解锁动画 -->
+<div id="unlockOverlay">
+  <div class="unlock-scan-line"></div>
+  <div class="unlock-icon" id="unlockIcon">🔒</div>
+  <div class="unlock-text" id="unlockText">正在扫描你的B面...</div>
+  <div class="unlock-progress"><div class="unlock-progress-fill" id="unlockProgress"></div></div>
+  <div class="unlock-sub" id="unlockSub"></div>
+</div>
+
+<!-- 卡片预览弹窗 -->
+<div id="cardOverlay">
+  <div id="cardLoading">⏳ 正在生成分享卡片...</div>
+  <div id="cardPreviewWrap"><img id="cardPreview" alt="分析卡片"></div>
+  <div id="cardActions" style="display:none;gap:12px;margin-top:20px">
+    <button onclick="downloadCard()" style="background:linear-gradient(135deg,#5f6cff,#7c5cfc);color:#fff;border:none;padding:12px 28px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold">💾 保存图片</button>
+    <button onclick="closeCardPreview()" style="background:rgba(255,255,255,.1);color:#ccc;border:1px solid rgba(255,255,255,.2);padding:12px 28px;border-radius:25px;font-size:15px;cursor:pointer">关闭</button>
+  </div>
+</div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+  // ===== 人格图鉴入口 =====
+  function goToTypeGuide() {
+    var code = window.typeCode || '';
+    if(!code) {
+      try { code = sessionStorage.getItem('bti_result_code') || ''; } catch(e) {}
+    }
+    var base = window.location.href.split('#')[0].replace(/index\.html.*$/, '').replace(/\/$/, '');
+    var targetUrl = base + '/types.html?code=' + (code || '');
+    window.open(targetUrl, '_self');
+  }
+  </script>
+</body>
+</html>

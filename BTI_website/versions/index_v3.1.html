@@ -1,0 +1,1853 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<!-- 页面最顶部定义：确保按钮点击100%有效，即使JS还没加载完 -->
+<script>
+window.BTI_PENDING = false;
+window.goTest = function() {
+    if (typeof startQuiz === 'function') {
+        startQuiz();
+    } else {
+        window.BTI_PENDING = true;
+        // JS还没加载完，静默等待，不改按钮文字
+    }
+};
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTI 反差人格测试 v3.2</title>
+<meta property="og:title" content="我测出了【%人格名称%】，你是什么反差人格？">
+<meta property="og:description" content="测测你的隐藏人格，看看你是不是表里不一">
+<meta property="og:image" content="https://你的域名.com/images/share-cover.jpg">
+<meta property="og:url" content="http://47.103.121.204/bti">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1a1625">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1625;color:#f0eef6;min-height:100vh;line-height:1.5}
+.container{max-width:480px;margin:0 auto;padding:20px}
+.header{text-align:center;padding:30px 0 20px}
+.header h1{font-size:26px;font-weight:800;letter-spacing:1px;
+  background:linear-gradient(90deg,#a78bfa,#f472b6,#fb923c,#a78bfa);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:flowText 3s linear infinite}
+@keyframes flowText{to{background-position:200% center}}
+.header p{color:#9ca3af;font-size:14px;margin-top:4px}
+#home{display:block;text-align:center;padding:40px 20px}
+.subtitle{color:#d1d5db;font-size:15px;line-height:1.8;margin-bottom:30px}
+.btn-start{background:linear-gradient(135deg,#a78bfa,#8b5cf6);color:#fff;border:none;padding:16px 56px;border-radius:28px;font-size:18px;cursor:pointer;font-weight:bold;transition:all .2s;box-shadow:0 4px 15px rgba(167,139,250,.3)}
+.btn-start:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(167,139,250,.4)}
+#quiz{padding:20px 16px}
+.progress-bar{width:100%;height:12px;background:#2e2642;border-radius:6px;margin-bottom:24px;overflow:hidden;padding:2px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#f472b6,#a78bfa);transition:width .4s cubic-bezier(.4,0,.2,1);width:0%;border-radius:5px}
+.q-num{font-size:14px;color:#f472b6;margin-bottom:10px;font-weight:600}
+.q-text{font-size:19px;line-height:1.6;margin-bottom:24px;font-weight:700}
+.options{display:flex;flex-direction:column;gap:12px}
+.option{background:#261f38;border:2px solid #3b2e5f;border-radius:18px;padding:18px 20px;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:14px;font-size:16px}
+.option:hover{border-color:#a78bfa;background:#2e2642;transform:translateY(-2px);box-shadow:0 4px 12px rgba(167,139,250,.15)}
+.option.selected{border-color:#f472b6;background:rgba(244,114,182,.15);transform:scale(1.02);box-shadow:0 6px 20px rgba(244,114,182,.2);animation:pulse .3s ease}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1.02)}}
+.opt-letter{width:32px;height:32px;border-radius:50%;background:#3b2e5f;color:#a78bfa;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;flex-shrink:0}
+.option.selected .opt-letter{background:#f472b6;color:#fff}
+footer{text-align:center;color:#6b7280;font-size:12px;padding:20px}
+
+/* 微信浅色模式适配 */
+@media (prefers-color-scheme: light) {
+  body{background:#fafafc;color:#1f2937}
+  .header p{color:#6b7280}
+  .subtitle{color:#4b5563}
+  #quiz{background:#fff;border-radius:20px;margin:10px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+  .q-text{color:#1f2937}
+  .option{background:#f3f4f6;border-color:#e5e7eb;color:#374151}
+  .option:hover{border-color:#a78bfa;background:#f5f3ff}
+  .option.selected{border-color:#f472b6;background:rgba(244,114,182,.1)}
+  .opt-letter{background:#e5e7eb;color:#6b7280}
+  .option.selected .opt-letter{background:#f472b6;color:#fff}
+  .progress-bar{background:#e5e7eb}
+  .result-card{background:#fff !important;box-shadow:0 4px 20px rgba(0,0,0,.08) !important}
+  .result-name-bar{box-shadow:0 4px 15px rgba(167,139,250,.2)}
+  .dim-breakdown{background:#f9fafb !important;border:1px solid #e5e7eb !important}
+  .dim-bar-wrap{background:#e5e7eb}
+  .roast-box{background:#fef2f2 !important;border:1px solid #fee2e2 !important}
+  .roast-text{color:#b91c1c !important}
+  .heal-box{background:#f0fdf4 !important;border:1px solid #dcfce7 !important;box-shadow:0 4px 20px rgba(72,219,251,.08) !important}
+  .heal-text{color:#0e7490 !important}
+  .desc-box{color:#1f2937 !important;box-shadow:0 4px 20px rgba(0,0,0,.05) !important}
+  .dim-breakdown{box-shadow:0 4px 20px rgba(0,0,0,.05) !important}
+  
+  /* 对比页强制深色背景（确保任何模式下都清晰可见） */
+  #comparePage{background:#1a1625 !important}
+  #comparePage .name{color:#e5e7eb !important}
+  #comparePage .code{color:#9ca3af !important}
+  #comparePage .percent{color:#fbbf24 !important}
+  #comparePage .percent-label{color:#f59e0b !important}
+  #comparePage .desc{color:#d1d5db !important}
+  #comparePage .dim-label{color:#9ca3af !important}
+  #comparePage .dim-name{color:#d1d5db !important}
+  #comparePage .section-title{color:#e5e7eb !important}
+  #comparePage .hidden-label{color:#d8b4fe !important}
+  #comparePage .hidden-desc{color:#9ca3af !important}
+  #comparePage .relation-title{color:#fbbf24 !important}
+  #comparePage .relation-desc{color:#d1d5db !important}
+  #comparePage .btn-share{color:#fff !important}
+  #comparePage .btn-secondary{color:#a78bfa !important}
+  #comparePage .link-box{background:rgba(99,102,241,.1) !important;border:1px solid rgba(99,102,241,.2) !important}
+  #comparePage .link-box a{color:#c4b5fd !important}
+  .btn-share,.btn-start{box-shadow:0 4px 15px rgba(167,139,250,.2)}
+  .btn-share:hover,.btn-start:hover{box-shadow:0 6px 20px rgba(167,139,250,.3)}
+  footer{color:#9ca3af}
+}
+
+/* 结果加载动效 */
+#resultLoading{display:none;position:fixed;inset:0;background:#1a1625;z-index:9999;flex-direction:column;align-items:center;justify-content:center}
+#resultLoading .loading-circle{width:80px;height:80px;border:4px solid rgba(167,139,250,.2);border-top-color:#f472b6;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px}
+#resultLoading .loading-text{font-size:18px;color:#a78bfa;font-weight:600}
+#resultLoading .loading-sub{font-size:14px;color:#9ca3af;margin-top:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 广告位预留 - 底部横幅 */
+.ad-banner-bottom{display:block;width:100%;min-height:100px;background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(244,114,182,.1));border-radius:16px;border:2px dashed rgba(167,139,250,.2);margin:20px 0;display:flex;align-items:center;justify-content:center;color:#a78bfa;font-size:14px;font-weight:600}
+
+/* 长按保存提示 */
+.longpress-hint{text-align:center;color:#9ca3af;font-size:12px;margin-top:10px;padding:8px 16px;background:rgba(167,139,250,.1);border-radius:12px;display:inline-block}
+
+/* 结果页增强 */
+.result-card-img{width:180px;height:180px;border-radius:20px;object-fit:cover;margin:0 auto 18px;display:block;border:3px solid rgba(255,255,255,.08)}
+.result-name-bar{background:linear-gradient(135deg,#5f6cff,#7c5cfc);border-radius:12px;padding:14px 20px;margin-bottom:16px;text-align:center}
+.result-name-bar h2{font-size:26px;color:#fff;margin:0}
+
+/* 四维反差拆解 */
+.dim-breakdown{margin-bottom:18px;background:rgba(255,255,255,.03);border:2px solid rgba(255,255,255,.05);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.dim-row{display:flex;align-items:center;margin-bottom:10px}
+.dim-row:last-child{margin-bottom:0}
+.dim-icon{font-size:14px;width:24px;flex-shrink:0}
+.dim-label{font-size:13px;color:#999;width:40px;flex-shrink:0}
+.dim-letter{font-size:13px;width:22px;flex-shrink:0;color:#888;text-align:center}
+.dim-letter b{color:#fff;background:rgba(255,107,129,.15);padding:1px 5px;border-radius:4px;font-weight:700}
+.dim-tilt-hot b{color:#ff4757;background:rgba(255,71,87,.25);text-shadow:0 0 8px rgba(255,71,87,.5)}
+.dim-tilt-cold b{color:#48dbfb;background:rgba(72,219,251,.25);text-shadow:0 0 8px rgba(72,219,251,.5)}
+.dim-bar-wrap{flex:1;display:flex;align-items:center;position:relative;height:20px;margin:0 4px;border-radius:10px;overflow:hidden;background:#151528}
+.bar-hot{height:100%;background:linear-gradient(90deg,#ff6b6b,#ff4757);border-radius:10px 0 0 10px;transition:width .5s ease}
+.bar-cold{height:100%;background:linear-gradient(90deg,#48dbfb,#7c5cfc);border-radius:0 10px 10px 0;transition:width .5s ease}
+.dim-pct-center{display:none}
+.bar-pct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;font-weight:700;color:#fff;text-shadow:0 0 5px rgba(0,0,0,.9);white-space:nowrap;z-index:2;pointer-events:none}
+/* 热侧/冷侧进度条 */
+.bar-hot{height:8px;border-radius:4px 0 0 4px;transition:width .6s ease;background:linear-gradient(90deg,#ff6b81,#ff4757);position:relative}
+.bar-cold{height:8px;border-radius:0 4px 4px 0;transition:width .6s ease;background:linear-gradient(90deg,#48dbfb,#7c5cfc);position:relative}
+.result-slogan-sm{color:rgba(255,255,255,.75);font-size:13px;margin-top:4px;font-style:italic}
+.desc-box{background:rgba(255,255,255,.04);border-left:4px solid #5f6cff;border-right:2px solid rgba(255,255,255,.05);border-top:2px solid rgba(255,255,255,.05);border-bottom:2px solid rgba(255,255,255,.05);border-radius:0 12px 12px 0;padding:16px 18px;margin-bottom:16px;line-height:1.9;font-size:15px;color:#e5e7eb;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.roast-box{background:linear-gradient(135deg,rgba(255,107,129,.08),rgba(255,71,87,.04));border-left:4px solid #ff6b81;border-right:2px solid rgba(255,107,129,.1);border-top:2px solid rgba(255,107,129,.1);border-bottom:2px solid rgba(255,107,129,.1);border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:14px;text-align:left;box-shadow:0 4px 20px rgba(255,107,129,.05)}
+.roast-label{color:#ff6b81;font-size:13px;margin-bottom:6px;font-weight:600}
+.roast-text{color:#ffccd5;font-size:14px;line-height:1.7;font-style:italic}
+.heal-box{background:linear-gradient(135deg,rgba(72,219,251,.1),rgba(159,168,218,.06));border-left:4px solid #48dbfb;border-right:2px solid rgba(72,219,251,.1);border-top:2px solid rgba(72,219,251,.1);border-bottom:2px solid rgba(72,219,251,.1);border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:20px;text-align:left;box-shadow:0 4px 20px rgba(72,219,251,.08)}
+.heal-label{color:#48dbfb;font-size:14px;margin-bottom:6px;font-weight:800;text-shadow:0 0 10px rgba(72,219,251,.25)}
+.heal-text{color:#caf0f8;font-size:14px;line-height:1.7}
+.hidden-even-box{background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,170,0,.04));border-left:4px solid #ffd700;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:20px;text-align:left;position:relative;overflow:hidden;animation:hiddenGlow 2.5s ease-in-out infinite}
+.hidden-even-box::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,215,0,.15),transparent);animation:hiddenShine 3s ease-in-out infinite}
+.hidden-even-label{color:#ffd700;font-size:13px;margin-bottom:6px;font-weight:600;position:relative;z-index:1}
+.hidden-even-text{color:#ffeaa7;font-size:14px;line-height:1.7;position:relative;z-index:1}
+@keyframes hiddenGlow{0%,100%{box-shadow:0 0 8px rgba(255,215,0,.1),inset 0 0 0 1px rgba(255,215,0,.15)}50%{box-shadow:0 0 20px rgba(255,215,0,.25),inset 0 0 0 1px rgba(255,215,0,.3)}}
+@keyframes hiddenShine{0%{left:-100%}50%,100%{left:200%}}
+.tags-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:18px}
+.rarity-row{text-align:center;margin:12px 0}.rarity-bar{display:inline-block;padding:6px 16px;border-radius:20px;font-size:14px;color:#ffd700;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);animation:fadeIn .5s ease}.rarity-num{font-weight:700;color:#ffd700;font-size:16px}
+.tag-pill{background:rgba(167,139,250,.12);color:#c4b5fd;border:1px solid rgba(167,139,250,.25);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500}
+.btn-share{background:linear-gradient(135deg,#5f6cff,#7c5cfc);color:#fff;border:none;padding:14px 44px;border-radius:25px;font-size:17px;cursor:pointer;font-weight:bold;transition:transform .2s;display:inline-block}
+.btn-share:hover{transform:scale(1.05)}
+
+/* ===== 精美海报风格分享卡片 v3 ===== */
+#shareArea{display:none;position:fixed;top:-9999px;left:-9999px;width:375px;background:linear-gradient(180deg,#1a1a3a,#0d0d20);border-radius:28px;overflow:hidden;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;box-shadow:0 25px 80px rgba(0,0,0,.5)}
+
+/* 顶部渐变装饰条 */
+#shareArea .scard-top-bar{height:5px;background:linear-gradient(90deg,#6366f1,#8b5cf6,#d946ef,#6366f1);background-size:200% 100%}
+
+/* 品牌区 */
+#shareArea .scard-brand{padding:20px 24px 8px;text-align:center}
+#shareArea .scard-brand-icon{font-size:28px;margin-bottom:4px}
+#shareArea .scard-brand-title{font-size:17px;font-weight:800;color:#fff;letter-spacing:1px}
+#shareArea .scard-brand-sub{color:rgba(167,139,250,.5);font-size:9px;margin-top:4px;letter-spacing:4px;font-weight:500}
+
+/* 主视觉区 */
+#shareArea .scard-visual{padding:0 24px 16px;text-align:center}
+#shareArea .scard-img-wrap{width:280px;height:280px;margin:0 auto 14px;position:relative}
+#shareArea .scard-img-wrap::before{content:'';position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6,#d946ef);z-index:0;opacity:.6}
+#shareArea .scard-img{width:280px;height:280px;border-radius:50%;object-fit:cover;display:block;position:relative;z-index:1;border:3px solid rgba(255,255,255,.1)}
+#shareArea .scard-name-wrap{background:transparent;border-radius:16px;padding:14px 16px;margin-top:8px;border:none}
+#shareArea .scard-name-wrap h3{font-size:26px;color:#fff;margin:0 0 4px;font-weight:800;background:linear-gradient(135deg,#fff,#e0e7ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#shareArea .scard-name-wrap p{color:rgba(255,255,255,.75);font-size:13px;margin:0;font-style:italic}
+#shareArea .scard-name-wrap .rarity-mini{color:#ffd700;font-size:11px;margin-top:6px;font-weight:600;letter-spacing:.5px}
+#shareArea .scard-name-wrap .code-mini{color:rgba(255,255,255,.35);font-size:9px;margin-top:4px;letter-spacing:3px;font-family:monospace}
+
+/* 未触发隐藏人格时覆盖 */
+.scard-name-bar--overlay{position:absolute!important;top:0!important;left:50%!important;transform:translateX(-50%)!important;width:100%!important;height:100%!important;background:transparent!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:20px!important;border-radius:50%!important;border:none!important;box-shadow:none!important;z-index:2!important}
+.scard-name-bar--overlay h3{background:linear-gradient(135deg,#ffd700,#ffaa00)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important;font-size:32px!important;margin-bottom:10px!important;font-weight:800!important}
+.scard-name-bar--overlay p#shareSlogan{color:#e9d5ff!important;font-size:15px!important;margin-bottom:6px!important;text-align:center!important;font-style:italic!important}
+.scard-name-bar--overlay p#shareCode{color:#d8b4fe!important;font-size:13px!important;margin-top:6px!important;opacity:1!important;letter-spacing:1px!important}
+.scard-name-bar--overlay .rarity-mini{display:none!important}
+
+/* 悬念钩子区 */
+#shareArea .scard-suspense{padding:0 24px 14px}
+#shareArea .scard-suspense-inner{background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,170,0,.03));border:1px dashed rgba(255,215,0,.2);border-radius:14px;padding:14px 16px;text-align:center}
+#shareArea .scard-suspense-icon{font-size:20px;margin-bottom:4px}
+#shareArea .scard-suspense-text{font-size:15px;color:#ffd700;font-weight:700;margin:0;letter-spacing:.3px}
+#shareArea .scard-suspense-hint{font-size:11px;color:rgba(255,215,0,.5);margin-top:4px}
+
+/* 二维码区 */
+#shareArea .scard-qr-section{display:flex;align-items:center;justify-content:center;gap:14px;padding:0 24px 16px}
+#shareArea .scard-qr-code{width:90px;height:90px;background:#fff;border-radius:14px;padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.25);flex-shrink:0}
+#shareArea .scard-qr-info{text-align:left}
+#shareArea .scard-qr-title{font-size:14px;color:#fff;margin:0 0 4px;font-weight:700}
+#shareArea .scard-qr-url{font-size:11px;color:#a78bfa;margin:0;word-break:break-all;font-family:monospace}
+
+/* CTA */
+#shareArea .scard-cta{text-align:center;padding:10px 24px 6px;color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px}
+
+/* 底部品牌 */
+#shareArea .scard-footer{background:linear-gradient(180deg,transparent,rgba(0,0,0,.4));border-top:1px solid rgba(255,255,255,.06);text-align:center;padding:12px 20px;font-size:10px;color:rgba(255,255,255,.25);letter-spacing:1px}
+
+
+/* 卡片预览弹窗 */
+#cardOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#cardLoading{color:#888;font-size:15px}
+#cardPreviewWrap{display:none}
+#cardPreview{max-width:96%;max-height:85vh;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+@media(max-width:480px){#cardPreview{max-width:100%;max-height:88vh;border-radius:12px}}
+
+/* 隐藏人格徽章 */
+.hidden-badge{display:inline-block;background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;font-size:12px;font-weight:700;padding:3px 12px;border-radius:20px;margin-top:8px;letter-spacing:1px;box-shadow:0 2px 10px rgba(255,170,0,.3);animation:badgePop .5s cubic-bezier(.34,1.56,.64,1)}
+.hidden-congrats{color:#ffd700;font-size:14px;text-align:center;margin:8px 0;font-weight:600;letter-spacing:1px;text-shadow:0 0 10px rgba(255,215,0,.2)}
+@keyframes badgePop{0%{transform:scale(0) rotate(-10deg);opacity:0}70%{transform:scale(1.1) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes hiddenPulse{0%,100%{box-shadow:0 0 10px rgba(255,215,0,.2),0 0 20px rgba(255,215,0,.1)}50%{box-shadow:0 0 18px rgba(255,215,0,.4),0 0 35px rgba(255,215,0,.2)}}
+
+/* 解锁动画 */
+#unlockOverlay{display:none;position:fixed;inset:0;background:rgba(10,10,25,.96);z-index:9998;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.unlock-icon{font-size:64px;margin-bottom:20px;animation:unlockPulse 1s ease-in-out infinite}
+@keyframes unlockPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.1);opacity:1}}
+.unlock-text{color:#ffd700;font-size:18px;font-weight:700;margin-bottom:24px;letter-spacing:1px}
+.unlock-progress{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin:0 auto 16px}
+.unlock-progress-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ffaa00);width:0%;transition:width .3s ease}
+.unlock-sub{color:rgba(255,255,255,.5);font-size:13px;min-height:20px}
+.unlock-scan-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.6),transparent);animation:scanLine 2s linear infinite;opacity:0}
+@keyframes scanLine{0%{top:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+.unlock-reveal{animation:unlockReveal .8s ease forwards;opacity:0;transform:scale(.9)}
+@keyframes unlockReveal{0%{opacity:0;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+#unlockBtn{display:none;text-align:center;margin:20px 0}
+#unlockBtn button{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,170,0,.1));color:#ffd700;border:1px solid rgba(255,215,0,.3);padding:14px 36px;border-radius:25px;font-size:16px;cursor:pointer;font-weight:bold;transition:all .3s;letter-spacing:1px}
+#unlockBtn button:hover{background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(255,170,0,.2));transform:scale(1.03)}
+
+/* ===== 翻转卡片（方案B） ===== */
+.flip-card{width:100%;height:580px;margin:0 0 18px;perspective:800px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.15);border-radius:20px}
+.flip-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1)}
+.flip-card-inner.flipped{transform:rotateY(180deg)}
+.flip-card-front,.flip-card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:20px;overflow:hidden;background:#1a1a2e;border:2px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;padding:20px 16px 16px}
+.flip-card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#1a1a2e 0%,#1e1028 100%);border:2px dashed rgba(255,215,0,.2)}
+.flip-card-back.locked{border:2px dashed rgba(255,255,255,.1);background:rgba(255,255,255,.02)}
+.flip-card-back.locked .flip-back-placeholder{font-size:60px}
+
+/* 正面 */
+.flip-front-img{width:340px;height:340px;border-radius:18px;object-fit:cover;border:3px solid rgba(255,255,255,.08);margin-bottom:8px;background:linear-gradient(135deg,#252545,#1a1a2e)}
+.flip-front-placeholder{width:340px;height:340px;border-radius:18px;background:linear-gradient(135deg,#252545,#1a1a2e);border:3px solid rgba(255,255,255,.08);margin-bottom:8px;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;font-size:120px;font-weight:800;color:rgba(95,108,255,.2)}
+.flip-front-name{font-size:24px;font-weight:700;background:linear-gradient(135deg,#5f6cff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.flip-front-slogan{font-size:13px;color:rgba(255,255,255,.5);font-style:italic;text-align:center;line-height:1.4;margin-bottom:4px;padding:0 14px}
+.flip-front-code{font-size:12px;color:rgba(255,255,255,.35);letter-spacing:2px;margin-bottom:6px}
+.flip-front-rarity{font-size:11px;color:rgba(255,215,0,.7);background:rgba(255,215,0,.1);padding:4px 14px;border-radius:12px;margin-bottom:8px}
+.flip-front-hint{margin-top:auto;font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px}
+.flip-front-hint svg{width:14px;height:14px;fill:rgba(255,255,255,.3)}
+
+/* 背面内容区 */
+.flip-back-content{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;overflow-y:auto}
+.flip-back-content::-webkit-scrollbar{width:2px}
+.flip-back-content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+
+/* 锁定状态文案 */
+.flip-back-locked-badge{font-size:10px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);padding:3px 10px;border-radius:10px;margin-bottom:8px}
+.flip-back-locked-tag{font-size:12px;color:#d8b4fe;background:rgba(167,139,250,.2);padding:4px 10px;border-radius:8px;margin-bottom:8px}
+.flip-back-locked-slogan{font-size:12px;color:#e9d5ff;font-style:italic;text-align:center;margin-bottom:8px;line-height:1.4}
+.flip-back-locked-box{width:100%;padding:12px 16px;border-radius:10px;margin:6px 0}
+.flip-back-locked-roast{background:rgba(255,107,129,.15);border-left:3px solid #ff6b81}
+.flip-back-locked-heal{background:rgba(72,219,251,.15);border-left:3px solid #48dbfb}
+.flip-back-locked-label{font-size:14px;margin-bottom:4px;font-weight:600}
+.flip-back-locked-roast .flip-back-locked-label{color:#ff6b81}
+.flip-back-locked-heal .flip-back-locked-label{color:#48dbfb}
+.flip-back-locked-text{font-size:14px;line-height:1.5;font-weight:600}
+.flip-back-locked-roast .flip-back-locked-text{color:#e11d48}
+.flip-back-locked-heal .flip-back-locked-text{color:#0891b2}
+.flip-back-locked-stat{font-size:11px;color:#c4b5fd;margin-top:auto;text-align:center;padding-top:8px}
+
+/* 对比页对比度优化（深色模式） */
+#comparePage{background:#1a1625}
+#comparePage .name{color:#e5e7eb;font-size:24px;font-weight:700}
+#comparePage .code{color:#9ca3af;font-size:14px}
+#comparePage .vs{color:#fbbf24;font-size:32px;font-weight:700}
+#comparePage .percent{color:#fbbf24;font-size:52px;font-weight:700}
+#comparePage .percent-label{color:#f59e0b;font-size:18px;font-weight:600}
+#comparePage .desc{color:#d1d5db;font-size:15px;line-height:1.6}
+#comparePage .dim-label{color:#9ca3af;font-size:13px}
+#comparePage .dim-name{color:#d1d5db;font-size:13px}
+#comparePage .section-title{color:#e5e7eb;font-size:16px;font-weight:600}
+#comparePage .hidden-label{color:#d8b4fe;font-size:14px;font-weight:600}
+#comparePage .hidden-desc{color:#9ca3af;font-size:13px}
+#comparePage .relation-title{color:#fbbf24;font-size:16px;font-weight:600}
+#comparePage .relation-desc{color:#d1d5db;font-size:14px;line-height:1.6}
+#comparePage .btn-share{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+#comparePage .btn-secondary{background:rgba(99,102,241,.2);color:#a78bfa}
+#comparePage .link-box{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:#a78bfa}
+#comparePage .link-box a{color:#c4b5fd;font-weight:500}
+
+/* 背面标准化（和正面对齐） */
+.flip-back-img{width:340px;height:340px;border-radius:18px;object-fit:cover;border:3px solid rgba(255,215,0,.15);margin-bottom:8px;background:linear-gradient(135deg,#252545,#1e1028)}
+.flip-back-placeholder{width:340px;height:340px;border-radius:18px;background:linear-gradient(135deg,#2a2040,#1e1028);border:3px solid rgba(255,215,0,.1);margin-bottom:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;font-size:120px;font-weight:800;color:rgba(255,215,0,.15)}
+.flip-back-name{font-size:24px;font-weight:700;background:linear-gradient(135deg,#ffd700,#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.flip-back-slogan{font-size:13px;color:rgba(255,215,0,.85);font-style:italic;text-align:center;line-height:1.4;margin-bottom:4px;padding:0 14px}
+.flip-back-code{font-size:12px;color:rgba(255,215,0,.7);letter-spacing:2px;margin-bottom:6px}
+.flip-back-rarity{font-size:11px;color:rgba(255,215,0,.7);background:rgba(255,215,0,.1);padding:4px 14px;border-radius:12px;margin-bottom:8px}
+.flip-back-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:3px 0}
+.flip-back-tag{font-size:9px;color:#b89b3c;background:rgba(255,215,0,.1);padding:2px 8px;border-radius:8px}
+.flip-back-roast-box{width:100%;padding:6px 8px;border-radius:6px;background:rgba(255,107,129,.08);border-left:2px solid #ff6b81;margin:2px 0}
+.flip-back-roast-label{font-size:10px;color:#ff6b81;margin-bottom:1px;font-weight:600}
+.flip-back-roast-text{font-size:10px;color:#ff8fa3;line-height:1.4}
+.flip-back-heal-box{width:100%;padding:6px 8px;border-radius:6px;background:rgba(72,219,251,.08);border-left:2px solid #48dbfb;margin:2px 0}
+.flip-back-heal-label{font-size:10px;color:#48dbfb;margin-bottom:1px;font-weight:600}
+.flip-back-heal-text{font-size:10px;color:#81ecec;line-height:1.4}
+
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header"><h1>🔥 BTI 反差人格测试</h1><p>Battle Type Indicator</p></div>
+
+<div id="home">
+<div class="subtitle">你的反差是哪一种？<br>你到底是哪种主导生命体？<br><span style="color:#ff6b81;">测测就知道了！</span></div>
+<div id="inviteTip" style="display:none;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:12px 16px;margin:0 auto 20px;max-width:320px;text-align:center;font-size:14px;color:#ffd700;"></div>
+<button class="btn-start" onclick="goTest()">开始测试</button>
+<footer>共 16 题 · 约 1 分钟 · 无需注册</footer>
+</div>
+
+<div id="quiz" style="display:none">
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div id="quizContent"></div>
+</div>
+
+<!-- 结果加载动效 -->
+<div id="resultLoading" style="display:none">
+  <div class="loading-circle"></div>
+  <div class="loading-text">正在分析你的人格...</div>
+  <div class="loading-sub">马上揭晓你的反差人格</div>
+</div>
+
+<div id="result" style="display:none">
+<div style="padding:20px 16px 40px">
+<!-- 核心冲突3：被邀请用户结果页顶部横幅 -->
+<div id="inviteBanner" style="display:none;text-align:center;margin:0 0 16px 0;padding:12px 16px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,170,0,.08));border-radius:12px;border:1px solid rgba(255,215,0,.2);">
+  <div style="font-size:14px;color:#ffd700;font-weight:600;margin-bottom:4px;">👋 你朋友邀你测的</div>
+  <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:8px;">测完啦！看看你们默契度如何</div>
+  <button onclick="showCompare()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;border:none;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:bold;">查看你们默契度 →</button>
+</div>
+<!-- 翻转卡片：正面=主人格，背面=隐藏人格 -->
+<div class="flip-card" id="flipCard" onclick="toggleFlipCard()">
+  <div class="flip-card-inner" id="flipCardInner">
+    <div class="flip-card-front">
+      <img id="flipFrontImg" class="flip-front-img" src="" alt="">
+      <div id="flipFrontPlaceholder" class="flip-front-placeholder"></div>
+      <div class="flip-front-name" id="flipFrontName"></div>
+      <div class="flip-front-slogan" id="flipFrontSlogan"></div>
+      <div class="flip-front-code" id="flipFrontCode"></div>
+      <div class="flip-front-rarity" id="flipFrontRarity"></div>
+      <div id="unlockBtn" style="margin-top:auto;width:100%;text-align:center;display:none;">
+        <button onclick="event.stopPropagation();unlockHidden()" style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,170,0,.1));color:#ffd700;border:1px solid rgba(255,215,0,.3);padding:12px 32px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold;transition:all .3s;letter-spacing:1px;width:100%;max-width:220px;">🔒 解锁隐藏人格</button>
+      </div>
+      <div id="flipFrontHint" class="flip-front-hint" style="display:none;">
+        <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        点击查看隐藏人格
+      </div>
+    </div>
+    <div class="flip-card-back" id="flipCardBack">
+      <div class="flip-back-content" id="flipBackContent">
+        <img id="flipBackImg" class="flip-back-img" src="" alt="" style="display:none;">
+        <div id="flipBackPlaceholder" class="flip-back-placeholder"></div>
+        <div class="flip-back-name" id="flipBackName"></div>
+        <div class="flip-back-slogan" id="flipBackSlogan"></div>
+        <div class="flip-back-code" id="flipBackCode"></div>
+        <div class="flip-back-rarity" id="flipBackRarity"></div>
+        <div id="flipBackExtra" style="width:100%;margin-top:4px;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 隐藏人格专属模块（默认隐藏，解锁后显示） -->
+<div id="hiddenModules" style="display:none;opacity:0;transition:opacity .6s ease;">
+  <div id="hiddenDesc" class="desc-box" style="border-left-color:#a78bfa;"></div>
+  <div class="roast-box" id="hiddenRoastBox" style="background:rgba(167,139,250,.08);border-left-color:#a78bfa;">
+    <p class="roast-label" style="color:#a78bfa;">💬 隐藏吐槽</p>
+    <p class="roast-text" id="hiddenRoast" style="color:#c4b5fd;"></p>
+  </div>
+  <div class="heal-box" id="hiddenHealBox" style="background:rgba(72,219,251,.08);border-left-color:#48dbfb;">
+    <p class="heal-label" style="color:#48dbfb;">✨ 隐藏治愈</p>
+    <p class="heal-text" id="hiddenHeal" style="color:#81ecec;"></p>
+  </div>
+  <div class="tags-row" id="hiddenTags"></div>
+</div>
+
+<div class="dim-breakdown" id="dimBreakdown"></div>
+<div id="resultDesc" class="desc-box"></div>
+<div class="roast-box" id="mainRoastBox">
+<p class="roast-label">一句话吐槽</p>
+<p class="roast-text" id="resultRoast"></p>
+</div>
+<div class="heal-box" id="mainHealBox">
+<p class="heal-label">反转治愈</p>
+<p class="heal-text" id="resultHeal"></p>
+</div>
+<div class="tags-row" id="resultTags"></div>
+<div id="resultMatch"></div>
+<div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+<button class="btn-share" onclick="shareCard()">分享测试</button>
+<button class="btn-start" onclick="location.reload()" style="padding:14px 44px;font-size:17px">再测一次</button>
+</div>
+<!-- 底部广告位预留 -->
+<div class="ad-banner-bottom">【广告位预留 - 后期接广告SDK】</div>
+<!-- 长按保存提示 -->
+<div style="text-align:center;margin-top:10px">
+  <span class="longpress-hint">👉 长按页面可保存结果卡片分享到朋友圈</span>
+</div>
+<!-- 免责声明 -->
+<div style="text-align:center;margin-top:14px;padding:10px 16px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid rgba(255,255,255,.06);">
+  <span style="font-size:11px;color:rgba(255,255,255,.35);line-height:1.6;">⚠️ 本测试结果仅供娱乐参考，不构成任何专业心理、医学或职业建议。</span>
+</div>
+<!-- P1-1: 手动输入朋友代码 -->
+<div id="manualCompareBox" style="text-align:center;margin-top:12px;">
+  <input type="text" id="friendCodeInput" placeholder="输入朋友的人格代码（如 HFLX）" maxlength="4" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 14px;color:#fff;font-size:14px;width:200px;text-align:center;text-transform:uppercase;letter-spacing:2px;">
+  <style>#friendCodeInput::placeholder{color:#a1a1aa;font-size:13px}#friendCodeInput::-webkit-input-placeholder{color:#a1a1aa;font-size:13px}</style>
+  <button onclick="manualCompare()" style="background:linear-gradient(135deg,#5f6cff,#7c5cfc);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;cursor:pointer;margin-left:6px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.3);">👥 查看默契度</button>
+</div>
+<div id="compareBtnWrap" style="display:none;text-align:center;margin-top:12px;">
+<button class="btn-start" onclick="showCompare()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;padding:12px 36px;font-size:15px;">👥 发给共同好友，看看TA站谁</button>
+</div>
+<div id="fissureBox" style="text-align:center;margin-top:16px;padding:12px 16px;background:rgba(255,215,0,.06);border-radius:12px;border:1px solid rgba(255,215,0,.15);">
+<p id="fissureMain" style="font-size:13px;color:#ffd700;margin:0;line-height:1.6;">这是你给自己开的"免打扰"证明，转发即生效</p>
+<p id="fissureSub" style="font-size:11px;color:rgba(255,255,255,.4);margin-top:6px;">拉个朋友来测，看看谁的隐藏人格更刺激</p>
+</div>
+</div>
+</div>
+
+<!-- 默契度对比页 -->
+<div id="comparePage" style="display:none;padding:20px 16px 40px;text-align:center;">
+<!-- 功能缺失4：返回按钮 -->
+<div style="text-align:left;margin-bottom:16px;">
+  <button onclick="backToResult()" style="background:none;border:none;color:#888;font-size:14px;cursor:pointer;padding:0;">← 返回我的结果</button>
+</div>
+<div style="margin-bottom:24px;">
+<div style="font-size:13px;color:#888;margin-bottom:8px;">默契度大揭秘</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px;">
+<div id="compareSelf" style="flex:1;text-align:center;"></div>
+<div style="font-size:28px;color:#ffd700;font-weight:bold;">VS</div>
+<div id="compareFriend" style="flex:1;text-align:center;"></div>
+</div>
+<div id="compareScore" style="font-size:48px;font-weight:800;background:linear-gradient(90deg,#ff6b81,#feca57,#48dbfb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0;"></div>
+<div id="compareLabel" style="font-size:15px;color:#ffd700;font-weight:600;margin-bottom:8px;"></div>
+<div id="compareDesc" style="font-size:13px;color:#aaa;line-height:1.6;max-width:320px;margin:0 auto;"></div>
+
+<!-- 功能缺失2：四维能量条并排对比 -->
+<div id="compareDimBars" style="margin:24px 0;text-align:left;"></div>
+
+<!-- 功能缺失2：隐藏人格对比 -->
+<div id="compareHidden" style="margin:24px 0;text-align:left;"></div>
+
+<!-- 功能缺失2+5：关系深度解读（含传播钩子） -->
+<div id="compareRelation" style="margin:24px 0;padding:16px;background:rgba(255,255,255,.03);border-radius:12px;text-align:left;"></div>
+</div>
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+<button class="btn-share" onclick="shareCompareCard()">生成对比卡片</button>
+<button class="btn-start" onclick="location.reload()" style="padding:12px 28px;font-size:15px">我也测一个</button>
+</div>
+<!-- P0-3: 对比页分享链接 -->
+<div id="compareShareBox" style="text-align:center;margin-top:16px;padding:10px 14px;background:rgba(95,108,255,.06);border-radius:10px;border:1px solid rgba(95,108,255,.15);display:none;">
+  <p style="font-size:12px;color:#888;margin:0 0 6px 0;">分享这个链接，让朋友来测你和TA的默契度</p>
+  <p id="compareShareUrl" style="font-size:12px;color:#5f6cff;margin:0;word-break:break-all;"></p>
+</div>
+</div>
+
+<!-- 分享卡片隐藏渲染区 -->
+<div id="shareArea">
+<!-- 顶部渐变条 -->
+<div class="scard-top-bar"></div>
+
+<!-- 品牌区 -->
+<div class="scard-brand">
+<div class="scard-brand-icon">🔮</div>
+<div class="scard-brand-title">BTI 反差人格测试</div>
+<div class="scard-brand-sub">BATTLE TYPE INDICATOR</div>
+</div>
+
+<!-- 主视觉区 -->
+<div class="scard-visual">
+<div class="scard-img-wrap">
+<img class="scard-img" id="shareImg" src="" alt="">
+</div>
+<div class="scard-name-wrap">
+<h3 id="shareName"></h3>
+<p id="shareSlogan"></p>
+<div id="shareRarity" class="rarity-mini"></div>
+<p id="shareCode" class="code-mini"></p>
+</div>
+</div>
+
+<!-- 悬念钩子 -->
+<div class="scard-suspense" id="shareSuspense">
+<div class="scard-suspense-inner">
+<div class="scard-suspense-icon">🔮</div>
+<p class="scard-suspense-text" id="shareSuspenseText">我的隐藏人格是「???」</p>
+<p class="scard-suspense-hint" id="shareSuspenseHint">扫码测测你的隐藏人格</p>
+</div>
+</div>
+
+<!-- 二维码区 -->
+<div class="scard-qr-section">
+<div class="scard-qr-code" id="shareQR">
+<canvas id="shareQRCanvas" width="90" height="90" style="width:90px;height:90px;"></canvas>
+</div>
+<div class="scard-qr-info">
+<p class="scard-qr-title">扫码来测 👉</p>
+<p class="scard-qr-url" id="shareQRLink">https://bti.test</p>
+</div>
+</div>
+
+<!-- CTA -->
+<div class="scard-cta" id="shareCta">👉 测测你是什么型</div>
+
+<!-- 底部品牌 -->
+<div class="scard-footer">
+<span>🔮 BTI 反差人格测试 · 发现隐藏的你 🔮</span>
+</div>
+</div>
+</div>
+
+<!-- 解锁动画 -->
+<div id="unlockOverlay">
+  <div class="unlock-scan-line"></div>
+  <div class="unlock-icon" id="unlockIcon">🔒</div>
+  <div class="unlock-text" id="unlockText">正在扫描你的B面...</div>
+  <div class="unlock-progress"><div class="unlock-progress-fill" id="unlockProgress"></div></div>
+  <div class="unlock-sub" id="unlockSub"></div>
+</div>
+
+<!-- 卡片预览弹窗 -->
+<div id="cardOverlay">
+  <div id="cardLoading">⏳ 正在生成分享卡片...</div>
+  <div id="cardPreviewWrap"><img id="cardPreview" alt="分析卡片"></div>
+  <div id="cardActions" style="display:none;gap:12px;margin-top:20px">
+    <button onclick="downloadCard()" style="background:linear-gradient(135deg,#5f6cff,#7c5cfc);color:#fff;border:none;padding:12px 28px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold">💾 保存图片</button>
+    <button onclick="closeCardPreview()" style="background:rgba(255,255,255,.1);color:#ccc;border:1px solid rgba(255,255,255,.2);padding:12px 28px;border-radius:25px;font-size:15px;cursor:pointer">关闭</button>
+  </div>
+</div>
+
+<script>
+console.log('[BTI] Script loaded');
+
+const DIMENSIONS = [
+  { key:'H', hot:'H', cold:'C', name:'能量', hotName:'热烈', coldName:'冷静' },
+  { key:'F', fast:'F', slow:'S', name:'决策', fastName:'快速', slowName:'缓慢' },
+  { key:'L', loud:'L', quiet:'Q', name:'社交', loudName:'外放', quietName:'内敛' },
+  { key:'X', explode:'X', defend:'D', name:'应对', explodeName:'爆发', defendName:'防御' }
+];
+
+const QUESTIONS = [
+  { dim:'H', q:'凌晨1点，朋友喊你出去吃夜宵，你？', options:[
+    {text:'已在穿鞋，顺便问还有谁',score:{H:2}},{text:'"等我5分钟"——实际洗漱+化妆半小时',score:{H:1,C:.5}},
+    {text:'发个表情包敷衍，继续刷手机',score:{H:.5,C:1}},{text:'手机静音，假装失联',score:{C:2}}]},
+  { dim:'H', q:'你的周末真实状态更接近？', options:[
+    {text:'周五晚上就把周末排满',score:{H:2}},{text:'计划做3件事，实际完成0.5件',score:{H:1,C:.5}},
+    {text:'出门的想法在脑海走完，身体没动',score:{H:.5,C:1}},{text:'谁也别烦我，我和床签了生死契约',score:{C:2}}]},
+  { dim:'F', q:'网购时你的真实操作是？', options:[
+    {text:'看到喜欢的，3秒下单',score:{F:2}},{text:'看3个评价就买了，第4个永远看不到',score:{F:1,S:.5}},
+    {text:'加入购物车，等它自己降价',score:{F:.5,S:1}},{text:'建Excel对比参数，一周后可能忘了买过',score:{S:2}}]},
+  { dim:'F', q:'朋友拿不定主意问你意见，你？', options:[
+    {text:'直接帮他拍板选你觉得对的，完全不纠结',score:{F:2}},{text:'先顺着他的情绪说两句，凭直觉给个大概方向',score:{F:1,S:.5}},
+    {text:'让他等你捋捋，仔细分析完利弊再给他建议',score:{F:.5,S:1}},{text:'把所有优缺点列得明明白白，让他自己做决定',score:{S:2}}]},
+  { dim:'L', q:'聚会结束后，你？', options:[
+    {text:'已经开始约下一场',score:{L:2}},{text:'嗨完需要1小时独自回血',score:{L:1,Q:.5}},
+    {text:'到家才想起来今天说了什么蠢话',score:{L:.5,Q:1}},{text:'到家第一时间把手机调飞行模式',score:{Q:2}}]},
+  { dim:'L', q:'如果独处是一种超能力，你的等级是？', options:[
+    {text:'我没这个技能，独处2小时就想出门找人',score:{L:2}},{text:'青铜级：能独处一天，但会刷爆朋友圈',score:{L:1,Q:.5}},
+    {text:'钻石级：独处一周，偶尔对着窗外发呆',score:{L:.5,Q:1}},{text:'王者级：我的Wi-Fi名就是"别敲门"',score:{Q:2}}]},
+  { dim:'X', q:'外卖迟到30分钟，你？', options:[
+    {text:'"骑手你超时了，我每分钟都在刷新APP"',score:{X:2}},{text:'"没事，不急"——挂了电话在差评框写了300字又删了',score:{X:1,D:.5}},
+    {text:'"大家都不容易"——反手给了五星好评',score:{X:.5,D:1}},{text:'"放门口吧"——继续刷手机，饭凉了才想起来',score:{D:2}}]},
+  { dim:'X', q:'凌晨2点，突然想起3年前某件尴尬的事，你？', options:[
+    {text:'翻身坐起，想穿越回去打自己',score:{X:2}},{text:'脑内重播10遍，每遍换个更好结局',score:{X:1,D:.5}},
+    {text:'叹口气："那时候我真年轻"',score:{X:.5,D:1}},{text:'想不起来为什么尴尬，只记得尴尬过',score:{D:2}}]},
+  { dim:'H', q:'你的人生计划表状态是？', options:[
+    {text:'人生浏览器是无痕模式',score:{H:2}},{text:'计划赶不上变化，变化赶不上躺平',score:{H:1,C:.5}},
+    {text:'喜欢按计划来，虽然经常完不成',score:{H:.5,C:1}},{text:'不列计划会焦虑，列了更焦虑',score:{C:2}}]},
+  { dim:'F', q:'你的"购物车"里有？', options:[
+    {text:'空空如也——看到就买，从不放购物车',score:{F:2}},{text:'3-5件，永远在"再等等"和"现在买"之间犹豫',score:{F:1,S:.5}},
+    {text:'10件以上，为了凑满减越加越多',score:{F:.5,S:1}},{text:'50件以上，有些已经失效下架了还没删',score:{S:2}}]},
+  { dim:'L', q:'参加朋友的局，你发现全场只认识一个人', options:[
+    {text:'自来熟，10分钟后已经知道身边人的老家和前任',score:{L:2}},{text:'全程静默，有人搭讪会回应两句',score:{L:1,Q:.5}},
+    {text:'全程跟着认识的人，像个人形挂件',score:{L:.5,Q:1}},{text:'待在角落手机全程不离手，假装很忙',score:{Q:2}}]},
+  { dim:'X', q:'排队被人插队，你？', options:[
+    {text:'"后面排着去"——直接指出来',score:{X:2}},{text:'盯着他看，用眼神发射激光',score:{X:1,D:.5}},
+    {text:'心里骂了800字，嘴上"算了算了"',score:{X:.5,D:1}},{text:'低头看手机——"刚才有人插队？我没注意"',score:{D:2}}]},
+  { dim:'X', q:'有人问了你不想回答的隐私问题，你？', options:[
+    {text:'直接反问他一个更隐私的问题，怼到他不敢再问',score:{X:2}},{text:'随便应付两句，心里已经有点不舒服了',score:{X:1,D:.5}},
+    {text:'假装没听见，赶紧聊别的转移话题',score:{X:.5,D:1}},{text:'笑着不接话，完全没往心里去',score:{D:2}}]},
+  { dim:'H', q:'早上闹钟响了，你？', options:[
+    {text:'闹钟一响就弹起来，甚至已经醒了在等闹钟',score:{H:2}},{text:'按掉一次，再眯10分钟',score:{H:1,C:.5}},
+    {text:'闹钟设了五个，最后一个才睁眼',score:{H:.5,C:1}},{text:'闹钟是心理安慰，你醒不醒看缘分',score:{C:2}}]},
+  { dim:'F', q:'有件事明天必须做完，你现在？', options:[
+    {text:'还没开始，但相信自己最后3小时能搞定',score:{F:2}},{text:'边做，边刷剧',score:{F:1,S:.5}},
+    {text:'列了详细计划，但卡在第一步迟迟没动',score:{F:.5,S:1}},{text:'两天前就做完了，现在在检查第三遍',score:{S:2}}]},
+  { dim:'L', q:'你在群聊里的常态是？', options:[
+    {text:'话题制造机，带节奏之王',score:{L:2}},{text:'跟着聊，偶尔发"哈哈"和表情包',score:{L:1,Q:.5}},
+    {text:'潜水但每条都看，不说话',score:{L:.5,Q:1}},{text:'群免打扰，除非@我否则不看',score:{Q:2}}]},
+  { dim:'X', q:'[隐藏题] 以下哪种情况最能让你瞬间上头？', options:[
+    {text:'连续加班一周，Crush喊你通宵嗨皮',score:{H:2}},{text:'成年人要做选择题',score:{F:2}},
+    {text:'和Crush发消息约会，21小时后回你下次再说',score:{L:2}},{text:'有人说，认真你就输了',score:{X:2}}]}
+];
+
+const TYPES = {
+  'HFLX':{name:'社交悍匪',code:'HFLX',rarity:'约10%',img:'images/HFLX.jpg',slogan:'人是我喊的，累是我受的。',
+    desc:'你的电量永远满格。别人喊"累了"的时候你在想下一个点子，别人躺平了你已经开始并行三件事。你的待办清单永远在排队——问题是，它们大部分都过期了。',
+    roast:'你不是社牛，你是社交透支户——借来的热闹迟早要还。',
+    heal:'但正因为是你组的局，大家才觉得有意思。你的累，是别人的光。',tags:['#永动机','#行动力满格','#社交悍匪']},
+  'HFLD':{name:'情绪资本家',code:'HFLD',rarity:'约8%',img:'images/HFLD.jpg',slogan:'社交是我的工作，独处才是我的假期。',
+    desc:'你像一台精密的情绪发电机，走到哪亮到哪。别人看到的是满格电量，看不到的是你独处时才能摘下来的面具。',
+    roast:'你的情绪是24小时营业的便利店，但店员只有你自己，还不给加班费。',
+    heal:'能稳定输出快乐本身就是一种超能力，不用为此抱歉。但别忘了，便利店也可以打烊。你的独处不是休息，是给发电机做保养。',tags:['#情绪资本家','#社交达人','#情绪稳定']},
+  'HFQX':{name:'伪E人',code:'HFQX',rarity:'约8%',img:'images/HFQX.jpg',slogan:'我不是社恐，我只是社交余额不足。',
+    desc:'你不是真的外向，你只是害怕安静。精力旺盛、冲动、独来独往、脾气爆——热闹是你的止痛药，药效过了就是独处时的三倍空虚。',
+    roast:'你的社交是信用卡消费，刷的时候爽，账单来了只想装死。',
+    heal:'能让自己开心本身就是本事，哪怕方式是借来的。重要的是，你知道什么时候该还，也知道还完了还能再借。',tags:['#伪E人','#社交余额不足','#内耗型外向']},
+  'HFQD':{name:'单机玩家',code:'HFQD',rarity:'约6%',img:'images/HFQD.jpg',slogan:'我一个人就能把日子过成热闹。',
+    desc:'最佛的宅，做最狠的事。一个人就能把日子过成热闹。精力旺盛、冲动、独来独往、情绪稳——不需要观众也能自嗨。',
+    roast:'你的佛系是装了消音器的永动机，别人听不见，但你自己知道在转。',
+    heal:'装了消音器的发动机也是发动机。你的佛系不是转得慢，是转速别人听不见。这份安静的能量，比喧嚣更有穿透力。',tags:['#单机玩家','#自嗨','#佛系永动机']},
+  'HSLX':{name:'霸道总裁',code:'HSLX',rarity:'约8%',img:'images/HSLX.jpg',slogan:'别人看我稳如老狗，其实已经在心里掀了三次桌。',
+    desc:'你的稳定是贴上去的，撕下来才发现底下全是褶皱。精力旺、有计划、爱社交、脾气直——暴走是常态，但炸之前会微笑.',
+    roast:'你的情绪稳定是年度最稳人设，塌房只在一瞬间。',
+    heal:'能压住情绪是本事，选对人释放是智慧。你的海啸，从来只冲该冲的岸。',tags:['#霸道总裁','#情绪稳定是演的','#有计划地爆发']},
+  'HSLD':{name:'人间调度员',code:'HSLD',rarity:'约6%',img:'images/HSLD.jpg',slogan:'每一分钟社交都是我算好的ROI。',
+    desc:'你的社交不是偶遇，是排期表。谁几点到、聊什么、什么时候撤，你心里早就跑过一遍流程图。 spontaneity 存在，只是被你写进了备注栏。',
+    roast:'你的随机是伪随机，seed值是你昨晚写的Excel。',
+    heal:'能把社交做成精密工程的，本身就是一种天赋。别人靠本能，你靠系统，结果往往你赢。',tags:['#人间调度员','#精密社交','#计划狂']},
+  'HSQX':{name:'遥控人生',code:'HSQX',rarity:'约6%',img:'images/HSQX.jpg',slogan:'我不在场，但场子是我的。',
+    desc:'你不出门，但全世界在你脑子里跑完了。精力旺、有计划、独来独往、脾气直——别人用腿跑，你用脑子跑，而且你从不迟到。',
+    roast:'你的运动步数每天不到1000，但脑细胞消耗的热量够别人跑半马。',
+    heal:'你的脑细胞在跑马拉松，身体在躺平——这不是懒，是效率最大化。躺赢不是运气，是你把别人跑步的时间用来画图了。',tags:['#遥控人生','#不在场掌控','#远程操盘']},
+  'HSQD':{name:'后台玩家',code:'HSQD',rarity:'约5%',img:'images/HSQD.jpg',slogan:'我不在局里，但我写了局的剧本。',
+    desc:'你不在台上，但台上按你的剧本走。精力旺、有计划、独来独往、情绪稳——遥控器在你手里，只是你懒得举起来。',
+    roast:'你是社交版的"deep state"，看不见但无处不在。',
+    heal:'幕后操盘不是缺席，是另一种在场。你布的局，比别人的表演更长久。',tags:['#后台玩家','#幕后操盘','#深度掌控']},
+  'CFLX':{name:'冷不丁',code:'CFLX',rarity:'约8%',img:'images/CFLX.jpg',slogan:'上一秒还在笑，下一秒你就懵了。',
+    desc:'你是人群里最好说话的那个，但也是翻脸最快的那个。反应慢、冲动、爱社交、脾气直——别人还在回味你的笑话，你已经因为某个细节炸了。',
+    roast:'你是人形天气预报，显示多云转晴，结果突然来了场雷暴。等大家找伞的时候，你已经放晴了。',
+    heal:'你的突然变脸不是任性，是你的感受来得慢，但来的时候特别真。能瞬间炸的人，往往也能瞬间好。你不记仇，只是反应慢了一拍。',tags:['#冷不丁','#突然炸毛','#没预警']},
+  'CFLD':{name:'慢热气氛组',code:'CFLD',rarity:'约6%',img:'images/CFLD.jpg',slogan:'我不是高冷，是蓝牙还没连上。',
+    desc:'看起来佛系，其实偷偷在嗨。反应慢、冲动、爱社交、情绪稳——别人已经嗨完了，你的脑机才启动。',
+    roast:'你是社交场合的"正在加载中"，等连上了比别人都热闹。',
+    heal:'来得晚没关系，你的温度一旦上来就不会退。别人热得快凉得也快，你是恒温型。',tags:['#慢热气氛组','#蓝牙连接中','#缓热型']},
+  'CFQX':{name:'孤狼',code:'CFQX',rarity:'约6%',img:'images/CFQX.jpg',slogan:'我一般不生气，生气一般不一般。',
+    desc:'你不合群，是因为群不合你。反应慢、冲动、独来独往、脾气直——孤狼不群居不是因为被排斥，是因为不需要。',
+    roast:'你是社交界的孤狼：群消息免打扰是你的领地标记，已读不回是你的捕猎方式。不是高冷，是你的反应速度和脾气都不允许你长期群居。',
+    heal:'狼群需要头狼，但孤狼不需要群。你的独处不是逃避，是筛选。能走进你领地的人不多，但每一个，都值得你亮出獠牙。',tags:['#孤狼','#领地意识','#独行']},
+  'CFQD':{name:'脑内弹幕',code:'CFQD',rarity:'约5%',img:'images/CFQD.jpg',slogan:'我不说话，不代表我没在骂你。',
+    desc:'表面岁月静好，内心弹幕刷屏。不说话是因为在写小作文。反应慢、冲动、独来独往、情绪稳——你的嘴是静音的，但脑子是环绕立体声。',
+    roast:'你是隐形弹幕池，满屏飞过但信号全丢。',
+    heal:'不说话不代表没想法，只是你选择把最狠的话留给自己消化。这种克制，是另一种温柔。',tags:['#脑内弹幕','#内心戏','#静音吐槽']},
+  'CSLX':{name:'计划型社交',code:'CSLX',rarity:'约6%',img:'images/CSLX.jpg',slogan:'这局我策划了三天，你搞砸我就散场。',
+    desc:'你计划了每一步，包括什么时候掀桌。社交有规划，绝不瞎凑热闹。反应慢、有计划、爱社交、脾气直——你赴约前已经在脑子里排演了三遍。',
+    roast:'你是揣着剧本赴约的导演，随时准备喊咔。',
+    heal:'有准备地社交不是矫情，是你对自己的负责。不是每个人都能把社交活得这么有掌控感。',tags:['#计划型社交','#剧本导演','#掌控感']},
+  'CSLD':{name:'人形Siri',code:'CSLD',rarity:'约5%',img:'images/CSLD.jpg',slogan:'感性请求已拦截，转人工请按0。',
+    desc:'你的社交像一台运行良好的服务程序：输入问候，输出回应，响应稳定，功耗可控。你不是不会感性，是你的防御系统把"情绪波动"归类为异常流量，自动过滤了。',
+    roast:'你是装了情感防火墙的社交终端——能连上，但 ping 不通心跳。',
+    heal:'稳定本身就是一种稀缺品质。不是每个人都需要在每次对话里燃烧自己，你的"常温"让靠近你的人很安全。能触发你深度响应的人不多，但每一个都拿到了最高权限。',tags:['#社交协议','#情感防火墙','#常温社交']},
+  'CSQX':{name:'待机卷王',code:'CSQX',rarity:'约5%',img:'images/CSQX.jpg',slogan:'身体在休眠，脑子在超频。',
+    desc:'你表面躺平了，但计划表还在后台跑。躺和卷，你全都要。反应慢、有计划、独来独往、脾气直——你的身体在待机，你的脑子在超频。',
+    roast:'你是人形矛盾体，表面OJBK，后台CPU烧到90度。',
+    heal:'身体和脑子各干各的，本来就是你的超能力。别人卷得气喘吁吁，你躺着就把事办了。',tags:['#待机卷王','#身体脑子各干各的','#慢节奏赢家']},
+  'CSQD':{name:'离线管家',code:'CSQD',rarity:'约3%',img:'images/CSQD.jpg',slogan:'我在场，但我的信号已关闭。',
+    desc:'你看了，你知道，但你就是不说。人间蒸发专业户，离线是你的默认状态。反应慢、有计划、独来独往、情绪稳——你在线的时间很短，但每一秒都在认真处理信息。',
+    roast:'你是社交场合的飞行模式，人在，但信号全丢。',
+    heal:'不是每个人都需要时刻在线。你选择性地回应，恰恰说明你在认真对待每一段关系。',tags:['#离线管家','#飞行模式','#信号关闭']},
+
+  'HIDDEN_HC_HOT':{name:'透支者',code:'HIDDEN',rarity:'⭐⭐⭐⭐ 稀有',starCount:4,isHidden:true,img:'images/HIDDEN_overdraft.jpg',
+    desc:'表面电量100%，实际后台挂着二十个社交APP疯狂耗电。热闹是你充的门面，独处才是真正的充电时间——问题是，你从来不给自己充电。',
+    tags:['#借来的光','#能量负债'],    slogan:'热闹是透支的，利息是独处。',
+    roast:'你不是在充电，你是在表演满电。',
+    heal:'但透支过的光，也曾照亮过别人。'},
+  'HIDDEN_HC_COLD':{name:'极地火山',code:'HIDDEN',rarity:'⭐⭐⭐⭐⭐ 极稀有',starCount:5,isHidden:true,img:'images/HIDDEN_polar.jpg',
+    desc:'表面上"嗯""哦""随便"，内心已经演完了八十集爱恨情仇。不是不想热，是怕一热起来，直接把对面烧成灰。',
+    tags:['#外冷内热','#延迟喷发'],slogan:'表面结冰，内心1000℃。',
+    roast:'你看起来好冷，靠近才发现是烫伤级别。',
+    heal:'滚烫不是你的错，是这个世界太慢热。'},
+  'HIDDEN_FS_FAST':{name:'零元购大师',code:'HIDDEN',rarity:'⭐⭐⭐⭐ 稀有',starCount:4,isHidden:true,img:'images/HIDDEN_zero.jpg',
+    desc:'购物车比脑子先醒，下单速度比Wi-Fi还快。等快递到了才想起来：我为啥要买这个？——算了，下次还敢。',
+    tags:['#先拿再说','#后果明天'],slogan:'购物车先满，脑子后想。',
+    roast:'你的决策速度是5G，后悔速度是2G。',
+    heal:'明天的你，会感谢今天果断的自己。'},
+  'HIDDEN_FS_SLOW':{name:'表格囚徒',code:'HIDDEN',rarity:'⭐⭐⭐⭐⭐ 极稀有',starCount:5,isHidden:true,img:'images/HIDDEN_excel.jpg',
+    desc:'Excel列了八百行，待办清单长到可以绕脖子三圈。每天最努力的事，就是给"明天再做"找一个体面的理由。',
+    tags:['#Excel追杀','#计划成瘾'],slogan:'我的待办清单有100条，打勾的永远只有1条。',
+    roast:'你计划了全世界，除了意外。',
+    heal:'能把混乱理成诗的人，混乱也怕你。'},
+  'HIDDEN_LQ_LOUD':{name:'戏精本精',code:'HIDDEN',rarity:'⭐⭐⭐⭐⭐ 极稀有',starCount:5,isHidden:true,img:'images/HIDDEN_actor.jpg',
+    desc:'没有观众也能自己演完整场，连洗澡的时候都在脑内回放刚才那句"我是不是说得太绝了"。人生如戏，但你忘了剧本是即兴的。',
+    tags:['#戏精认证','#没有观众会死','#表演型'],slogan:'没有观众，我连自己都演不下去。',
+    roast:'你的人生是24小时直播，可惜观众经常掉线。',
+    heal:'但聚光灯之外，你才是自己的导演。cut！这场戏你演得很好。'},
+  'HIDDEN_LQ_QUIET':{name:'薛定谔的社恐',code:'HIDDEN',rarity:'⭐⭐⭐⭐ 稀有',starCount:4,isHidden:true,img:'images/HIDDEN_schrodinger.jpg',
+    desc:'今天能跟陌生人聊成拜把子，明天看到微信红点就想把手机扔出窗外。你自己也说不清哪个是真的——可能两个都是，可能两个都不是。',
+    tags:['#模式切换','#量子社交'],slogan:'在社牛和社恐之间反复横跳。',
+    roast:'你的社交状态像Wi-Fi信号，时有时无。',
+    heal:'两种模式都是你，切换自由是天赋。'},
+  'HIDDEN_XD_EXPLODE':{name:'人形刺猬',code:'HIDDEN',rarity:'⭐⭐⭐⭐⭐ 极稀有',starCount:5,isHidden:true,img:'images/HIDDEN_hedgehog.jpg',
+    desc:'靠近三米自动进入战斗模式，浑身是刺，心里却软得一批。不是不想让人摸，是怕摸完发现里面全是棉花，丢面子。',
+    tags:['#靠近就炸','#心软嘴硬'],slogan:'刺是保护，软是礼物。',
+    roast:'你距离感设定是10米，但心里只想要1米。',
+    heal:'你的刺帮你挡住了80%的麻烦，剩下的20%值得你把肚皮翻过来。'},
+  'HIDDEN_XD_DEFEND':{name:'透明人2.0',code:'HIDDEN',rarity:'⭐⭐⭐⭐ 稀有',starCount:4,isHidden:true,img:'images/HIDDEN_transparent.jpg',
+    desc:'群聊里发了消息，半小时没人接茬；合照里站C位，修图时被当成背景板裁掉。不是不存在，是存在得刚刚好——刚好够看清别人，刚好不被别人看见。',
+    tags:['#存在稀薄','#NPC模式'],slogan:'在场，但从未真正加入。',
+    roast:'你的存在感薄到能当手机膜，但恰好挡住了所有伤害。',
+    heal:'透明不是消失，是你选择了不被人看见。这件隐身衣，只有你能决定什么时候脱。'},
+};
+
+// 人格化分享引导语（按人格定制，v3.0升级版：身份标签化+自嘲先行+社交预埋+悬念感+截图友好）
+const SHARE_HOOKS = {
+  'HFLX':'人是我喊的，累是我受的。——发给你最像的人，看看谁才是真正的表面一套背后一套',
+  'HFLD':'社交是我的工作，独处才是我的假期。——转发即生效，这是你给自己开的"免打扰"证明',
+  'HFQX':'我不是社恐，我只是社交余额不足。——凌晨2点还在测人格的人，你的隐藏人格是失眠',
+  'HFQD':'我一个人就能把日子过成热闹。——截图发朋友圈，让大家都知道你其实不好惹',
+  'HSLX':'表面风平浪静，内心已经海啸三回了。——发给最像你的人，看看谁才是真正的戏精',
+  'HSLD':'每一分钟社交都是我算好的ROI。——转发这张"社交免责声明"，让大家都知道你不好惹',
+  'HSQX':'我不在场，但场子是我的。——把这张图发给共同好友，看看TA站谁',
+  'HSQD':'我不在局里，但我写了局的剧本。——拉个朋友来测，看看谁才是真正的幕后黑手',
+  'CFLX':'上一秒还在笑，下一秒你就懵了。——截图发朋友圈，让大家知道你其实不好惹',
+  'CFLD':'我不是高冷，是蓝牙还没连上。——转发即生效，这是你给自己开的"免打扰"证明',
+  'CFQX':'我一般不生气，生气一般不一般。——发给你最像的人，看看谁才是真正的表面一套背后一套',
+  'CFQD':'我不说话，不代表我没在骂你。——把这张图发给共同好友，看看TA站谁',
+  'CSLX':'这局我策划了三天，你搞砸我就散场。——拉个朋友来测，看看谁的策划更缜密',
+  'CSLD':'我的社交半径3.5米，误差不超过10厘米。——转发这张"社交免责声明"，让大家都知道你不好惹',
+  'CSQX':'身体在休眠，脑子在超频。——测出来我是待机卷王，躺和卷我全都要',
+  'CSQD':'我在场，但我的信号已关闭。——截图发朋友圈，让大家都知道你其实不好惹'
+};
+
+let currentQ = 0;
+let userChoices = [];
+let resultTypeData = null;
+
+function startQuiz() {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  currentQ = 0;
+  userChoices = [];
+  window.hasUnlockedHidden = false;
+  window.triggeredHidden = null;
+  window.hiddenMaxDim = null;
+  window.hiddenQ17Options = null;
+  window.hiddenQ17Correct = false;
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = QUESTIONS[currentQ];
+  const isHiddenQ = (currentQ === 16);
+  const totalDisplay = isHiddenQ ? 17 : 16;
+  const progress = isHiddenQ ? 100 : (currentQ / 16) * 100;
+  document.getElementById('progressFill').style.width = progress + '%';
+  
+  let html = '';
+  if (isHiddenQ) {
+    html += '<div class="q-num" style="color:#ffd700;font-weight:800;">隐藏题 · 最终试炼</div>';
+    html += '<div style="text-align:center;color:rgba(255,215,0,.6);font-size:13px;margin-bottom:12px;">你的测试结果藏了点什么...</div>';
+  } else {
+    html += '<div class="q-num">第 ' + (currentQ+1) + '/' + totalDisplay + ' 题</div>';
+  }
+  html += '<div class="q-text">' + q.q + '</div>';
+  html += '<div class="options">';
+  
+  if (isHiddenQ) {
+    // C1方案：Q17动态2选1（正确选项对应最高分维度对，干扰项来自其他维度对）
+    var maxDim = window.hiddenMaxDim || 'H';
+    var pairMap = {H:'HC', C:'HC', F:'FS', S:'FS', L:'LQ', Q:'LQ', X:'XD', D:'XD'};
+    var correctPair = pairMap[maxDim];
+    var pairToIdx = {'HC':0, 'FS':1, 'LQ':2, 'XD':3};
+    var correctIdx = pairToIdx[correctPair];
+    var wrongIdxs = [0,1,2,3].filter(function(i){ return i !== correctIdx; });
+    var wrongIdx = wrongIdxs[Math.floor(Math.random() * wrongIdxs.length)];
+    var opts = [
+      {origIdx: correctIdx, isCorrect: true, data: q.options[correctIdx]},
+      {origIdx: wrongIdx, isCorrect: false, data: q.options[wrongIdx]}
+    ];
+    // 随机排序
+    for (var i = 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = opts[i]; opts[i] = opts[j]; opts[j] = tmp;
+    }
+    window.hiddenQ17Options = opts;
+    var letters = ['A','B'];
+    for (var di = 0; di < 2; di++) {
+      var opt = opts[di];
+      html += '<div class="option" onclick="selectOption(' + di + ')">';
+      html += '<span class="opt-letter">' + letters[di] + '</span>';
+      html += '<span>' + opt.data.text + '</span>';
+      html += '</div>';
+    }
+  } else {
+    const letters = ['A','B','C','D'];
+    var idxArr = [0,1,2,3];
+    for (var i = 3; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = idxArr[i]; idxArr[i] = idxArr[j]; idxArr[j] = tmp;
+    }
+    for (var di = 0; di < 4; di++) {
+      var origIdx = idxArr[di];
+      html += '<div class="option" onclick="selectOption('+origIdx+')">';
+      html += '<span class="opt-letter">'+letters[di]+'</span>';
+      html += '<span>'+q.options[origIdx].text+'</span>';
+      html += '</div>';
+    }
+  }
+  html += '</div>';
+  document.getElementById('quizContent').innerHTML = html;
+}
+
+function selectOption(origIdx) {
+  userChoices.push(origIdx);
+  
+  // C1方案：隐藏题记录选择是否正确
+  if (currentQ === 16 && window.hiddenQ17Options) {
+    window.hiddenQ17Correct = window.hiddenQ17Options[origIdx].isCorrect;
+  }
+  
+  var scores = {H:0,C:0,F:0,S:0,L:0,Q:0,X:0,D:0};
+  for (var ci = 0; ci < userChoices.length; ci++) {
+    var co;
+    if (ci === 16 && window.hiddenQ17Options) {
+      co = window.hiddenQ17Options[userChoices[ci]].data;
+    } else {
+      co = QUESTIONS[ci].options[userChoices[ci]];
+    }
+    for (var sk in co.score) { scores[sk] += co.score[sk]; }
+  }
+  
+  currentQ++;
+  
+  // 答完Q16（索引15）后，判断是否显示隐藏题Q17（索引16）
+  if (currentQ === 16) {
+    // C1方案：维度对差值≥5.0分出现隐藏题（出现率约39%，总触发率约19.5%）
+    var diffs = [
+      Math.abs(scores.H - scores.C),
+      Math.abs(scores.F - scores.S),
+      Math.abs(scores.L - scores.Q),
+      Math.abs(scores.X - scores.D)
+    ];
+    var maxDiff = Math.max.apply(Math, diffs);
+    
+    // 记录最高分维度（用于Q17动态生成和触发判断）
+    var singleScores = {H:scores.H, C:scores.C, F:scores.F, S:scores.S, L:scores.L, Q:scores.Q, X:scores.X, D:scores.D};
+    var maxDim = ''; var maxDimScore = -1;
+    for (var sk in singleScores) {
+      if (singleScores[sk] > maxDimScore) { maxDimScore = singleScores[sk]; maxDim = sk; }
+    }
+    window.hiddenMaxDim = maxDim;
+    window.hiddenQ17Options = null;
+    window.hiddenQ17Correct = false;
+    
+    if (maxDiff >= 5.0) {
+      showQuestion();
+      return;
+    } else {
+      showResult(scores);
+      return;
+    }
+  }
+  
+  if (currentQ >= QUESTIONS.length) {
+    // 显示结果加载动效
+    document.getElementById('quiz').style.display = 'none';
+    document.getElementById('resultLoading').style.display = 'flex';
+    // 1.2秒后显示真实结果
+    setTimeout(() => {
+      showResult(scores);
+      document.getElementById('resultLoading').style.display = 'none';
+    }, 1200);
+  } else {
+    showQuestion();
+  }
+}
+
+function renderDimBars(scores, finalType) {
+  const dims = [
+    { icon:'🔥', label:'能量', hot:'H', cold:'C', hotName:'热烈', coldName:'冷静' },
+    { icon:'⚡', label:'决策', hot:'F', cold:'S', hotName:'快速', coldName:'缓慢' },
+    { icon:'🎤', label:'社交', hot:'L', cold:'Q', hotName:'外放', coldName:'内敛' },
+    { icon:'🛡️', label:'应对', hot:'X', cold:'D', hotName:'爆发', coldName:'防御' }
+  ];
+  const total = scores.H + scores.C + scores.F + scores.S + scores.L + scores.Q + scores.X + scores.D || 1;
+  
+  // 人格代码总解码
+  let codeHtml = '';
+  if (finalType && finalType.length === 4) {
+    codeHtml += '<div style="text-align:center;margin-bottom:18px;padding:12px 16px;background:rgba(167,139,250,.08);border-radius:12px;border:1px solid rgba(167,139,250,.15);">';
+    codeHtml += '<div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:6px;">你的人格代码由以下四个维度拼成</div>';
+    codeHtml += '<div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:2px;">';
+    for (let i = 0; i < 4; i++) {
+      const d = dims[i];
+      const tc = finalType[i] || '';
+      const isHot = tc === d.hot;
+      const color = isHot ? '#ff6b6b' : '#48dbfb';
+      codeHtml += '<span style="color:'+color+'">'+tc+'</span>';
+      if (i < 3) codeHtml += '<span style="color:rgba(255,255,255,.3)">·</span>';
+    }
+    codeHtml += '</div>';
+    codeHtml += '<div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:6px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">';
+    for (let i = 0; i < 4; i++) {
+      const d = dims[i];
+      const tc = finalType[i] || '';
+      const isHot = tc === d.hot;
+      const name = isHot ? d.hotName : d.coldName;
+      codeHtml += '<span>'+d.icon+d.label+'('+name+')</span>';
+    }
+    codeHtml += '</div>';
+    codeHtml += '</div>';
+  }
+
+  let html = codeHtml;
+  const dimKeys = ['H','C','F','S','L','Q','X','D'];
+  for (let i = 0; i < dims.length; i++) {
+    const d = dims[i];
+    const h = scores[d.hot] || 0, c = scores[d.cold] || 0;
+    const sum = h + c;
+    const hp = sum ? Math.round(h / sum * 100) : 50;
+    const cp = 100 - hp;
+    const isTie = hp === cp;
+
+    // 用finalType决定哪个字母高亮（你的实际人格字母）
+    let hotCls = '', coldCls = '';
+    if (finalType) {
+      // finalType第i位：0→H/C, 1→F/S, 2→L/Q, 3→X/D
+      const typeChar = finalType[i] || '';
+      if (typeChar === d.hot) hotCls = ' dim-tilt-hot';   // 你的字母在热侧→热侧红
+      else if (typeChar === d.cold) coldCls = ' dim-tilt-cold'; // 你的字母在冷侧→冷侧蓝
+    }
+
+    html += '<div class="dim-row">';
+    html += '<span class="dim-icon">'+d.icon+'</span>';
+    html += '<span class="dim-label">'+d.label+'</span>';
+    html += '<span style="font-size:11px;color:rgba(255,107,107,.7);margin-right:4px;">'+d.hotName+'</span>';
+    html += '<span class="dim-letter'+hotCls+'"><b>'+d.hot+'</b></span>';
+    html += '<div class="dim-bar-wrap">';
+    if (hp > 0) html += '<div class="bar-hot" style="width:'+hp+'%"></div>';
+    if (cp > 0 && hp < 100) html += '<div class="bar-cold" style="width:'+cp+'%"></div>';
+    html += '</div>';
+    html += '<span class="dim-letter'+coldCls+'"><b>'+d.cold+'</b></span>';
+    html += '<span style="font-size:11px;color:rgba(72,219,251,.7);margin-left:4px;">'+d.coldName+'</span>';
+    html += '</div>';
+  }
+  
+  document.getElementById('dimBreakdown').innerHTML = html;
+}
+
+function showResult(scores) {
+  // C1方案：主人格判断排除Q17加分影响（Q17只影响隐藏人格，不影响主人格）
+  var mainScores = {H:scores.H, C:scores.C, F:scores.F, S:scores.S, L:scores.L, Q:scores.Q, X:scores.X, D:scores.D};
+  if (userChoices.length >= 17 && window.hiddenQ17Options) {
+    var q17Data = window.hiddenQ17Options[userChoices[16]].data;
+    for (var sk in q17Data.score) { mainScores[sk] -= q17Data.score[sk]; }
+  }
+  
+  var typeStr = '';
+  typeStr += (mainScores.H >= mainScores.C ? 'H' : 'C');
+  typeStr += (mainScores.F >= mainScores.S ? 'F' : 'S');
+  typeStr += (mainScores.L >= mainScores.Q ? 'L' : 'Q');
+  typeStr += (mainScores.X >= mainScores.D ? 'X' : 'D');
+
+  var finalType = typeStr;
+  window.triggeredHidden = null;
+
+  // C1方案：隐藏人格触发检测（Q17选对即触发，选错不触发）
+  // 出现条件：维度对差值≥5.0分；触发条件：Q17 2选1选对
+  if (userChoices.length >= 17 && window.hiddenQ17Correct === true) {
+    var maxDim = window.hiddenMaxDim;
+    var hiddenKey = '';
+    if (maxDim === 'H') hiddenKey = 'HIDDEN_HC_HOT';
+    else if (maxDim === 'C') hiddenKey = 'HIDDEN_HC_COLD';
+    else if (maxDim === 'F') hiddenKey = 'HIDDEN_FS_FAST';
+    else if (maxDim === 'S') hiddenKey = 'HIDDEN_FS_SLOW';
+    else if (maxDim === 'L') hiddenKey = 'HIDDEN_LQ_LOUD';
+    else if (maxDim === 'Q') hiddenKey = 'HIDDEN_LQ_QUIET';
+    else if (maxDim === 'X') hiddenKey = 'HIDDEN_XD_EXPLODE';
+    else if (maxDim === 'D') hiddenKey = 'HIDDEN_XD_DEFEND';
+    window.triggeredHidden = TYPES[hiddenKey];
+  }
+
+  window.finalType = finalType;
+  window.hasHiddenQuestion = userChoices.length >= 17; // 是否出现了隐藏题（用于分享卡片悬念控制）
+  window.hasUnlockedHidden = false; // 重置解锁状态
+  const t = TYPES[finalType] || TYPES[typeStr];
+  resultTypeData = t;
+
+  // 渲染四维反差拆解条（隐藏人格用finalType故意让字母不变色，和常规人格视觉区分）
+  renderDimBars(scores, finalType);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  
+  // 翻转卡片 - 正面（主人格）
+  var flipFrontImg = document.getElementById('flipFrontImg');
+  var flipFrontPlaceholder = document.getElementById('flipFrontPlaceholder');
+  var flipFrontName = document.getElementById('flipFrontName');
+  var flipCardInner = document.getElementById('flipCardInner');
+  var flipCardBack = document.getElementById('flipCardBack');
+  var flipBackContent = document.getElementById('flipBackContent');
+  
+  // 重置翻转
+  if(flipCardInner) flipCardInner.classList.remove('flipped');
+  
+  // 处理图片路径：Windows绝对路径添加file:///前缀
+  function fixImgPath(p){
+    if(!p) return p;
+    p = p.replace(/\\/g,'/');
+    if(/^\w:\//.test(p) && !p.startsWith('file:///')){
+      p = 'file:///' + p;
+    }
+    return p;
+  }
+  var frontImgPath = fixImgPath(t.img);
+  if(frontImgPath){
+    flipFrontImg.src = frontImgPath;
+    flipFrontImg.style.display = 'block';
+    flipFrontPlaceholder.style.display = 'none';
+  } else {
+    flipFrontImg.style.display = 'none';
+    flipFrontPlaceholder.style.display = 'flex';
+    flipFrontPlaceholder.textContent = t.name.charAt(0);
+  }
+  flipFrontImg.onerror = function(){this.style.display='none'; flipFrontPlaceholder.style.display='flex'; flipFrontPlaceholder.textContent=t.name.charAt(0);};
+  flipFrontName.textContent = t.name;
+  
+  // 翻转卡片 - 背面（隐藏人格）标准化布局
+  var flipBackImg = document.getElementById('flipBackImg');
+  var flipBackPlaceholder = document.getElementById('flipBackPlaceholder');
+  var flipBackName = document.getElementById('flipBackName');
+  var flipBackSlogan = document.getElementById('flipBackSlogan');
+  var flipBackCode = document.getElementById('flipBackCode');
+  var flipBackRarity = document.getElementById('flipBackRarity');
+  var flipBackExtra = document.getElementById('flipBackExtra');
+  
+  // 背面内容根据隐藏人格状态设置
+  if(window.triggeredHidden){
+    // 已触发隐藏人格 → 背面直接设置图片和完整信息
+    var h = window.triggeredHidden;
+    var hImgPath = fixImgPath(h.img);
+    // 直接设置隐藏人格图片（和正面图片设置方式完全一致）
+    if(flipBackImg && hImgPath){
+      flipBackImg.src = hImgPath;
+      flipBackImg.style.display = 'block';
+      flipBackImg.onerror = function(){
+        this.style.display='none';
+        if(flipBackPlaceholder){
+          flipBackPlaceholder.style.display='flex';
+          flipBackPlaceholder.textContent = h.name.charAt(0);
+        }
+      };
+      if(flipBackPlaceholder) flipBackPlaceholder.style.display = 'none';
+    } else {
+      if(flipBackImg) flipBackImg.style.display = 'none';
+      if(flipBackPlaceholder){
+        flipBackPlaceholder.style.display = 'flex';
+        flipBackPlaceholder.textContent = h.name.charAt(0);
+      }
+    }
+    if(flipBackName) flipBackName.textContent = h.name;
+    if(flipBackSlogan) flipBackSlogan.textContent = '"' + (h.slogan || '') + '"';
+    if(flipBackCode) flipBackCode.textContent = '[' + (h.code || 'HIDDEN') + ']';
+    if(flipBackRarity) flipBackRarity.textContent = h.rarity;
+    // 背面只保留基础信息，去掉标签/吐槽/治愈
+    if(flipBackExtra) flipBackExtra.innerHTML = '';
+    flipCardBack.classList.remove('locked');
+  } else {
+    // 未触发隐藏人格 → 背面显示占位提示（文字整合到占位区域）
+    if(flipBackImg) flipBackImg.style.display = 'none';
+    if(flipBackPlaceholder){
+      flipBackPlaceholder.style.display = 'flex';
+      flipBackPlaceholder.innerHTML = `
+<div style="font-size:36px;font-weight:700;background:linear-gradient(135deg,#ffd700,#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;text-align:center;">隐藏人格</div>
+<div style="font-size:16px;color:#e9d5ff;margin-bottom:8px;text-align:center;font-style:italic;">"你的隐藏人格选择隐身。"</div>
+<div style="font-size:14px;color:#d8b4fe;margin-bottom:16px;text-align:center;">约80% 的用户未触发隐藏人格</div>
+<div style="background:rgba(167,139,250,.2);color:#d8b4fe;padding:6px 16px;border-radius:12px;font-size:14px;font-weight:500;text-align:center;">#表里如一</div>
+`;
+    }
+    // 隐藏原来的外部文字元素，已经整合到占位区域
+    if(flipBackName) flipBackName.style.display = 'none';
+    if(flipBackSlogan) flipBackSlogan.style.display = 'none';
+    if(flipBackCode) flipBackCode.style.display = 'none';
+    if(flipBackRarity){ flipBackRarity.textContent = ''; flipBackRarity.style.display = 'none'; }
+    // 未触发隐藏人格 → 背面保留吐槽/治愈（标签已经放到上面占位区域）
+    var noTriggerExtra = '';
+    noTriggerExtra += '<div class="flip-back-locked-box flip-back-locked-roast"><div class="flip-back-locked-label">💬 隐藏吐槽</div><div class="flip-back-locked-text">不是每个人都有B面。</div></div>';
+    noTriggerExtra += '<div class="flip-back-locked-box flip-back-locked-heal"><div class="flip-back-locked-label">✨ 隐藏治愈</div><div class="flip-back-locked-text">A面活得漂亮，也是本事。</div></div>';
+    if(flipBackExtra) flipBackExtra.innerHTML = noTriggerExtra;
+    flipCardBack.classList.add('locked');
+  }
+  
+  // 翻转卡片正面 - 设置人格信息（名称/slogan/代码/稀有度）
+  var flipFrontName = document.getElementById('flipFrontName');
+  var flipFrontSlogan = document.getElementById('flipFrontSlogan');
+  var flipFrontCode = document.getElementById('flipFrontCode');
+  var flipFrontRarity = document.getElementById('flipFrontRarity');
+  if(flipFrontName) flipFrontName.textContent = t.name;
+  if(flipFrontSlogan) flipFrontSlogan.textContent = t.slogan || '';
+  if(flipFrontCode) flipFrontCode.textContent = '[' + t.code + ']';
+  if(flipFrontRarity && t.rarity) {
+    if(t.isHidden) {
+      flipFrontRarity.textContent = '🏆 隐藏人格触发 · 非标准分布';
+    } else {
+      flipFrontRarity.textContent = '📊 全站 ' + t.rarity.replace('%','') + '% 的人测出这个人格';
+    }
+    flipFrontRarity.style.display = 'inline-block';
+  } else if(flipFrontRarity) {
+    flipFrontRarity.style.display = 'none';
+  }
+  
+  // 描述
+  document.getElementById('resultDesc').innerHTML = t.desc.replace(/\n/g,'<br>');
+  
+  // 隐藏人格模块：重置并填充（触发时填充内容，但默认隐藏，等解锁后显示）
+  var hiddenModules = document.getElementById('hiddenModules');
+  var hiddenDesc = document.getElementById('hiddenDesc');
+  var hiddenRoast = document.getElementById('hiddenRoast');
+  var hiddenHeal = document.getElementById('hiddenHeal');
+  var hiddenTags = document.getElementById('hiddenTags');
+  if(hiddenModules){
+    hiddenModules.style.display = 'none';
+    hiddenModules.style.opacity = '0';
+  }
+  if(window.triggeredHidden){
+    var h = window.triggeredHidden;
+    if(hiddenDesc) hiddenDesc.innerHTML = (h.desc || '').replace(/\n/g,'<br>');
+    if(hiddenRoast) hiddenRoast.textContent = h.roast || '';
+    if(hiddenHeal) hiddenHeal.textContent = h.heal || '';
+    if(hiddenTags){
+      var hTagHtml = '';
+      var hTags = (h.tags || []);
+      for(var hi=0; hi<hTags.length; hi++){
+        hTagHtml += '<span class="flip-back-locked-tag">' + hTags[hi] + '</span>';
+      }
+      hiddenTags.innerHTML = hTagHtml;
+    }
+  }
+  
+  // 解锁按钮控制（隐藏人格内容全部集中到翻转卡片背面）
+  var unlockBtn = document.getElementById('unlockBtn');
+  var flipFrontHint = document.getElementById('flipFrontHint');
+  var hasQ17 = userChoices.length >= 17;
+  
+  if (window.triggeredHidden) {
+    // 触发了隐藏人格 → 显示解锁按钮，点击后卡片翻转揭晓
+    if(unlockBtn) unlockBtn.style.display = 'block';
+    if(flipFrontHint) flipFrontHint.style.display = 'none';
+    // 底部裂变引导
+    document.getElementById('fissureMain').textContent = '测完别走，拉个朋友下水';
+    document.getElementById('fissureSub').textContent = '看看朋友的隐藏人格是什么';
+  } else if (!hasQ17) {
+    // 没答Q17 → 不显示解锁按钮，显示翻转提示
+    if(unlockBtn) unlockBtn.style.display = 'none';
+    if(flipFrontHint) flipFrontHint.style.display = 'flex';
+    // 裂变引导：未出现Q17
+    document.getElementById('fissureMain').textContent = '🔒 你的隐藏人格埋得太深了——拉个朋友来挖挖？';
+    document.getElementById('fissureSub').textContent = '看看朋友能不能触发隐藏题';
+  } else {
+    // 答了Q17但没触发 → 显示解锁按钮，点击后揭晓"未触发"
+    if(unlockBtn) unlockBtn.style.display = 'block';
+    if(flipFrontHint) flipFrontHint.style.display = 'none';
+    // 裂变引导：未触发
+    document.getElementById('fissureMain').textContent = '😭 80%的人测不出隐藏人格——你是那80%，还是你朋友是那20%？';
+    document.getElementById('fissureSub').textContent = '拉个朋友来测，看看TA能不能触发';
+  }
+  
+  // 毒舌金句 & 治愈金句
+  document.getElementById('resultRoast').innerHTML = t.roast;
+  document.getElementById('resultHeal').innerHTML = t.heal || '';
+  
+  // 标签
+  var tagsHtml = '';
+  var tagList = t.tags || ['#'+t.name];
+  for(var ti=0;ti<tagList.length;ti++){
+    tagsHtml+='<span class="tag-pill">'+tagList[ti]+'</span>';
+  }
+  document.getElementById('resultTags').innerHTML = tagsHtml;
+
+  // 最配/最冲人格
+  var matchEl = document.getElementById('resultMatch');
+  if (matchEl && t.bestMatch && TYPES[t.bestMatch]) {
+    var best = TYPES[t.bestMatch];
+    var worst = TYPES[t.worstMatch] || null;
+    var mHtml = '<div style="display:flex;gap:10px;margin:14px 0;">';
+    mHtml += '<div style="flex:1;background:rgba(95,108,255,.08);border:1px solid rgba(95,108,255,.2);border-radius:12px;padding:12px;text-align:center;">';
+    mHtml += '<div style="font-size:11px;color:#5f6cff;margin-bottom:5px;font-weight:600;">🔥 最配人格</div>';
+    mHtml += '<div style="font-size:15px;font-weight:bold;color:#fff;">' + best.name + '</div>';
+    mHtml += '<div style="font-size:10px;color:#777;margin-top:2px;">[' + best.code + ']</div>';
+    mHtml += '</div>';
+    if (worst) {
+      mHtml += '<div style="flex:1;background:rgba(255,107,129,.08);border:1px solid rgba(255,107,129,.2);border-radius:12px;padding:12px;text-align:center;">';
+      mHtml += '<div style="font-size:11px;color:#ff6b81;margin-bottom:5px;font-weight:600;">💥 最冲人格</div>';
+      mHtml += '<div style="font-size:15px;font-weight:bold;color:#fff;">' + worst.name + '</div>';
+      mHtml += '<div style="font-size:10px;color:#777;margin-top:2px;">[' + worst.code + ']</div>';
+      mHtml += '</div>';
+    }
+    mHtml += '</div>';
+    matchEl.innerHTML = mHtml;
+    matchEl.style.display = 'block';
+  } else if (matchEl) {
+    matchEl.style.display = 'none';
+  }
+
+  // 核心冲突3：被邀请用户结果页顶部横幅
+  var inviteBanner = document.getElementById('inviteBanner');
+  var inviterCode = getInviter();
+  if(inviteBanner && inviterCode && TYPES[inviterCode]){
+    inviteBanner.style.display = 'block';
+  } else if(inviteBanner){
+    inviteBanner.style.display = 'none';
+  }
+
+  // 有邀请人时显示"查看默契度"按钮（保留作为备用入口）
+  var compareWrap = document.getElementById('compareBtnWrap');
+  if (compareWrap && inviterCode && TYPES[inviterCode]) {
+    compareWrap.style.display = 'block';
+  } else if (compareWrap) {
+    compareWrap.style.display = 'none';
+  }
+
+  // P0-1: 用户分数持久化，供对比页能量条对比使用
+  window.userScores = mainScores;
+
+  window.scrollTo(0,0);
+  console.log('[BTI] Result:', t.name, t.code, 'img:', t.img);
+}
+
+// 获取常规内容模块（用于溶解切换）
+function getFadeModules(){
+  return [
+    document.getElementById('dimBreakdown'),
+    document.getElementById('resultDesc'),
+    document.getElementById('mainRoastBox'),
+    document.getElementById('mainHealBox'),
+    document.getElementById('resultTags')
+  ].filter(function(el){ return !!el; });
+}
+
+// 翻转卡片切换
+function toggleFlipCard(){
+  // 已解锁 或 未出现Q17（背面直接展示未触发状态）时允许翻转
+  if(!window.hasUnlockedHidden && window.hasHiddenQuestion) return;
+  var inner = document.getElementById('flipCardInner');
+  if(!inner) return;
+  inner.classList.toggle('flipped');
+  
+  // 已解锁+触发隐藏人格 → 翻转时同步切换常规模块/隐藏人格模块
+  if(window.hasUnlockedHidden && window.triggeredHidden){
+    var isFlipped = inner.classList.contains('flipped');
+    var fadeEls = getFadeModules();
+    var hm = document.getElementById('hiddenModules');
+    if(isFlipped){
+      // 翻到背面（隐藏人格）→ 常规模块淡出，隐藏模块淡入
+      fadeEls.forEach(function(el){
+        el.style.transition = 'opacity .6s ease';
+        el.style.opacity = '0';
+      });
+      setTimeout(function(){
+        fadeEls.forEach(function(el){ el.style.display = 'none'; });
+        if(hm){
+          hm.style.display = 'block';
+          requestAnimationFrame(function(){
+            hm.style.transition = 'opacity .6s ease';
+            hm.style.opacity = '1';
+          });
+        }
+      }, 600);
+    } else {
+      // 翻回正面（常规人格）→ 隐藏模块淡出，常规模块淡入
+      if(hm){
+        hm.style.transition = 'opacity .6s ease';
+        hm.style.opacity = '0';
+      }
+      setTimeout(function(){
+        if(hm) hm.style.display = 'none';
+        fadeEls.forEach(function(el){
+          el.style.display = 'block';
+          el.style.opacity = '0';
+        });
+        requestAnimationFrame(function(){
+          fadeEls.forEach(function(el){
+            el.style.transition = 'opacity .6s ease';
+            el.style.opacity = '1';
+          });
+        });
+      }, 600);
+    }
+  }
+}
+
+// 解锁隐藏人格动画
+function unlockHidden(){
+  var overlay = document.getElementById('unlockOverlay');
+  var icon = document.getElementById('unlockIcon');
+  var text = document.getElementById('unlockText');
+  var progress = document.getElementById('unlockProgress');
+  var sub = document.getElementById('unlockSub');
+  var unlockBtn = document.getElementById('unlockBtn');
+  var flipBackImg = document.getElementById('flipBackImg');
+  var flipBackPlaceholder = document.getElementById('flipBackPlaceholder');
+  
+  overlay.style.display = 'flex';
+  
+  // 阶段1：扫描
+  setTimeout(function(){
+    progress.style.width = '25%';
+    text.textContent = '正在扫描你的B面...';
+    sub.textContent = '检测信号中';
+  }, 100);
+  
+  // 阶段2：检测到异常
+  setTimeout(function(){
+    progress.style.width = '55%';
+    text.textContent = '⚠️ 检测到异常信号';
+    sub.textContent = '信号强度：强';
+    icon.textContent = '⚡';
+  }, 900);
+  
+  // 阶段3：解析中
+  setTimeout(function(){
+    progress.style.width = '80%';
+    text.textContent = '正在解析第二人格...';
+    sub.textContent = '解码中，请稍候';
+  }, 1800);
+  
+  // 阶段4：解锁成功
+  setTimeout(function(){
+    progress.style.width = '100%';
+    var triggered = window.triggeredHidden;
+    if(triggered){
+      text.textContent = '🏆 你的隐藏人格已经现身了';
+      sub.textContent = '已解锁：' + triggered.name;
+      icon.textContent = '🔓';
+      // 解锁时只更新翻转卡片背面的图片（其他内容已在showResult中设置好）
+      var flipCardBack = document.getElementById('flipCardBack');
+      var flipBackImg = document.getElementById('flipBackImg');
+      var flipBackPlaceholder = document.getElementById('flipBackPlaceholder');
+      
+      if(flipCardBack) flipCardBack.classList.remove('locked');
+      
+      // 图片已在showResult中预加载，解锁后确保可见
+      if(flipBackImg && flipBackImg.src && !flipBackImg.src.endsWith('/')){
+        flipBackImg.style.display = 'block';
+      }
+    } else {
+      text.textContent = '🔒 未检测到隐藏人格';
+      sub.textContent = '想知道你的隐藏人格？再测一次试试';
+      icon.textContent = '✓';
+    }
+  }, 2800);
+  
+  // 阶段5：关闭动画，显示结果
+  setTimeout(function(){
+    overlay.style.display = 'none';
+    if(unlockBtn) unlockBtn.style.display = 'none';
+    window.hasUnlockedHidden = true; // 标记已解锁
+    var triggered = window.triggeredHidden;
+    if(triggered){
+      // 常规人格模块先淡出，再翻转卡片 → 溶解切换效果
+      var fadeEls = getFadeModules();
+      fadeEls.forEach(function(el){
+        el.style.transition = 'opacity .7s ease';
+        el.style.opacity = '0';
+      });
+      setTimeout(function(){
+        var flipCardInner = document.getElementById('flipCardInner');
+        if(flipCardInner) flipCardInner.classList.add('flipped');
+        // 翻转完成后：隐藏常规模块 + 显示隐藏人格模块
+        setTimeout(function(){
+          fadeEls.forEach(function(el){ el.style.display = 'none'; });
+          var hm = document.getElementById('hiddenModules');
+          if(hm){
+            hm.style.display = 'block';
+            requestAnimationFrame(function(){
+              hm.style.transition = 'opacity .6s ease';
+              hm.style.opacity = '1';
+            });
+          }
+        }, 600);
+      }, 400);
+    }
+  }, 4000);
+}
+
+// 分析卡片 - 生成后弹窗预览，用户决定是否下载
+function shareCard(){
+  if(!resultTypeData){alert('没有结果数据');return;}
+  var t=resultTypeData;
+  
+  // 填充分享卡片内容
+  var shareImgEl = document.getElementById('shareImg');
+  shareImgEl.src = t.img || '';
+  shareImgEl.onerror = function(){ this.style.display = 'none'; };
+  shareImgEl.style.display = 'block';
+  document.getElementById('shareName').textContent = t.name;
+  document.getElementById('shareSlogan').textContent = t.slogan || '';
+
+  // 稀有度显示（主人格）
+  document.getElementById('shareCode').textContent = (t.code || '').toUpperCase();
+  document.getElementById('shareRarity').textContent = '📊 全站 ' + (t.rarity || '').replace('%','') + '% 的人测出这个人格';
+
+  // 人格化分享引导语（按人格定制）
+  var ctaEl = document.getElementById('shareCta');
+  if(ctaEl){
+    var hook = SHARE_HOOKS[t.code] || '👉 测测你是什么型';
+    ctaEl.textContent = hook;
+  }
+
+  // 分享链接带邀请参数（裂变）
+  var baseUrl = 'http://47.103.121.204/bti';
+  var shareUrl = baseUrl + '?ref=' + t.code;
+  document.getElementById('shareQRLink').textContent = shareUrl;
+  document.getElementById('shareQRLink').href = shareUrl;
+
+  // 生成简易QR码（canvas绘制）
+  drawSimpleQR('shareQRCanvas', shareUrl);
+
+  // 悬念钩子：隐藏人格只露首字（三种状态）
+  var suspenseText = document.getElementById('shareSuspenseText');
+  var suspenseHint = document.getElementById('shareSuspenseHint');
+  var hasHQ = window.hasHiddenQuestion;
+  var hasUnlocked = window.hasUnlockedHidden;
+
+  if(!hasHQ){
+    // 没出现隐藏题
+    suspenseText.textContent = '我的隐藏人格选择隐身';
+    suspenseHint.textContent = '扫码测测你的隐藏人格';
+  } else if(hasHQ && !hasUnlocked){
+    // 出现了但没解锁 → 最强悬念
+    suspenseText.textContent = '我的隐藏人格是「???」';
+    suspenseHint.textContent = '扫码解锁你的隐藏人格';
+  } else if(window.triggeredHidden){
+    // 已解锁 + 触发了 → 只露首字
+    var h = window.triggeredHidden;
+    var firstChar = (h.name || '').charAt(0);
+    suspenseText.textContent = '我的隐藏人格是「' + firstChar + '...」';
+    suspenseHint.textContent = '扫码看看你的隐藏人格';
+  } else {
+    // 已解锁 + 没触发
+    suspenseText.textContent = '我的隐藏人格选择隐身';
+    suspenseHint.textContent = '扫码测测你的隐藏人格';
+  }
+
+  // 显示加载中状态
+  var overlay=document.getElementById('cardOverlay');
+  var previewImg=document.getElementById('cardPreview');
+  var cardActions=document.getElementById('cardActions');
+  var wrap=document.getElementById('cardPreviewWrap');
+  overlay.style.display='flex';
+  previewImg.style.display='none';
+  cardActions.style.display='none';
+  document.getElementById('cardLoading').style.display='block';
+  
+  // 清理之前的预览内容
+  wrap.innerHTML = '';
+  wrap.appendChild(previewImg);
+  
+  // 渲染卡片到canvas
+  var sa=document.getElementById('shareArea');
+  sa.style.display='block';
+  sa.style.position='fixed';sa.style.left='-9999px';sa.style.top='0';
+  
+  var isLocalFile = window.location.protocol === 'file:';
+  
+  setTimeout(function(){
+    // 修复：html2canvas不支持background-clip:text，截图前用!important强制覆盖CSS规则
+    var shareNameEl = document.getElementById('shareName');
+    shareNameEl.style.setProperty('background', 'none', 'important');
+    shareNameEl.style.setProperty('-webkit-background-clip', 'initial', 'important');
+    shareNameEl.style.setProperty('background-clip', 'initial', 'important');
+    shareNameEl.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+    shareNameEl.style.setProperty('color', '#ffffff', 'important');
+
+    // 本地file协议：直接显示DOM预览（无法截图但可预览效果）
+    if(isLocalFile){
+      // 恢复样式：移除强制覆盖的内联属性，让CSS重新生效
+      shareNameEl.style.removeProperty('background');
+      shareNameEl.style.removeProperty('-webkit-background-clip');
+      shareNameEl.style.removeProperty('background-clip');
+      shareNameEl.style.removeProperty('-webkit-text-fill-color');
+      shareNameEl.style.removeProperty('color');
+      sa.style.display='none';
+      sa.style.position='';
+      sa.style.left='';
+      sa.style.top='';
+      // 克隆shareArea到预览区域
+      var clone = sa.cloneNode(true);
+      clone.style.display = 'block';
+      clone.style.position = 'relative';
+      clone.style.left = '0';
+      clone.style.top = '0';
+      clone.style.transform = 'scale(0.85)';
+      clone.style.transformOrigin = 'top center';
+      clone.style.margin = '0 auto';
+      wrap.style.display='block';
+      wrap.appendChild(clone);
+      previewImg.style.display='none';
+      // 本地不显示保存按钮，只显示关闭
+      cardActions.style.display='flex';
+      var saveBtn = cardActions.querySelector('button:first-child');
+      if(saveBtn) saveBtn.style.display = 'none';
+      document.getElementById('cardLoading').style.display='none';
+      // 添加提示
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(255,107,129,.9);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;z-index:10;';
+      tip.textContent = '本地预览效果，部署后可保存图片';
+      wrap.appendChild(tip);
+      return;
+    }
+    
+    // 在线环境：html2canvas生成高清图片（scale:3平衡清晰度与文件大小）
+    html2canvas(sa,{
+      backgroundColor:'#12122a',scale:3,useCORS:true,
+      allowTaint:true,logging:false
+    }).then(function(canvas){
+      // 恢复样式
+      shareNameEl.style.removeProperty('background');
+      shareNameEl.style.removeProperty('-webkit-background-clip');
+      shareNameEl.style.removeProperty('background-clip');
+      shareNameEl.style.removeProperty('-webkit-text-fill-color');
+      shareNameEl.style.removeProperty('color');
+      sa.style.display='none';
+      // 在overlay中显示预览图
+      wrap.style.display='block';
+      previewImg.src=canvas.toDataURL('image/png');
+      previewImg.style.display='block';
+      cardActions.style.display='flex';
+      var saveBtn = cardActions.querySelector('button:first-child');
+      if(saveBtn) saveBtn.style.display = 'inline-block';
+      document.getElementById('cardLoading').style.display='none';
+      
+      // 存储下载链接
+      previewImg.dataset.downloadUrl=canvas.toDataURL('image/png');
+    }).catch(function(e){
+      // 恢复样式
+      shareNameEl.style.removeProperty('background');
+      shareNameEl.style.removeProperty('-webkit-background-clip');
+      shareNameEl.style.removeProperty('background-clip');
+      shareNameEl.style.removeProperty('-webkit-text-fill-color');
+      shareNameEl.style.removeProperty('color');
+      console.error('[BTI] shareCard error:',e);
+      alert('生成失败，请稍后重试');overlay.style.display='none';sa.style.display='none';
+    });
+  },300);
+}
+
+// 真实QR码生成（扫码直接跳转）
+function drawSimpleQR(canvasId, text){
+  var canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var img = new Image();
+  img.crossOrigin = 'anonymous';
+  // 调用免费二维码API生成真实可扫描的二维码
+  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=82x82&margin=2&ecc=M&data=' + encodeURIComponent(text);
+  img.onload = function(){
+    ctx.drawImage(img, 0, 0, 82, 82);
+  }
+}
+
+// 下载卡片
+function downloadCard(){
+  var url=document.getElementById('cardPreview').dataset.downloadUrl;
+  if(!url){alert('图片未准备好');return;}
+  var link=document.createElement('a');
+  var friendCode = getInviter();
+  if(friendCode && document.getElementById('comparePage').style.display !== 'none'){
+    link.download='BTI-默契度-'+resultTypeData.code+'-VS-'+friendCode+'.png';
+  } else {
+    link.download='BTI-'+resultTypeData.code+'-分析卡片.png';
+  }
+  link.href=url;link.click();
+}
+
+// 关闭卡片预览
+function closeCardPreview(){
+  document.getElementById('cardOverlay').style.display='none';
+}
+
+// ========== 裂变机制 ==========
+function getUrlParam(name){
+  var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return match && decodeURIComponent(match[1]);
+}
+function saveInviter(code){
+  if(code) sessionStorage.setItem('bti_inviter', code);
+}
+function getInviter(){
+  // P0-2: URL参数始终优先sessionStorage
+  var urlRef = getUrlParam('ref');
+  if(urlRef && TYPES[urlRef]) return urlRef;
+  return sessionStorage.getItem('bti_inviter') || '';
+}
+function clearInviter(){
+  sessionStorage.removeItem('bti_inviter');
+}
+
+// 页面加载时检查邀请
+function checkInvite(){
+  var ref = getUrlParam('ref');
+  if(ref && TYPES[ref]){
+    // P0-2: URL参数始终优先，覆盖sessionStorage
+    saveInviter(ref);
+    var inviter = TYPES[ref];
+    var tip = document.getElementById('inviteTip');
+    // P1-2: 被邀请欢迎页升级——展示朋友人格信息+明确"开始测试"按钮
+    tip.innerHTML =
+      '<div style="font-size:16px;margin-bottom:6px;">👋 你朋友是 <b style="color:#ffd700;">' + inviter.name + '</b></div>' +
+      '<div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:8px;">"' + inviter.slogan + '"</div>' +
+      '<div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:10px;">TA 邀你测测你的隐藏人格</div>' +
+      '<button onclick="goTest()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;border:none;padding:10px 28px;border-radius:20px;font-size:14px;font-weight:bold;cursor:pointer;">开始测试</button>';
+    tip.style.display = 'block';
+  }
+}
+
+// 默契度计算：基于人格代码维度重叠率
+function getMatchScore(myCode, friendCode){
+  if(!myCode || !friendCode || myCode.length !== 4 || friendCode.length !== 4) return 0;
+  var same = 0;
+  for(var i=0;i<4;i++){ if(myCode[i] === friendCode[i]) same++; }
+  return Math.round(same / 4 * 100);
+}
+
+// 默契度文案
+function getMatchLabel(score){
+  if(score === 100) return {label:'复制粘贴', desc:'你们连反差都反得一模一样，建议直接拜把子。'};
+  if(score >= 75) return {label:'灵魂同频', desc:'高度默契，一个眼神就能懂对方的烂梗。'};
+  if(score >= 50) return {label:'互补共生', desc:'你们来自同一个星球的不同半球，碰撞才有火花。'};
+  if(score >= 25) return {label:'互相好奇', desc:'你们互相理解不了，但互相吸引。危险又迷人。'};
+  return {label:'跨物种交流', desc:'你们来自不同星球，建议先从翻译器开始。'};
+}
+
+// P1-1: 手动输入朋友代码对比
+function manualCompare(){
+  var input = document.getElementById('friendCodeInput');
+  var code = (input.value || '').toUpperCase().trim();
+  if(!code || code.length !== 4){ alert('请输入4位人格代码（如 HFLX）'); return; }
+  if(!TYPES[code]){ alert('无效的人格代码，请检查后重新输入'); return; }
+  // 保存手动输入的朋友代码到临时变量，供showCompare使用
+  window.manualFriendCode = code;
+  showCompare(code);
+}
+
+// 显示对比页（支持手动传入friendCode）
+function showCompare(friendCode){
+  var myCode = resultTypeData.code;
+  // 优先使用传入的参数，其次是sessionStorage中的邀请人
+  var fc = friendCode || getInviter();
+  if(!fc || !TYPES[fc]){ alert('暂无邀请人数据'); return; }
+  var my = resultTypeData;
+  var friend = TYPES[fc];
+  var score = getMatchScore(myCode, fc);
+  var match = getMatchLabel(score);
+
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('comparePage').style.display = 'block';
+  window.scrollTo(0,0);
+
+  document.getElementById('compareSelf').innerHTML =
+    '<div style="font-size:13px;color:#888;margin-bottom:4px;">你</div>' +
+    '<div style="font-size:18px;font-weight:bold;color:#fff;">' + my.name + '</div>' +
+    '<div style="font-size:11px;color:#777;">[' + myCode + ']</div>';
+  document.getElementById('compareFriend').innerHTML =
+    '<div style="font-size:13px;color:#888;margin-bottom:4px;">TA</div>' +
+    '<div style="font-size:18px;font-weight:bold;color:#fff;">' + friend.name + '</div>' +
+    '<div style="font-size:11px;color:#777;">[' + fc + ']</div>';
+  document.getElementById('compareScore').textContent = score + '%';
+  document.getElementById('compareLabel').textContent = match.label;
+  document.getElementById('compareDesc').textContent = match.desc;
+
+  // 功能缺失2：四维能量条并排对比
+  var dimBars = document.getElementById('compareDimBars');
+  if(dimBars){
+    var dims = [
+      {key:'H', name:'精力', pair:['H','C']},
+      {key:'F', name:'决策', pair:['F','S']},
+      {key:'L', name:'社交', pair:['L','Q']},
+      {key:'X', name:'应对', pair:['X','D']}
+    ];
+    var myDir = {H:myCode[0]==='H',C:myCode[0]==='C',F:myCode[1]==='F',S:myCode[1]==='S',L:myCode[2]==='L',Q:myCode[2]==='Q',X:myCode[3]==='X',D:myCode[3]==='D'};
+    var friendDir = {H:fc[0]==='H',C:fc[0]==='C',F:fc[1]==='F',S:fc[1]==='S',L:fc[2]==='L',Q:fc[2]==='Q',X:fc[3]==='X',D:fc[3]==='D'};
+    var barsHtml = '<div style="font-size:13px;color:#888;margin-bottom:12px;text-align:center;">🔥 四维能量对比</div>';
+    dims.forEach(function(d){
+      var myHot = myDir[d.pair[0]] ? 75 : 25;
+      var friendHot = friendDir[d.pair[0]] ? 75 : 25;
+      barsHtml += '<div style="margin-bottom:10px;">';
+      barsHtml += '<div style="font-size:11px;color:#aaa;margin-bottom:4px;">' + d.name + '</div>';
+      barsHtml += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">';
+      barsHtml += '<div style="font-size:10px;color:#888;width:24px;">我</div>';
+      barsHtml += '<div style="flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;">';
+      barsHtml += '<div style="width:' + myHot + '%;height:100%;background:linear-gradient(90deg,#ff6b81,#feca57);border-radius:3px;"></div>';
+      barsHtml += '</div></div>';
+      barsHtml += '<div style="display:flex;align-items:center;gap:8px;">';
+      barsHtml += '<div style="font-size:10px;color:#888;width:24px;">TA</div>';
+      barsHtml += '<div style="flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;">';
+      barsHtml += '<div style="width:' + friendHot + '%;height:100%;background:linear-gradient(90deg,#48dbfb,#5f6cff);border-radius:3px;"></div>';
+      barsHtml += '</div></div></div>';
+    });
+    dimBars.innerHTML = barsHtml;
+    dimBars.style.display = 'block';
+  }
+
+  // 功能缺失2：隐藏人格对比
+  var hiddenCompare = document.getElementById('compareHidden');
+  if(hiddenCompare){
+    var myHiddenLabel = document.getElementById('hiddenEvenLabel');
+    var hasMyHidden = myHiddenLabel && myHiddenLabel.textContent.indexOf('🏆') !== -1;
+    var hiddenHtml = '<div style="font-size:13px;color:#888;margin-bottom:12px;text-align:center;">🔒 隐藏人格对比</div>';
+    hiddenHtml += '<div style="display:flex;gap:12px;">';
+    hiddenHtml += '<div style="flex:1;padding:12px;background:rgba(255,255,255,.03);border-radius:10px;text-align:center;">';
+    hiddenHtml += '<div style="font-size:11px;color:#888;margin-bottom:4px;">你</div>';
+    if(hasMyHidden){
+      var hiddenName = myHiddenLabel.textContent.replace('🏆 ','');
+      hiddenHtml += '<div style="font-size:14px;color:#ffd700;font-weight:bold;">' + hiddenName + '</div>';
+    } else {
+      hiddenHtml += '<div style="font-size:14px;color:#a78bfa;">🔒 未触发</div>';
+      hiddenHtml += '<div style="font-size:11px;color:#888;margin-top:4px;">#表里如一</div>';
+    }
+    hiddenHtml += '</div>';
+    hiddenHtml += '<div style="flex:1;padding:12px;background:rgba(255,255,255,.03);border-radius:10px;text-align:center;">';
+    hiddenHtml += '<div style="font-size:11px;color:#888;margin-bottom:4px;">TA</div>';
+    hiddenHtml += '<div style="font-size:14px;color:#888;">❓ 未知</div>';
+    hiddenHtml += '<div style="font-size:11px;color:#888;margin-top:4px;">让TA也来测测</div>';
+    hiddenHtml += '</div></div>';
+    hiddenCompare.innerHTML = hiddenHtml;
+    hiddenCompare.style.display = 'block';
+  }
+
+  // 功能缺失2+5：关系深度解读（含传播钩子）
+  var relation = document.getElementById('compareRelation');
+  if(relation){
+    var hookText = '';
+    if(score >= 75) hookText = '一个眼神就能懂对方的烂梗';
+    else if(score >= 50) hookText = '碰撞才有火花';
+    else if(score >= 25) hookText = '危险又迷人';
+    else hookText = '建议先从翻译器开始';
+    var relationHtml = '<div style="font-size:13px;color:#ffd700;font-weight:600;margin-bottom:8px;">💡 关系解读</div>';
+    relationHtml += '<div style="font-size:13px;color:#ccc;line-height:1.6;">';
+    relationHtml += '你们的默契度是 <span style="color:#ffd700;font-weight:bold;">' + score + '%</span>——' + match.label + '。';
+    relationHtml += match.desc + ' ' + hookText + '。';
+    relationHtml += '</div>';
+    relationHtml += '<div style="margin-top:10px;padding:10px;background:rgba(255,215,0,.06);border-radius:8px;border:1px solid rgba(255,215,0,.15);">';
+    relationHtml += '<div style="font-size:12px;color:#ffd700;text-align:center;">';
+    relationHtml += '📸 截图发朋友圈，让大家知道你们' + (score >= 50 ? '有多默契' : '有多反差') + '！';
+    relationHtml += '</div></div>';
+    relation.innerHTML = relationHtml;
+    relation.style.display = 'block';
+  }
+
+  // P0-3: 对比页分享带当前用户代码（B分享给C，C看到的是B邀请的）
+  var baseUrl = 'http://47.103.121.204/bti';
+  var shareUrl = baseUrl + '?ref=' + myCode;
+  var shareBox = document.getElementById('compareShareBox');
+  var shareUrlEl = document.getElementById('compareShareUrl');
+  if(shareBox && shareUrlEl){
+    shareUrlEl.textContent = shareUrl;
+    shareBox.style.display = 'block';
+  }
+}
+
+// 功能缺失4：对比页返回按钮
+function backToResult(){
+  document.getElementById('comparePage').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+// 生成对比卡片分享（简化版：直接截图对比页）
+function shareCompareCard(){
+  var overlay = document.getElementById('cardOverlay');
+  var previewImg = document.getElementById('cardPreview');
+  var cardActions = document.getElementById('cardActions');
+  overlay.style.display = 'flex';
+  previewImg.style.display = 'none';
+  cardActions.style.display = 'none';
+  document.getElementById('cardLoading').style.display = 'block';
+
+  setTimeout(function(){
+    var cp = document.getElementById('comparePage');
+    cp.style.display = 'block';
+    cp.style.position = 'fixed';
+    cp.style.left = '-9999px';
+    cp.style.top = '0';
+    cp.style.width = '420px';
+    cp.style.background = '#0d0d1a';
+
+    html2canvas(cp, {backgroundColor:'#0d0d1a', scale:2, useCORS:true, allowTaint:true, logging:false})
+    .then(function(canvas){
+      cp.style.position = '';
+      cp.style.left = '';
+      cp.style.top = '';
+      cp.style.width = '';
+      cp.style.background = '';
+
+      var wrap = document.getElementById('cardPreviewWrap');
+      wrap.style.display = 'block';
+      previewImg.src = canvas.toDataURL('image/png');
+      previewImg.style.display = 'block';
+      cardActions.style.display = 'flex';
+      document.getElementById('cardLoading').style.display = 'none';
+      previewImg.dataset.downloadUrl = canvas.toDataURL('image/png');
+    }).catch(function(e){
+      console.error('[BTI] compare card error:', e);
+      alert('生成失败，请稍后重试');
+      cp.style.position = '';
+      cp.style.left = '';
+      cp.style.top = '';
+      cp.style.width = '';
+      cp.style.background = '';
+      overlay.style.display = 'none';
+    });
+  }, 300);
+}
+
+// ========== 开始测试入口 ==========
+function goTest() {
+    try {
+        startQuiz();
+    } catch(e) {
+        alert('启动测试失败：' + e.message);
+    }
+}
+
+
+// ========== 自动执行待启动的测试 ==========
+if (window.BTI_PENDING) {
+    window.BTI_PENDING = false;
+    startQuiz();
+}
+
+// 页面加载时检查邀请
+if(typeof checkInvite === 'function') checkInvite();
+
+// 强制启用开始按钮，避免本地加载卡住（最多1秒后自动可用）
+setTimeout(function(){
+  var startBtn = document.querySelector('.btn-start');
+  if(startBtn && (startBtn.textContent.indexOf('准备中') !== -1 || startBtn.disabled)){
+    startBtn.textContent = '开始测试';
+    startBtn.disabled = false;
+  }
+}, 1000);
+</script>
+</body>
+</html>

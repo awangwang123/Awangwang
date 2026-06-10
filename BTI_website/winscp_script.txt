@@ -1,0 +1,9 @@
+open sftp://root:Pb52013145@8.148.82.169:22 -hostkey=*
+cd /var/www/html/bti
+lcd C:\Users\EDY\CC\BTI\BTI_website
+put index.html
+put versions.html
+put versions
+put images
+close
+exit

@@ -1,0 +1,50 @@
+# 构建产物和打包文件
+*.zip
+*.tar.gz
+*.tar
+dist/
+
+# 依赖目录
+node_modules/
+scripts/node_modules/
+
+# 临时文件
+.temp_*
+*.tmp
+*.log
+server2.log
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE 配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 本地环境配置
+scripts/.env
+
+# 比较和检查生成的临时文件
+review_diff.txt
+.temp_compare.py
+.temp_compare_result.txt
+.temp_fix_appjs.txt
+.temp_fix_baseurl.txt
+.temp_fix_urls.txt
+.temp_v3.4/
+.temp_v3.4_fix/
+.temp_v34fix/
+
+# 本地预览服务器
+_preview_server.js
+# 图片资源（大文件，单独管理）
+BTI_website/images/

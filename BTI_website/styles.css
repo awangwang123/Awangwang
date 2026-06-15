@@ -176,7 +176,7 @@ footer{text-align:center;color:#6b7280;font-size:12px;padding:20px}
 #shareArea .scard-name-wrap h3{font-size:26px;color:#fff;margin:0 0 4px;font-weight:800;background:linear-gradient(135deg,#fff,#e0e7ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 #shareArea .scard-name-wrap p{color:rgba(255,255,255,.75);font-size:13px;margin:0;font-style:italic}
 #shareArea .scard-name-wrap .rarity-mini{color:#ffd700;font-size:11px;margin-top:6px;font-weight:600;letter-spacing:.5px}
-#shareArea .scard-name-wrap .code-mini{color:rgba(255,255,255,.35);font-size:9px;margin-top:4px;letter-spacing:3px;font-family:monospace}
+#shareArea .scard-name-wrap .code-mini{color:#1a1a2e!important;font-size:18px!important;margin-top:10px!important;letter-spacing:1px!important;font-family:monospace!important;font-weight:800!important;font-style:normal!important;display:inline-block!important;padding:5px 14px!important;background:linear-gradient(135deg,#ffd700,#ffaa00)!important;border-radius:12px!important;box-shadow:0 3px 10px rgba(255,170,0,.35)!important}
 
 /* 未触发隐藏人格时覆盖 */
 .scard-name-bar--overlay{position:absolute!important;top:0!important;left:50%!important;transform:translateX(-50%)!important;width:100%!important;height:100%!important;background:transparent!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:20px!important;border-radius:50%!important;border:none!important;box-shadow:none!important;z-index:2!important}

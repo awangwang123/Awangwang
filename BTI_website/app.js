@@ -730,10 +730,12 @@ function shareCard(){
   document.getElementById('shareCode').textContent = (t.code || '').toUpperCase();
   document.getElementById('shareRarity').textContent = '📊 全站 ' + (t.rarity || '').replace('%','') + '% 的人测出这个人格';
 
-  // 人格化分享引导语（按人格定制）
+  // 人格化分享引导语（按人格定制）：SHARE_HOOKS 只存后半句动作，前半句自动拼接 slogan
   var ctaEl = document.getElementById('shareCta');
   if(ctaEl){
-    var hook = SHARE_HOOKS[t.code] || '👉 测测你是什么型';
+    var hook = SHARE_HOOKS[t.code]
+      ? t.slogan + '——' + SHARE_HOOKS[t.code]
+      : '👉 测测你是什么型';
     ctaEl.textContent = hook;
   }
 

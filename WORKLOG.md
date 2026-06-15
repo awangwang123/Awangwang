@@ -16,9 +16,15 @@
 
 - [x] **稀有度说明补充**：types.html 中"约6%"改为"人群占比 约6%"
 
+- [x] **重写 16 种主人格文案**：基于 data.js 的 desc/roast/heal 字段，重写 types.html 的 main 和 hidden 字段
+  - 输出文件：`types_copy_optimized.json`
+  - 要求：去除四维度公式化描述，main 180-250 字聚焦一个场景+一个核心矛盾，hidden 120-180 字揭示深层脆弱
+  - 保持自嘲+洞察+网感语气，与项目整体风格一致
+
 ### 待办事项
 - [ ] 本地测试通过后部署到服务器
 - [ ] 更新版本号到 v3.7（index.html 顶部注释已更新）
+- [ ] 将 types_copy_optimized.json 内容合并到 types.html 的 DETAIL_CONTENT 中
 
 ### 版本
 - 当前：v3.7（开发中）

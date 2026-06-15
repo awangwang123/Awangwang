@@ -458,9 +458,12 @@ function showResult(scores) {
   var hasQ17 = userChoices.length >= 17;
   
   if (window.triggeredHidden) {
-    // 触发了隐藏人格 → 显示解锁按钮，点击后卡片翻转揭晓
+    // 触发了隐藏人格 → 显示解锁按钮+翻转提示，点击后卡片翻转揭晓
     if(unlockBtn) unlockBtn.style.display = 'block';
-    if(flipFrontHint) flipFrontHint.style.display = 'none';
+    if(flipFrontHint){
+      flipFrontHint.style.display = 'flex';
+      flipFrontHint.innerHTML = '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg><span>解锁后将翻转卡片揭晓隐藏人格</span>';
+    }
     // 底部裂变引导
     document.getElementById('fissureMain').textContent = '测完别走，拉个朋友下水';
     document.getElementById('fissureSub').textContent = '看看朋友的隐藏人格是什么';
@@ -684,6 +687,8 @@ function unlockHidden(){
   setTimeout(function(){
     overlay.style.display = 'none';
     if(unlockBtn) unlockBtn.style.display = 'none';
+    var flipFrontHint = document.getElementById('flipFrontHint');
+    if(flipFrontHint) flipFrontHint.style.display = 'none';
     window.hasUnlockedHidden = true; // 标记已解锁
     var triggered = window.triggeredHidden;
     if(triggered){

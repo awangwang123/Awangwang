@@ -1034,7 +1034,7 @@ function checkInvite(){
     tip.innerHTML =
       '<div style="font-size:16px;margin-bottom:6px;">👋 你朋友是 <b style="color:#ffd700;">' + inviter.name + '</b></div>' +
       '<div style="font-size:15px;color:#ffd700;margin-bottom:8px;font-weight:700;">"' + inviter.slogan + '"</div>' +
-      '<div style="font-size:14px;color:#ffffff;margin-bottom:10px;font-weight:600;">TA 邀你测测你的隐藏人格</div>' +
+      '<div style="font-size:14px;color:#1a1a2e;margin-bottom:10px;font-weight:700;">TA 邀你测测你的隐藏人格</div>' +
       '<button onclick="goTest()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;border:none;padding:10px 28px;border-radius:20px;font-size:14px;font-weight:bold;cursor:pointer;">开始测试</button>';
     tip.style.display = 'block';
   }

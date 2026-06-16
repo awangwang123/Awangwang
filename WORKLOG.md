@@ -135,3 +135,19 @@
 ### 版本
 - 当前：v3.10.8（已部署）
 - 访问地址：http://8.148.82.169/bti/
+
+## 2026-06-16（v3.10.9 修复）
+
+### 已完成 ✅
+- [x] **修复手机端分享弹窗图片偏左**：`styles.css` 给 `#cardPreview` 添加 `display:block; margin:0 auto;`，确保图片严格水平居中
+- [x] **更新版本号与备份**：index.html 版本注释更新为 v3.10.9，备份 `versions/index_v3.10.9.html`
+- [x] **本地预览确认**：启动 http.server 8080，用户确认效果 OK
+- [x] **构建打包部署 v3.10.9**：node build.js v3.10.9 + pack.py + deploy.py，35/35 文件上传成功
+- [x] **Git commit + push**：提交并推送到 GitHub
+
+### 待办事项
+- [ ] 等待百度联盟审核
+
+### 版本
+- 当前：v3.10.9（已部署）
+- 访问地址：http://8.148.82.169/bti/

@@ -488,9 +488,16 @@ function showResult(scores, isRestoring) {
     document.getElementById('fissureMain').textContent = '🔒 你的隐藏人格埋得太深了——拉个朋友来挖挖？';
     document.getElementById('fissureSub').textContent = '看看朋友能不能触发隐藏题';
   } else {
-    // 答了Q17但没触发 → 显示解锁按钮，点击后揭晓"未触发"
-    if(unlockBtn) unlockBtn.style.display = 'block';
-    if(flipFrontHint) flipFrontHint.style.display = 'none';
+    // 答了Q17但没触发隐藏人格
+    if(window.hasUnlockedHidden){
+      // 已解锁（揭晓过"未触发"）→ 不显示解锁按钮，显示翻转提示引导查看背面
+      if(unlockBtn) unlockBtn.style.display = 'none';
+      if(flipFrontHint) flipFrontHint.style.display = 'flex';
+    } else {
+      // 未解锁 → 显示解锁按钮，点击后揭晓"未触发"
+      if(unlockBtn) unlockBtn.style.display = 'block';
+      if(flipFrontHint) flipFrontHint.style.display = 'none';
+    }
     // 裂变引导：未触发
     document.getElementById('fissureMain').textContent = '😭 80%的人测不出隐藏人格——你是那80%，还是你朋友是那20%？';
     document.getElementById('fissureSub').textContent = '拉个朋友来测，看看TA能不能触发';
@@ -1222,21 +1229,24 @@ if(typeof checkInvite === 'function') checkInvite();
         document.getElementById('home').style.display = 'none';
         showResult(savedScores, true);
         // 如果已解锁隐藏人格，直接应用已解锁的 UI 状态
-        if(savedHasUnlockedHidden && window.triggeredHidden){
+        if(savedHasUnlockedHidden){
           var unlockBtn = document.getElementById('unlockBtn');
           if(unlockBtn) unlockBtn.style.display = 'none';
           var flipFrontHint = document.getElementById('flipFrontHint');
           if(flipFrontHint) flipFrontHint.style.display = 'none';
-          var flipCardBack = document.getElementById('flipCardBack');
-          if(flipCardBack) flipCardBack.classList.remove('locked');
-          var flipCardInner = document.getElementById('flipCardInner');
-          if(flipCardInner) flipCardInner.classList.add('flipped');
-          var fadeEls = getFadeModules();
-          fadeEls.forEach(function(el){ el.style.display = 'none'; });
-          var hm = document.getElementById('hiddenModules');
-          if(hm){
-            hm.style.display = 'block';
-            hm.style.opacity = '1';
+          // 只有真正触发了隐藏人格，才翻转卡片并展示隐藏人格模块
+          if(window.triggeredHidden){
+            var flipCardBack = document.getElementById('flipCardBack');
+            if(flipCardBack) flipCardBack.classList.remove('locked');
+            var flipCardInner = document.getElementById('flipCardInner');
+            if(flipCardInner) flipCardInner.classList.add('flipped');
+            var fadeEls = getFadeModules();
+            fadeEls.forEach(function(el){ el.style.display = 'none'; });
+            var hm = document.getElementById('hiddenModules');
+            if(hm){
+              hm.style.display = 'block';
+              hm.style.opacity = '1';
+            }
           }
         }
       }

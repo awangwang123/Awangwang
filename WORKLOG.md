@@ -58,3 +58,19 @@
 ### 版本
 - 当前：v3.10.3（已部署）
 - 访问地址：http://8.148.82.169/bti/
+
+## 2026-06-16（v3.10.4 修复）
+
+### 已完成 ✅
+- [x] **进一步优化图鉴稀有度显示**：types.html `.hero-rarity` 字号/字重继续加大，背景加深、边框加亮、发光增强
+- [x] **修复返回结果页解锁按钮刷新**：app.js 给 `showResult()` 增加 `isRestoring` 参数，恢复模式下保留 `triggeredHidden` 和 `hasUnlockedHidden`，从图鉴返回不再重置
+- [x] **更新版本号与备份**：index.html 版本注释更新为 v3.10.4，备份 `versions/index_v3.10.4.html`
+- [x] **构建打包部署 v3.10.4**：node build.js v3.10.4 + pack.py + deploy.py，35/35 文件上传成功
+- [x] **Git commit + push**：提交并推送到 GitHub
+
+### 待办事项
+- [ ] 等待百度联盟审核
+
+### 版本
+- 当前：v3.10.4（已部署）
+- 访问地址：http://8.148.82.169/bti/

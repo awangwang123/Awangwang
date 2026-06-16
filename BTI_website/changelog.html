@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1625">
+<meta name="description" content="BTI 反差人格测试更新日志，查看每个版本的迭代记录与功能更新。">
+<title>更新日志 - BTI 反差人格测试</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1625;color:#f0eef6;min-height:100vh;line-height:1.6}
+.container{max-width:480px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== 顶部导航 ===== */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(26,22,37,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 0;margin-bottom:24px}
+.nav-inner{max-width:480px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:.5px;background:linear-gradient(90deg,#a78bfa,#f472b6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.nav-links a{color:#d1d5db;font-size:12px;text-decoration:none;transition:all .2s;white-space:nowrap;padding:5px 8px;border-radius:6px}
+.nav-links a:hover{color:#a78bfa;background:rgba(167,139,250,.12)}
+.nav-links a.active{color:#a78bfa;background:rgba(167,139,250,.12);font-weight:600}
+@media(max-width:360px){.nav-links a{font-size:11px;padding:4px 6px}}
+
+/* ===== 页面标题区 ===== */
+.page-header{text-align:center;padding:30px 0 24px}
+.page-header h1{font-size:26px;font-weight:800;margin-bottom:8px;background:linear-gradient(90deg,#a78bfa,#f472b6,#ff6b81);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.page-subtitle{color:#9ca3af;font-size:13px}
+
+/* ===== 时间线容器 ===== */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(167,139,250,.4),rgba(244,114,182,.2),rgba(167,139,250,.1));border-radius:1px}
+
+/* ===== 版本节点 ===== */
+.version-item{position:relative;margin-bottom:28px}
+.version-item:last-child{margin-bottom:0}
+
+/* 时间节点圆点 */
+.version-dot{position:absolute;left:-28px;top:6px;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#f472b6);border:3px solid #1a1625;box-shadow:0 0 8px rgba(167,139,250,.3);z-index:2}
+.version-dot.current{box-shadow:0 0 12px rgba(167,139,250,.5),0 0 20px rgba(244,114,182,.3);animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 12px rgba(167,139,250,.5),0 0 20px rgba(244,114,182,.3)}50%{box-shadow:0 0 16px rgba(167,139,250,.7),0 0 28px rgba(244,114,182,.5)}}
+
+/* 版本卡片 */
+.version-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:18px 16px;box-shadow:0 4px 20px rgba(0,0,0,.1);transition:all .2s}
+.version-card:hover{background:rgba(255,255,255,.06);border-color:rgba(167,139,250,.15)}
+.version-card.current{border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.06)}
+
+/* 版本头部 */
+.version-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.version-badge{font-size:15px;font-weight:800;color:#f0eef6;background:linear-gradient(135deg,rgba(167,139,250,.2),rgba(244,114,182,.15));padding:4px 12px;border-radius:10px;border:1px solid rgba(167,139,250,.2);letter-spacing:.5px}
+.version-badge.current{background:linear-gradient(135deg,rgba(167,139,250,.3),rgba(244,114,182,.2));border-color:rgba(167,139,250,.35);color:#fff}
+.version-date{font-size:12px;color:#9ca3af;font-weight:500}
+.version-current-tag{font-size:10px;color:#ffd700;background:rgba(255,215,0,.1);padding:2px 8px;border-radius:6px;border:1px solid rgba(255,215,0,.2);font-weight:600;letter-spacing:1px}
+
+/* 更新列表 */
+.version-list{list-style:none}
+.version-list li{position:relative;padding-left:18px;margin-bottom:8px;font-size:13px;color:#d1d5db;line-height:1.7}
+.version-list li:last-child{margin-bottom:0}
+.version-list li::before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#f472b6)}
+.version-list li.type-feat::before{background:linear-gradient(135deg,#48dbfb,#7c5cfc)}
+.version-list li.type-fix::before{background:linear-gradient(135deg,#ff6b81,#ff4757)}
+.version-list li.type-opt::before{background:linear-gradient(135deg,#ffd700,#ffaa00)}
+.version-list li.type-docs::before{background:linear-gradient(135deg,#a78bfa,#d8b4fe)}
+
+/* 更新类型标签 */
+.update-type{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;margin-right:6px;vertical-align:1px}
+.type-feat .update-type{color:#48dbfb;background:rgba(72,219,251,.1);border:1px solid rgba(72,219,251,.2)}
+.type-fix .update-type{color:#ff6b81;background:rgba(255,107,129,.1);border:1px solid rgba(255,107,129,.2)}
+.type-opt .update-type{color:#ffd700;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2)}
+.type-docs .update-type{color:#a78bfa;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2)}
+
+/* ===== 底部页脚 ===== */
+.page-footer{text-align:center;padding:30px 16px 40px;color:#6b7280;font-size:12px}
+.page-footer p{margin:4px 0}
+.page-footer a{color:#a78bfa;text-decoration:none}
+.page-footer a:hover{color:#c4b5fd}
+
+/* ===== 微信浅色模式适配 ===== */
+@media(prefers-color-scheme:light){
+  body{background:#fafafc;color:#1f2937}
+  .navbar{background:rgba(255,255,255,.92);border-bottom-color:rgba(0,0,0,.06)}
+  .nav-links a{color:#6b7280}
+  .nav-links a:hover{color:#7c3aed;background:rgba(167,139,250,.08)}
+  .nav-links a.active{color:#7c3aed;background:rgba(167,139,250,.12)}
+  .page-header h1{color:#1f2937;-webkit-text-fill-color:transparent}
+  .page-subtitle{color:#6b7280}
+  .timeline::before{background:linear-gradient(180deg,rgba(167,139,250,.3),rgba(244,114,182,.15),rgba(167,139,250,.1))}
+  .version-dot{border-color:#fafafc}
+  .version-card{background:#fff;border-color:#e5e7eb;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+  .version-card:hover{background:#f9fafb;border-color:rgba(167,139,250,.2)}
+  .version-card.current{background:rgba(167,139,250,.04);border-color:rgba(167,139,250,.2)}
+  .version-badge{color:#1f2937;background:linear-gradient(135deg,rgba(167,139,250,.12),rgba(244,114,182,.08));border-color:rgba(167,139,250,.15)}
+  .version-badge.current{background:linear-gradient(135deg,rgba(167,139,250,.2),rgba(244,114,182,.12));border-color:rgba(167,139,250,.25)}
+  .version-date{color:#6b7280}
+  .version-list li{color:#4b5563}
+  .page-footer{color:#9ca3af}
+  .page-footer a{color:#7c3aed}
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">BTI</a>
+    <div class="nav-links">
+      <a href="types.html">人格图鉴</a>
+      <a href="articles.html">文章</a>
+      <a href="changelog.html" class="active">更新日志</a>
+      <a href="help.html">帮助</a>
+      <a href="about.html">关于我们</a>
+      <a href="privacy.html">隐私政策</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- 页面标题 -->
+  <div class="page-header">
+    <h1>更新日志</h1>
+    <p class="page-subtitle">BTI 反差人格测试的版本迭代记录</p>
+  </div>
+
+  <!-- 时间线 -->
+  <div class="timeline">
+
+    <!-- v3.10.3 -->
+    <div class="version-item">
+      <div class="version-dot current"></div>
+      <div class="version-card current">
+        <div class="version-header">
+          <span class="version-badge current">v3.10.3</span>
+          <span class="version-date">2026-06-16</span>
+          <span class="version-current-tag">当前版本</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-opt"><span class="update-type">优化</span>统一 articles / changelog / help 三个内容页的顶部导航，补齐「人格图鉴」入口</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.10.2 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.10.2</span>
+          <span class="version-date">2026-06-15</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-fix"><span class="update-type">修复</span>修复结果页"查看人格图鉴"按钮跳转链接在微信/带参数链接下解析错误的问题</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.10.1 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.10.1</span>
+          <span class="version-date">2026-06-15</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-fix"><span class="update-type">修复</span>修复结果页触发隐藏人格时，人物图片模块底部缺少翻转提示的问题</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.10 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.10</span>
+          <span class="version-date">2026-06-15</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-opt"><span class="update-type">优化</span>8 种隐藏人格文案全面重写，提升深度与独特性</li>
+          <li class="type-opt"><span class="update-type">优化</span>隐藏人格文案与常规人格文案去重，降低相似度</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.9 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.9</span>
+          <span class="version-date">2026-06-15</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-opt"><span class="update-type">优化</span>分享卡片人格字母（code）显示效果，添加内联样式保底与 !important 确保生效</li>
+          <li class="type-opt"><span class="update-type">优化</span>全部 12 种人格 DESC 描述去重，降低相似度</li>
+          <li class="type-opt"><span class="update-type">重构</span>SHARE_HOOKS 只保留动作句，由 app.js 自动拼接 slogan，避免重复</li>
+          <li class="type-opt"><span class="update-type">优化</span>部分人格 roast / heal 文案</li>
+          <li class="type-opt"><span class="update-type">重命名</span>HSQD 从"后台玩家"改为"掌局者"</li>
+          <li class="type-opt"><span class="update-type">优化</span>types.html 人格图鉴 16 条 main + 16 条 hidden 文案精简重写</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.8 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.8</span>
+          <span class="version-date">2026-06-15</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-opt"><span class="update-type">优化</span>分享卡片 code 样式加强为金色渐变底、深色粗体 18px、圆角 pill、投影</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.7 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.7</span>
+          <span class="version-date">2026-06-05</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-opt"><span class="update-type">移除</span>结果页"分享解锁人格图鉴"限制，改为直接查看</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.6 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.6</span>
+          <span class="version-date">2026-06-04</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-opt"><span class="update-type">精简</span>首页内容重新排列，"开始测试"按钮首屏可见</li>
+          <li class="type-opt"><span class="update-type">精简</span>"什么是 BTI"缩减到 50 字以内，四维标签改为 2x2 网格</li>
+          <li class="type-opt"><span class="update-type">精简</span>人格预览从 6 张缩减为 3 张横向滑动卡片</li>
+          <li class="type-opt"><span class="update-type">精简</span>卖点从 3 个大卡片改为 1 行 3 列紧凑布局</li>
+          <li class="type-opt"><span class="update-type">优化</span>整体模块 padding、字号缩小，更适配手机屏幕</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.5 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.5</span>
+          <span class="version-date">2026-06-04</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-feat"><span class="update-type">新增</span>顶部导航栏（Logo + 人格图鉴/关于我们/隐私政策链接）</li>
+          <li class="type-feat"><span class="update-type">新增</span>首页内容模块（什么是 BTI、12 种人格预览、3 个卖点）</li>
+          <li class="type-feat"><span class="update-type">新增</span>全局页脚含 ICP 备案号占位</li>
+          <li class="type-opt"><span class="update-type">替换</span>底部广告位预留为互动提示</li>
+          <li class="type-opt"><span class="update-type">优化</span>免责声明表述更专业，meta description 更完整</li>
+          <li class="type-fix"><span class="update-type">修复</span>移除死代码（qrious.js 加载、二维码生成函数）</li>
+          <li class="type-fix"><span class="update-type">修复</span>build.js 版本号替换正则过于激进的问题</li>
+          <li class="type-fix"><span class="update-type">修复</span>pack.py 重复目录过滤逻辑</li>
+          <li class="type-fix"><span class="update-type">修复</span>Nginx 配置添加 charset utf-8，解决中文乱码</li>
+          <li class="type-opt"><span class="update-type">优化</span>charset meta 标签前置，移除 UTF-8 BOM</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.4 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.4</span>
+          <span class="version-date">2026-06-01</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-fix"><span class="update-type">修复</span>结果页人格字母解码区、警示栏、输入框颜色对比度不足</li>
+          <li class="type-fix"><span class="update-type">修复</span>分享卡片链接改为可点击超链接</li>
+          <li class="type-fix"><span class="update-type">移除</span>分享卡片二维码（生成不稳定）</li>
+          <li class="type-feat"><span class="update-type">新增</span>分享卡片底部链接复制区（一键复制发给好友）</li>
+          <li class="type-fix"><span class="update-type">移除</span>默契度对比页"生成对比卡片"和"我也测一个"按钮</li>
+          <li class="type-fix"><span class="update-type">修复</span>对比页分享链接改为可点击超链接</li>
+          <li class="type-fix"><span class="update-type">修复</span>shareCard 截图后清理 shareArea 残留内联样式</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.2 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.2</span>
+          <span class="version-date">2026-05-??</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-opt"><span class="update-type">优化</span>加深结果页多处浅色文字，提升可读性</li>
+          <li class="type-feat"><span class="update-type">新增</span>人格字母解码说明 + 结果页免责声明</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v3.0 -->
+    <div class="version-item">
+      <div class="version-dot"></div>
+      <div class="version-card">
+        <div class="version-header">
+          <span class="version-badge">v3.0</span>
+          <span class="version-date">2026-05-??</span>
+        </div>
+        <ul class="version-list">
+          <li class="type-feat"><span class="update-type">新增</span>BTI 反差人格测试正式上线，基于热力/冷力、外向/内向、理性/感性、掌控/随性四维模型</li>
+          <li class="type-feat"><span class="update-type">新增</span>16 道情境题，测出主人格与隐藏人格</li>
+          <li class="type-feat"><span class="update-type">新增</span>12 种人格类型图鉴，含详细解读</li>
+          <li class="type-feat"><span class="update-type">新增</span>分享卡片生成与下载功能</li>
+          <li class="type-feat"><span class="update-type">新增</span>朋友默契度对比功能</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 底部页脚 -->
+<footer class="page-footer">
+  <p>
+    <a href="about.html">关于我们</a> ·
+    <a href="privacy.html">隐私政策</a> ·
+    <a href="changelog.html">更新日志</a>
+  </p>
+  <p>
+    <a href="https://beian.miit.gov.cn/" target="_blank">鄂ICP备2026026859号-1</a>
+  </p>
+  <p>&copy; 2026 BTI 反差人格测试 · 发现隐藏的你</p>
+</footer>
+
+</body>
+</html>

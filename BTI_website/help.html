@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTI 使用帮助与常见问题 - 反差人格测试指南</title>
+<meta name="description" content="BTI 反差人格测试使用帮助、测试结果解读指南、16+8 人格体系说明、常见问题 FAQ。了解如何测试、分享和查看人格图鉴。">
+<meta name="theme-color" content="#1a1625">
+<link rel="stylesheet" href="styles.css">
+<style>
+  :root{
+    --bg:#1a1625;
+    --card:#261f38;
+    --card-hover:#2e2642;
+    --border:#3b2e5f;
+    --purple:#a78bfa;
+    --pink:#f472b6;
+    --red:#ff6b81;
+    --cyan:#48dbfb;
+    --gold:#ffd700;
+    --text:#f0eef6;
+    --muted:#9ca3af;
+  }
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;line-height:1.6;margin:0}
+  a{color:inherit;text-decoration:none}
+
+  /* ===== 顶部导航 ===== */
+  .top-nav{position:sticky;top:0;z-index:100;background:rgba(26,22,37,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+  .nav-inner{max-width:480px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+  .nav-logo{font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--purple),var(--pink),var(--red),var(--purple));background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:flowText 3s linear infinite}
+  @keyframes flowText{to{background-position:200% center}}
+  .nav-links{display:flex;gap:10px;align-items:center;flex-wrap:nowrap}
+  .nav-links a{font-size:12px;color:var(--muted);transition:all .2s;white-space:nowrap;padding:6px 8px;border-radius:8px}
+  .nav-links a:hover{color:var(--purple);background:rgba(167,139,250,.1)}
+  .nav-links a.active{color:var(--purple);background:rgba(167,139,250,.15);font-weight:600}
+  @media(max-width:360px){.nav-links a{font-size:11px;padding:5px 6px}}
+
+  /* ===== 页面容器 ===== */
+  .page-wrap{max-width:480px;margin:0 auto;padding:24px 16px 40px}
+
+  /* ===== 页面标题 ===== */
+  .page-title{text-align:center;margin-bottom:28px}
+  .page-title h1{font-size:22px;font-weight:800;margin-bottom:8px;background:linear-gradient(90deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .page-title p{font-size:13px;color:var(--muted)}
+
+  /* ===== 内容卡片 ===== */
+  .help-section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 18px;margin-bottom:16px;transition:all .2s}
+  .help-section:hover{border-color:rgba(167,139,250,.3)}
+  .help-section h2{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .help-section h2 .sec-icon{font-size:18px}
+  .help-section h3{font-size:14px;font-weight:700;color:var(--purple);margin:14px 0 8px}
+  .help-section p{font-size:14px;color:#e2ddf0;line-height:1.8;margin:0 0 10px}
+  .help-section ol,.help-section ul{margin:0;padding-left:18px;color:#e2ddf0;font-size:14px;line-height:1.8}
+  .help-section li{margin-bottom:6px}
+
+  /* 步骤列表 */
+  .step-list{list-style:none;padding:0}
+  .step-list li{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+  .step-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#8b5cf6);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .step-text{flex:1;font-size:14px;color:#e2ddf0;line-height:1.7}
+
+  /* 维度标签 */
+  .dim-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+  .dim-tag{background:rgba(167,139,250,.1);color:#c4b5fd;border:1px solid rgba(167,139,250,.22);border-radius:20px;padding:5px 12px;font-size:12px}
+
+  /* FAQ 手风琴 */
+  .faq-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:10px;overflow:hidden}
+  .faq-q{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s}
+  .faq-q:hover{background:rgba(167,139,250,.08)}
+  .faq-q-icon{font-size:14px;color:var(--purple);font-weight:700;flex-shrink:0}
+  .faq-q-text{font-size:14px;font-weight:600;color:var(--text);flex:1}
+  .faq-q-arrow{font-size:12px;color:var(--muted);transition:transform .2s}
+  .faq-item.open .faq-q-arrow{transform:rotate(180deg)}
+  .faq-a{padding:0 16px 14px 16px;font-size:13px;color:#e2ddf0;line-height:1.8;display:none}
+  .faq-item.open .faq-a{display:block}
+  .faq-a p{margin:0}
+
+  /* 人格体系表格 */
+  .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .type-grid-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;text-align:center}
+  .type-grid-code{font-size:11px;color:var(--purple);font-weight:700;letter-spacing:1px;margin-bottom:2px}
+  .type-grid-name{font-size:12px;color:var(--text);font-weight:600}
+  .type-grid-rarity{font-size:10px;color:var(--muted);margin-top:2px}
+
+  /* 提示框 */
+  .tip-box{background:rgba(72,219,251,.08);border-left:3px solid var(--cyan);border-radius:0 10px 10px 0;padding:12px 14px;margin:12px 0;font-size:13px;color:#caf0f8;line-height:1.7}
+  .tip-box strong{color:var(--cyan)}
+
+  /* 底部页脚 */
+  .page-footer{text-align:center;padding:30px 16px 40px;color:var(--muted);font-size:12px}
+  .page-footer p{margin:4px 0}
+  .page-footer a{color:var(--purple);text-decoration:none}
+  .footer-links{margin-bottom:8px}
+  .footer-links a{color:var(--purple);text-decoration:none;margin:0 8px;font-size:13px;transition:color .2s}
+  .footer-links a:hover{color:#c4b5fd}
+  .footer-icp{font-size:12px;color:#6b7280}
+  .footer-icp a{color:#6b7280;text-decoration:none}
+  .footer-icp a:hover{color:#9ca3af}
+
+  /* ===== 微信浅色模式适配 ===== */
+  @media(prefers-color-scheme:light){
+    body{background:#fafafc;color:#1f2937}
+    .top-nav{background:rgba(255,255,255,.92);border-bottom-color:rgba(0,0,0,.06)}
+    .nav-links a{color:#6b7280}
+    .nav-links a:hover{color:#7c3aed;background:rgba(167,139,250,.08)}
+    .nav-links a.active{color:#7c3aed;background:rgba(167,139,250,.12)}
+    .page-title h1{color:#1f2937;-webkit-text-fill-color:transparent}
+    .page-title p{color:#6b7280}
+    .help-section{background:#fff;border-color:#e5e7eb}
+    .help-section:hover{border-color:rgba(167,139,250,.25)}
+    .help-section p{color:#374151}
+    .help-section ol,.help-section ul{color:#374151}
+    .step-text{color:#374151}
+    .dim-tag{background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.18);color:#7c3aed}
+    .faq-item{background:#f9fafb;border-color:#e5e7eb}
+    .faq-q-text{color:#1f2937}
+    .faq-a{color:#374151}
+    .type-grid-item{background:#f9fafb;border-color:#e5e7eb}
+    .type-grid-name{color:#1f2937}
+    .tip-box{background:rgba(72,219,251,.06);color:#0e7490}
+    .tip-box strong{color:#0891b2}
+    .page-footer{color:#6b7280}
+    .footer-links a{color:#7c3aed}
+    .footer-icp{color:#9ca3af}
+    .footer-icp a{color:#9ca3af}
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<nav class="top-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">BTI</a>
+    <div class="nav-links">
+      <a href="types.html">人格图鉴</a>
+      <a href="articles.html">文章</a>
+      <a href="changelog.html">更新日志</a>
+      <a href="help.html" class="active">帮助</a>
+      <a href="about.html">关于我们</a>
+      <a href="privacy.html">隐私政策</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- 页面标题 -->
+  <div class="page-title">
+    <h1>使用帮助与常见问题</h1>
+    <p>快速上手 BTI 反差人格测试，读懂你的人格密码</p>
+  </div>
+
+  <!-- 使用说明 -->
+  <section class="help-section">
+    <h2><span class="sec-icon">📖</span> BTI 测试使用说明</h2>
+    <ol class="step-list">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-text">打开首页，点击「开始测试」按钮。无需注册，无需填写任何个人信息。</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-text">依次回答 16 道情境选择题。每题有两个选项，选择最符合你真实反应的那个。</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-text">答完最后一题后，系统会自动分析并展示你的主人格结果。</span>
+      </li>
+      <li>
+        <span class="step-num">4</span>
+        <span class="step-text">点击结果页的「解锁隐藏人格」按钮，揭晓你的隐藏人格（需完成一个小互动）。</span>
+      </li>
+      <li>
+        <span class="step-num">5</span>
+        <span class="step-text">点击「分享测试结果」生成精美卡片，长按保存后分享到朋友圈或发给好友。</span>
+      </li>
+    </ol>
+    <div class="tip-box">
+      <strong>💡 小贴士：</strong>测试没有标准答案，选择第一反应即可。如果纠结太久，反而测不准哦。
+    </div>
+  </section>
+
+  <!-- 结果解读 -->
+  <section class="help-section">
+    <h2><span class="sec-icon">🔍</span> 测试结果解读指南</h2>
+    <p>每个 BTI 测试结果包含以下模块：</p>
+    <ul>
+      <li><strong>人格名称 + 代码：</strong>如「热力型领袖 HFLX」，4 位字母分别对应四个维度。</li>
+      <li><strong>人格画像：</strong>一段 200 字左右的深度描述，聚焦你的核心行为模式。</li>
+      <li><strong>隐藏反差：</strong>揭示你表面行为背后的深层心理动机。</li>
+      <li><strong>一句话吐槽：</strong>用幽默的方式点出你的"槽点"。</li>
+      <li><strong>反转治愈：</strong>一句温暖的话，让你看到人格中的闪光点。</li>
+      <li><strong>四维能量条：</strong>直观展示你在热力/冷力、外向/内向、理性/感性、掌控/随性四个维度上的倾向。</li>
+      <li><strong>人格标签：</strong>3-5 个关键词，快速概括你的性格特征。</li>
+    </ul>
+    <div class="tip-box">
+      <strong>💡 小贴士：</strong>主人格是你最常用的"操作系统"，隐藏人格是你偶尔才会启动的"备用模式"。两者结合，才是完整的你。
+    </div>
+  </section>
+
+  <!-- 16+8 人格体系 -->
+  <section class="help-section">
+    <h2><span class="sec-icon">🧬</span> 16+8 人格体系说明</h2>
+    <p>BTI 基于四个核心维度构建人格模型：</p>
+    <div class="dim-tags">
+      <span class="dim-tag">热力 H / 冷力 C</span>
+      <span class="dim-tag">外向 F / 内向 S</span>
+      <span class="dim-tag">理性 L / 感性 Q</span>
+      <span class="dim-tag">掌控 X / 随性 D</span>
+    </div>
+    <p>四个维度两两组合，形成 16 种主人格（如 HFLX = 热力+外向+理性+掌控）。此外，系统还会根据你的答题模式，从 8 种隐藏人格中匹配一个最贴合你的"B 面"。</p>
+    <h3>16 种主人格一览</h3>
+    <div class="type-grid">
+      <div class="type-grid-item"><div class="type-grid-code">HFLX</div><div class="type-grid-name">热力型领袖</div><div class="type-grid-rarity">约 10%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">HFLD</div><div class="type-grid-name">热力型粘合剂</div><div class="type-grid-rarity">约 8%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">HFQX</div><div class="type-grid-name">热力型孤狼</div><div class="type-grid-rarity">约 6%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">HFQD</div><div class="type-grid-name">热力型独行者</div><div class="type-grid-rarity">约 5%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">HSLX</div><div class="type-grid-name">冷力型操盘手</div><div class="type-grid-rarity">约 8%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">HSLD</div><div class="type-grid-name">冷力型规划师</div><div class="type-grid-rarity">约 6%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">HSQX</div><div class="type-grid-name">冷力型思想家</div><div class="type-grid-rarity">约 5%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">HSQD</div><div class="type-grid-name">冷力型幕后玩家</div><div class="type-grid-rarity">约 3%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CFLX</div><div class="type-grid-name">冷感型点火器</div><div class="type-grid-rarity">约 6%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CFLD</div><div class="type-grid-name">冷感型慢热者</div><div class="type-grid-rarity">约 5%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CFQX</div><div class="type-grid-name">冷感型孤狼</div><div class="type-grid-rarity">约 3%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CFQD</div><div class="type-grid-name">冷感型观察者</div><div class="type-grid-rarity">约 3%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CSLX</div><div class="type-grid-name">冷静型导演</div><div class="type-grid-rarity">约 5%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CSLD</div><div class="type-grid-name">冷静型服务者</div><div class="type-grid-rarity">约 3%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CSQX</div><div class="type-grid-name">冷静型待机者</div><div class="type-grid-rarity">约 3%</div></div>
+      <div class="type-grid-item"><div class="type-grid-code">CSQD</div><div class="type-grid-name">冷静型离线者</div><div class="type-grid-rarity">约 3%</div></div>
+    </div>
+    <p style="margin-top:12px;font-size:13px;color:var(--muted);">稀有度仅供参考，基于测试样本的分布统计。每种人格都有独特的优势和价值。</p>
+  </section>
+
+  <!-- 分享和查看图鉴 -->
+  <section class="help-section">
+    <h2><span class="sec-icon">📤</span> 分享和查看人格图鉴</h2>
+    <h3>如何分享测试结果</h3>
+    <ol class="step-list">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-text">在结果页点击「分享测试结果」按钮，系统会自动生成精美分享卡片。</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-text">长按生成的卡片图片，选择「保存图片」或「分享到朋友圈」。</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-text">也可以直接复制页面底部的链接，发送给好友邀请他们来测。</span>
+      </li>
+    </ol>
+    <h3>如何查看人格图鉴</h3>
+    <ol class="step-list">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-text">在结果页点击「查看你的人格详细图鉴」按钮，即可进入专属图鉴页。</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-text">图鉴页包含：人格画像、隐藏反差、适合场景、相处建议等深度内容。</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-text">你也可以直接访问 <a href="types.html" style="color:var(--purple);text-decoration:underline;">人格图鉴页</a>，但需要先完成测试才能查看专属解读。</span>
+      </li>
+    </ol>
+    <h3>如何查看朋友默契度</h3>
+    <p>在结果页底部的输入框中，输入朋友的人格代码（如 HFLX），点击「查看默契度」即可看到你们的人格匹配分析和关系深度解读。</p>
+  </section>
+
+  <!-- FAQ -->
+  <section class="help-section">
+    <h2><span class="sec-icon">❓</span> 常见问题 FAQ</h2>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q1</span>
+        <span class="faq-q-text">BTI 测试是免费的吗？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>完全免费。BTI 反差人格测试无需注册、无需付费，16 道题测完即可查看完整结果，包括主人格、隐藏人格、人格图鉴等全部内容。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q2</span>
+        <span class="faq-q-text">测试结果准确吗？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>BTI 测试基于行为倾向分析模型，通过 16 道情境题捕捉你的行为模式。它不能替代专业心理测评，但可以作为自我探索的有趣参考。建议以开放心态看待结果，把它当作认识自己的一面镜子，而非绝对标签。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q3</span>
+        <span class="faq-q-text">我可以多次测试吗？结果会不一样吗？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>可以多次测试。如果每次选择的答案一致，结果也会一致。但人的状态会变化，偶尔重测可能会发现"今天的我和上次有点不一样"——这很正常，也是 BTI 有趣的地方。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q4</span>
+        <span class="faq-q-text">什么是"隐藏人格"？为什么需要解锁？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>隐藏人格是你不常展示的一面，通常只在特定情境下才会"启动"。设置解锁环节是为了增加一点仪式感——就像拆盲盒一样，让揭晓过程更有惊喜感。解锁后，你可以看到完整的"A 面 + B 面"解读。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q5</span>
+        <span class="faq-q-text">人格代码的 4 个字母代表什么？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>4 位字母分别对应四个维度：<br>第 1 位：H（热力）/ C（冷力）<br>第 2 位：F（外向）/ S（内向）<br>第 3 位：L（理性）/ Q（感性）<br>第 4 位：X（掌控）/ D（随性）<br>例如 HFLX = 热力 + 外向 + 理性 + 掌控。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q6</span>
+        <span class="faq-q-text">测试需要收集我的个人信息吗？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>不需要。BTI 测试不收集姓名、手机号、邮箱等任何个人信息。你的答题数据仅用于实时计算人格结果，不会上传或存储到服务器。详细隐私政策请查看 <a href="privacy.html" style="color:var(--purple);text-decoration:underline;">隐私政策页面</a>。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q7</span>
+        <span class="faq-q-text">分享卡片上的"隐藏人格是???"是什么意思？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>这是分享卡片设计的悬念钩子。你分享出去时，好友只能看到你的主人格；隐藏人格需要他们自己完成测试后才能解锁。这样既保护了你的隐私，又能吸引好友来测。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q8</span>
+        <span class="faq-q-text">默契度对比是怎么计算的？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>默契度基于四维能量条的相似度计算。如果两个人在四个维度上的倾向接近，默契度就高；如果互补（如一个极热力、一个极冷力），则默契度可能偏低，但关系解读会强调"互补型"的独特价值。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q9</span>
+        <span class="faq-q-text">为什么我的结果和 MBTI 不一样？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>BTI 和 MBTI 是两套不同的模型。MBTI 侧重"认知偏好"（你如何获取信息和做决策），BTI 侧重"行为反差"（你表面行为 vs 内在模式的差异）。两者可以共存，就像用不同的镜头看同一个人，各有侧重。</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span class="faq-q-icon">Q10</span>
+        <span class="faq-q-text">遇到 Bug 或想提建议怎么办？</span>
+        <span class="faq-q-arrow">▼</span>
+      </div>
+      <div class="faq-a">
+        <p>欢迎通过 <a href="about.html" style="color:var(--purple);text-decoration:underline;">关于我们</a> 页面中的联系方式反馈。我们会认真查看每一条建议，持续优化测试体验。</p>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<!-- 底部页脚 -->
+<footer class="page-footer">
+  <p class="footer-links">
+    <a href="index.html">首页</a>
+    <a href="types.html">人格图鉴</a>
+    <a href="about.html">关于我们</a>
+    <a href="privacy.html">隐私政策</a>
+  </p>
+  <p class="footer-icp">
+    <a href="https://beian.miit.gov.cn/" target="_blank">鄂ICP备2026026859号-1</a>
+  </p>
+  <p>&copy; 2026 BTI 反差人格测试 · 发现隐藏的你</p>
+</footer>
+
+</body>
+</html>

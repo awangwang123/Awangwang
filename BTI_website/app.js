@@ -296,6 +296,7 @@ function showResult(scores, isRestoring) {
     else if (maxDim === 'X') hiddenKey = 'HIDDEN_XD_EXPLODE';
     else if (maxDim === 'D') hiddenKey = 'HIDDEN_XD_DEFEND';
     window.triggeredHidden = TYPES[hiddenKey];
+    if(window.triggeredHidden) window.triggeredHidden.key = hiddenKey;
   }
 
   window.finalType = finalType;
@@ -574,7 +575,7 @@ function showResult(scores, isRestoring) {
     sessionStorage.setItem('bti_result_choices', JSON.stringify(userChoices));
     sessionStorage.setItem('bti_has_hidden_question', window.hasHiddenQuestion ? '1' : '0');
     sessionStorage.setItem('bti_has_unlocked_hidden', window.hasUnlockedHidden ? '1' : '0');
-    sessionStorage.setItem('bti_hidden_key', (window.triggeredHidden && (window.triggeredHidden.key || window.triggeredHidden.code)) || '');
+    sessionStorage.setItem('bti_hidden_key', (window.triggeredHidden && window.triggeredHidden.key) || '');
     history.replaceState({page:'result'}, '', '#result=' + finalType);
   } catch(e) {}
 
@@ -1221,6 +1222,7 @@ if(typeof checkInvite === 'function') checkInvite();
       window.hasUnlockedHidden = savedHasUnlockedHidden;
       if(savedHiddenKey && typeof TYPES !== 'undefined' && TYPES[savedHiddenKey]) {
         window.triggeredHidden = TYPES[savedHiddenKey];
+        window.triggeredHidden.key = savedHiddenKey;
       }
       // 恢复用户选择数据
       if(Array.isArray(savedChoices) && savedChoices.length > 0) {

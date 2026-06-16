@@ -89,8 +89,8 @@ function build() {
   html = html.replace(/styles\.css/g, 'styles.css?v=' + timestamp);
   html = html.replace(/data\.js/g, 'data.js?v=' + timestamp);
   html = html.replace(/app\.js/g, 'app.js?v=' + timestamp);
-  // 更新版本号
-  html = html.replace(/(<title>.*?BTI 反差人格测试 )v[0-9]+\.[0-9]+/, '$1' + version);
+  // 更新版本号（支持 v3.6 / v3.10.3 / v3.10.10.10 任意段数）
+  html = html.replace(/(<title>.*?BTI 反差人格测试 )v[0-9]+(?:\.[0-9]+)*/, '$1' + version);
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), html);
   console.log('[+] index.html 已更新（缓存清除时间戳：' + timestamp + '）');
 
@@ -103,8 +103,8 @@ function build() {
       let pageHtml = fs.readFileSync(srcPath, 'utf8');
       // 为这些页面引用的 styles.css 也添加版本戳
       pageHtml = pageHtml.replace(/styles\.css/g, 'styles.css?v=' + timestamp);
-      // title 版本号统一处理（即使当前没有也 harmless）
-      pageHtml = pageHtml.replace(/(<title>.*?BTI.*? )v[0-9]+\.[0-9]+/, '$1' + version);
+      // title 版本号统一处理（支持任意段数版本号）
+      pageHtml = pageHtml.replace(/(<title>.*?BTI.*? )v[0-9]+(?:\.[0-9]+)*/, '$1' + version);
       fs.writeFileSync(dstPath, pageHtml);
       console.log('[+] ' + page + ' 已复制到 dist');
     } else {

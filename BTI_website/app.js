@@ -1033,8 +1033,8 @@ function checkInvite(){
     // P1-2: 被邀请欢迎页升级——展示朋友人格信息+明确"开始测试"按钮
     tip.innerHTML =
       '<div style="font-size:16px;margin-bottom:6px;">👋 你朋友是 <b style="color:#ffd700;">' + inviter.name + '</b></div>' +
-      '<div style="font-size:14px;color:#e2e8f0;margin-bottom:8px;font-weight:500;">"' + inviter.slogan + '"</div>' +
-      '<div style="font-size:13px;color:#cbd5e1;margin-bottom:10px;">TA 邀你测测你的隐藏人格</div>' +
+      '<div style="font-size:15px;color:#ffd700;margin-bottom:8px;font-weight:700;">"' + inviter.slogan + '"</div>' +
+      '<div style="font-size:14px;color:#ffffff;margin-bottom:10px;font-weight:600;">TA 邀你测测你的隐藏人格</div>' +
       '<button onclick="goTest()" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;border:none;padding:10px 28px;border-radius:20px;font-size:14px;font-weight:bold;cursor:pointer;">开始测试</button>';
     tip.style.display = 'block';
   }
@@ -1084,13 +1084,13 @@ function showCompare(friendCode){
   window.scrollTo(0,0);
 
   document.getElementById('compareSelf').innerHTML =
-    '<div style="font-size:13px;color:#d1d5db;margin-bottom:4px;">你</div>' +
+    '<div style="font-size:13px;color:#ffffff;font-weight:700;margin-bottom:4px;">你</div>' +
     '<div style="font-size:18px;font-weight:bold;color:#fff;">' + my.name + '</div>' +
-    '<div style="font-size:11px;color:#9ca3af;">[' + myCode + ']</div>';
+    '<div style="font-size:11px;color:#e5e7eb;">[' + myCode + ']</div>';
   document.getElementById('compareFriend').innerHTML =
-    '<div style="font-size:13px;color:#d1d5db;margin-bottom:4px;">TA</div>' +
+    '<div style="font-size:13px;color:#ffffff;font-weight:700;margin-bottom:4px;">TA</div>' +
     '<div style="font-size:18px;font-weight:bold;color:#fff;">' + friend.name + '</div>' +
-    '<div style="font-size:11px;color:#9ca3af;">[' + fc + ']</div>';
+    '<div style="font-size:11px;color:#e5e7eb;">[' + fc + ']</div>';
   document.getElementById('compareScore').textContent = score + '%';
   document.getElementById('compareLabel').textContent = match.label;
   document.getElementById('compareDesc').textContent = match.desc;
@@ -1106,19 +1106,19 @@ function showCompare(friendCode){
     ];
     var myDir = {H:myCode[0]==='H',C:myCode[0]==='C',F:myCode[1]==='F',S:myCode[1]==='S',L:myCode[2]==='L',Q:myCode[2]==='Q',X:myCode[3]==='X',D:myCode[3]==='D'};
     var friendDir = {H:fc[0]==='H',C:fc[0]==='C',F:fc[1]==='F',S:fc[1]==='S',L:fc[2]==='L',Q:fc[2]==='Q',X:fc[3]==='X',D:fc[3]==='D'};
-    var barsHtml = '<div style="font-size:13px;color:#e5e7eb;font-weight:600;margin-bottom:12px;text-align:center;">🔥 四维能量对比</div>';
+    var barsHtml = '<div style="font-size:13px;color:#ffffff;font-weight:700;margin-bottom:12px;text-align:center;">🔥 四维能量对比</div>';
     dims.forEach(function(d){
       var myHot = myDir[d.pair[0]] ? 75 : 25;
       var friendHot = friendDir[d.pair[0]] ? 75 : 25;
       barsHtml += '<div style="margin-bottom:10px;">';
-      barsHtml += '<div style="font-size:11px;color:#d1d5db;margin-bottom:4px;">' + d.name + '</div>';
+      barsHtml += '<div style="font-size:11px;color:#ffffff;font-weight:600;margin-bottom:4px;">' + d.name + '</div>';
       barsHtml += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">';
-      barsHtml += '<div style="font-size:10px;color:#9ca3af;width:24px;">我</div>';
+      barsHtml += '<div style="font-size:10px;color:#f3f4f6;font-weight:600;width:24px;">我</div>';
       barsHtml += '<div style="flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;">';
       barsHtml += '<div style="width:' + myHot + '%;height:100%;background:linear-gradient(90deg,#ff6b81,#feca57);border-radius:3px;"></div>';
       barsHtml += '</div></div>';
       barsHtml += '<div style="display:flex;align-items:center;gap:8px;">';
-      barsHtml += '<div style="font-size:10px;color:#9ca3af;width:24px;">TA</div>';
+      barsHtml += '<div style="font-size:10px;color:#f3f4f6;font-weight:600;width:24px;">TA</div>';
       barsHtml += '<div style="flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;">';
       barsHtml += '<div style="width:' + friendHot + '%;height:100%;background:linear-gradient(90deg,#48dbfb,#5f6cff);border-radius:3px;"></div>';
       barsHtml += '</div></div></div>';
@@ -1131,22 +1131,22 @@ function showCompare(friendCode){
   var hiddenCompare = document.getElementById('compareHidden');
   if(hiddenCompare){
     var hasMyHidden = window.triggeredHidden !== null;
-    var hiddenHtml = '<div style="font-size:13px;color:#e5e7eb;font-weight:600;margin-bottom:12px;text-align:center;">🔒 隐藏人格对比</div>';
+    var hiddenHtml = '<div style="font-size:13px;color:#ffffff;font-weight:700;margin-bottom:12px;text-align:center;">🔒 隐藏人格对比</div>';
     hiddenHtml += '<div style="display:flex;gap:12px;">';
     hiddenHtml += '<div style="flex:1;padding:12px;background:rgba(255,255,255,.03);border-radius:10px;text-align:center;">';
-    hiddenHtml += '<div style="font-size:11px;color:#9ca3af;margin-bottom:4px;">你</div>';
+    hiddenHtml += '<div style="font-size:11px;color:#ffffff;font-weight:600;margin-bottom:4px;">你</div>';
     if(hasMyHidden){
       var hiddenName = myHiddenLabel.textContent.replace('🏆 ','');
       hiddenHtml += '<div style="font-size:14px;color:#ffd700;font-weight:bold;">' + hiddenName + '</div>';
     } else {
-      hiddenHtml += '<div style="font-size:14px;color:#a78bfa;">🔒 未触发</div>';
-      hiddenHtml += '<div style="font-size:11px;color:#9ca3af;margin-top:4px;">#表里如一</div>';
+      hiddenHtml += '<div style="font-size:14px;color:#a78bfa;font-weight:700;">🔒 未触发</div>';
+      hiddenHtml += '<div style="font-size:11px;color:#e5e7eb;margin-top:4px;">#表里如一</div>';
     }
     hiddenHtml += '</div>';
     hiddenHtml += '<div style="flex:1;padding:12px;background:rgba(255,255,255,.03);border-radius:10px;text-align:center;">';
-    hiddenHtml += '<div style="font-size:11px;color:#9ca3af;margin-bottom:4px;">TA</div>';
-    hiddenHtml += '<div style="font-size:14px;color:#d1d5db;">❓ 未知</div>';
-    hiddenHtml += '<div style="font-size:11px;color:#9ca3af;margin-top:4px;">让TA也来测测</div>';
+    hiddenHtml += '<div style="font-size:11px;color:#ffffff;font-weight:600;margin-bottom:4px;">TA</div>';
+    hiddenHtml += '<div style="font-size:14px;color:#ffffff;font-weight:700;">❓ 未知</div>';
+    hiddenHtml += '<div style="font-size:11px;color:#e5e7eb;margin-top:4px;">让TA也来测测</div>';
     hiddenHtml += '</div></div>';
     hiddenCompare.innerHTML = hiddenHtml;
     hiddenCompare.style.display = 'block';
@@ -1161,7 +1161,7 @@ function showCompare(friendCode){
     else if(score >= 25) hookText = '危险又迷人';
     else hookText = '建议先从翻译器开始';
     var relationHtml = '<div style="font-size:13px;color:#ffd700;font-weight:600;margin-bottom:8px;">💡 关系解读</div>';
-    relationHtml += '<div style="font-size:13px;color:#f3f4f6;line-height:1.6;">';
+    relationHtml += '<div style="font-size:13px;color:#ffffff;line-height:1.6;">';
     relationHtml += '你们的默契度是 <span style="color:#ffd700;font-weight:bold;">' + score + '%</span>——' + match.label + '。';
     relationHtml += match.desc + ' ' + hookText + '。';
     relationHtml += '</div>';

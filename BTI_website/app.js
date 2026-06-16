@@ -57,6 +57,13 @@ function startQuiz() {
   window.hiddenMaxDim = null;
   window.hiddenQ17Options = null;
   window.hiddenQ17Correct = false;
+  // 开始新测试时清除旧结果，避免返回/刷新时恢复旧结果
+  try {
+    ['bti_result_code','bti_result_scores','bti_result_choices','bti_has_hidden_question','bti_has_unlocked_hidden','bti_hidden_key'].forEach(function(k){
+      sessionStorage.removeItem(k);
+      localStorage.removeItem(k);
+    });
+  } catch(e) {}
   showQuestion();
 }
 
@@ -568,14 +575,30 @@ function showResult(scores, isRestoring) {
   if(shareTypeName) shareTypeName.textContent = t.name;
   window.typeCode = finalType;
 
-  // 保存结果到 sessionStorage，方便从图鉴页返回时恢复
+  // 保存结果到 sessionStorage + localStorage，方便从图鉴页返回时恢复
+  // localStorage 作为备用：部分手机浏览器/微信返回时会丢失 sessionStorage
   try {
-    sessionStorage.setItem('bti_result_code', finalType);
-    sessionStorage.setItem('bti_result_scores', JSON.stringify(mainScores));
-    sessionStorage.setItem('bti_result_choices', JSON.stringify(userChoices));
-    sessionStorage.setItem('bti_has_hidden_question', window.hasHiddenQuestion ? '1' : '0');
-    sessionStorage.setItem('bti_has_unlocked_hidden', window.hasUnlockedHidden ? '1' : '0');
-    sessionStorage.setItem('bti_hidden_key', (window.triggeredHidden && window.triggeredHidden.key) || '');
+    var hiddenKey = (window.triggeredHidden && window.triggeredHidden.key) || '';
+    var saveData = {
+      code: finalType,
+      scores: JSON.stringify(mainScores),
+      choices: JSON.stringify(userChoices),
+      hasHiddenQuestion: window.hasHiddenQuestion ? '1' : '0',
+      hasUnlockedHidden: window.hasUnlockedHidden ? '1' : '0',
+      hiddenKey: hiddenKey
+    };
+    sessionStorage.setItem('bti_result_code', saveData.code);
+    sessionStorage.setItem('bti_result_scores', saveData.scores);
+    sessionStorage.setItem('bti_result_choices', saveData.choices);
+    sessionStorage.setItem('bti_has_hidden_question', saveData.hasHiddenQuestion);
+    sessionStorage.setItem('bti_has_unlocked_hidden', saveData.hasUnlockedHidden);
+    sessionStorage.setItem('bti_hidden_key', saveData.hiddenKey);
+    localStorage.setItem('bti_result_code', saveData.code);
+    localStorage.setItem('bti_result_scores', saveData.scores);
+    localStorage.setItem('bti_result_choices', saveData.choices);
+    localStorage.setItem('bti_has_hidden_question', saveData.hasHiddenQuestion);
+    localStorage.setItem('bti_has_unlocked_hidden', saveData.hasUnlockedHidden);
+    localStorage.setItem('bti_hidden_key', saveData.hiddenKey);
     history.replaceState({page:'result'}, '', '#result=' + finalType);
   } catch(e) {}
 
@@ -714,7 +737,10 @@ function unlockHidden(){
     var flipFrontHint = document.getElementById('flipFrontHint');
     if(flipFrontHint) flipFrontHint.style.display = 'none';
     window.hasUnlockedHidden = true; // 标记已解锁
-    try { sessionStorage.setItem('bti_has_unlocked_hidden', '1'); } catch(e) {}
+    try {
+      sessionStorage.setItem('bti_has_unlocked_hidden', '1');
+      localStorage.setItem('bti_has_unlocked_hidden', '1');
+    } catch(e) {}
     var triggered = window.triggeredHidden;
     if(triggered){
       // 常规人格模块先淡出，再翻转卡片 → 溶解切换效果
@@ -1207,17 +1233,18 @@ if(typeof checkInvite === 'function') checkInvite();
 
 // 从图鉴页返回时恢复结果页
 (function restoreResult(){
+  var restored = false;
   try {
-    var savedCode = sessionStorage.getItem('bti_result_code');
-    var savedScoresStr = sessionStorage.getItem('bti_result_scores');
-    var savedChoicesStr = sessionStorage.getItem('bti_result_choices');
+    var savedCode = sessionStorage.getItem('bti_result_code') || localStorage.getItem('bti_result_code');
+    var savedScoresStr = sessionStorage.getItem('bti_result_scores') || localStorage.getItem('bti_result_scores');
+    var savedChoicesStr = sessionStorage.getItem('bti_result_choices') || localStorage.getItem('bti_result_choices');
     if(savedCode && savedScoresStr && savedChoicesStr) {
       var savedScores = JSON.parse(savedScoresStr);
       var savedChoices = JSON.parse(savedChoicesStr);
       // 恢复隐藏人格状态
-      var savedHasHiddenQuestion = sessionStorage.getItem('bti_has_hidden_question') === '1';
-      var savedHasUnlockedHidden = sessionStorage.getItem('bti_has_unlocked_hidden') === '1';
-      var savedHiddenKey = sessionStorage.getItem('bti_hidden_key') || '';
+      var savedHasHiddenQuestion = (sessionStorage.getItem('bti_has_hidden_question') || localStorage.getItem('bti_has_hidden_question')) === '1';
+      var savedHasUnlockedHidden = (sessionStorage.getItem('bti_has_unlocked_hidden') || localStorage.getItem('bti_has_unlocked_hidden')) === '1';
+      var savedHiddenKey = sessionStorage.getItem('bti_hidden_key') || localStorage.getItem('bti_hidden_key') || '';
       window.hasHiddenQuestion = savedHasHiddenQuestion;
       window.hasUnlockedHidden = savedHasUnlockedHidden;
       if(savedHiddenKey && typeof TYPES !== 'undefined' && TYPES[savedHiddenKey]) {
@@ -1230,6 +1257,8 @@ if(typeof checkInvite === 'function') checkInvite();
         // 恢复显示结果页（标记为恢复模式，避免重置解锁/触发状态）
         document.getElementById('home').style.display = 'none';
         showResult(savedScores, true);
+        restored = true;
+        console.log('[BTI] 已从图鉴页恢复结果:', savedCode);
         // 如果已解锁隐藏人格，直接应用已解锁的 UI 状态
         if(savedHasUnlockedHidden){
           var unlockBtn = document.getElementById('unlockBtn');
@@ -1252,8 +1281,16 @@ if(typeof checkInvite === 'function') checkInvite();
           }
         }
       }
+    } else {
+      console.log('[BTI] 无保存的结果，显示首页');
     }
-  } catch(e) {}
+  } catch(e) {
+    console.error('[BTI] 恢复结果失败:', e);
+  }
+  // 无论恢复成功/失败，都移除首页预隐藏样式
+  try {
+    document.documentElement.classList.remove('bti-restoring');
+  } catch(e2) {}
 })();
 
 // 强制启用开始按钮，避免本地加载卡住（最多1秒后自动可用）

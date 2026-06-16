@@ -192,14 +192,9 @@ footer{text-align:center;color:#6b7280;font-size:12px;padding:20px}
 #shareArea .scard-suspense-text{font-size:15px;color:#ffd700;font-weight:700;margin:0;letter-spacing:.3px}
 #shareArea .scard-suspense-hint{font-size:11px;color:rgba(255,215,0,.5);margin-top:4px}
 
-/* 链接复制区 */
-#shareArea .scard-link-section{padding:0 24px 16px;text-align:center}
-#shareArea .scard-link-label{font-size:13px;color:rgba(255,255,255,.6);margin:0 0 8px 0}
-#shareArea .scard-link-box{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px}
-#shareArea .scard-link-text{font-size:11px;color:#c4b5fd;word-break:break-all;font-family:monospace;flex:1;text-align:left;line-height:1.4}
-#shareArea .scard-link-btn{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;flex-shrink:0;transition:all .2s}
-#shareArea .scard-link-btn:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(99,102,241,.3)}
-#shareArea .scard-link-btn.copied{background:rgba(72,219,251,.2);color:#48dbfb}
+/* 链接复制区 — 已移至预览弹窗底部，此处样式保留复用 */
+#shareArea .scard-link-section{display:none}
+#shareArea .scard-link-text{text-decoration:none}
 
 /* CTA */
 #shareArea .scard-cta{text-align:center;padding:10px 24px 6px;color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px}
@@ -214,6 +209,15 @@ footer{text-align:center;color:#6b7280;font-size:12px;padding:20px}
 #cardPreviewWrap{display:none}
 #cardPreview{max-width:96%;max-height:85vh;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
 @media(max-width:480px){#cardPreview{max-width:100%;max-height:88vh;border-radius:12px}}
+
+/* 预览弹窗底部分享链接区 */
+#cardShareLink{margin-top:24px;text-align:center;max-width:340px;width:100%;padding:16px;background:rgba(255,255,255,.04);border:1px solid rgba(167,139,250,.2);border-radius:18px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+#cardShareLink p{font-size:13px;color:rgba(255,255,255,.7);margin:0 0 12px 0;font-weight:500}
+#cardShareLink .card-share-link-box{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.18);border:1px solid rgba(167,139,250,.12);border-radius:12px;padding:10px 12px}
+#cardShareLink .card-share-link-box a{flex:1;text-align:left;font-size:12px;color:#e0dcfe;word-break:break-all;font-family:monospace;text-decoration:none;line-height:1.5;font-weight:500}
+#cardShareLink .card-share-link-box a:hover{color:#a78bfa}
+#cardShareLink .card-share-link-box button{flex-shrink:0;background:linear-gradient(135deg,#a78bfa,#8b5cf6);color:#fff;border:none;padding:8px 16px;border-radius:10px;font-size:13px;cursor:pointer;font-weight:600;transition:all .2s;box-shadow:0 4px 12px rgba(139,92,246,.25)}
+#cardShareLink .card-share-link-box button:hover{transform:scale(1.05);box-shadow:0 6px 16px rgba(139,92,246,.4)}
 
 /* 隐藏人格徽章 */
 .hidden-badge{display:inline-block;background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a1a2e;font-size:12px;font-weight:700;padding:3px 12px;border-radius:20px;margin-top:8px;letter-spacing:1px;box-shadow:0 2px 10px rgba(255,170,0,.3);animation:badgePop .5s cubic-bezier(.34,1.56,.64,1)}

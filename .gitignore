@@ -32,6 +32,10 @@ __pycache__/
 
 # 本地环境配置
 scripts/.env
+scripts/venv/
+
+# 文案生成临时文件
+types_copy_optimized.json
 
 # 比较和检查生成的临时文件
 review_diff.txt

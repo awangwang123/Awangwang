@@ -105,7 +105,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">BTI</a>
     <div class="nav-links">
-      <a href="types.html">人格图鉴</a>
       <a href="articles.html">文章</a>
       <a href="changelog.html" class="active">更新日志</a>
       <a href="help.html">帮助</a>
@@ -135,7 +134,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-current-tag">当前版本</span>
         </div>
         <ul class="version-list">
-          <li class="type-opt"><span class="update-type">优化</span>统一 articles / changelog / help 三个内容页的顶部导航，补齐「人格图鉴」入口</li>
+          <li class="type-opt"><span class="update-type">优化</span>调整顶部导航，精简页面入口</li>
+          <li class="type-opt"><span class="update-type">优化</span>简化更新日志，聚焦用户可感知的变化</li>
+          <li class="type-fix"><span class="update-type">修复</span>修正文章页中人格数量的表述</li>
         </ul>
       </div>
     </div>
@@ -149,7 +150,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-15</span>
         </div>
         <ul class="version-list">
-          <li class="type-fix"><span class="update-type">修复</span>修复结果页"查看人格图鉴"按钮跳转链接在微信/带参数链接下解析错误的问题</li>
+          <li class="type-fix"><span class="update-type">修复</span>优化人格图鉴跳转体验</li>
         </ul>
       </div>
     </div>
@@ -163,7 +164,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-15</span>
         </div>
         <ul class="version-list">
-          <li class="type-fix"><span class="update-type">修复</span>修复结果页触发隐藏人格时，人物图片模块底部缺少翻转提示的问题</li>
+          <li class="type-fix"><span class="update-type">修复</span>完善隐藏人格解锁提示</li>
         </ul>
       </div>
     </div>
@@ -177,8 +178,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-15</span>
         </div>
         <ul class="version-list">
-          <li class="type-opt"><span class="update-type">优化</span>8 种隐藏人格文案全面重写，提升深度与独特性</li>
-          <li class="type-opt"><span class="update-type">优化</span>隐藏人格文案与常规人格文案去重，降低相似度</li>
+          <li class="type-opt"><span class="update-type">优化</span>重写隐藏人格文案，提升解读深度</li>
         </ul>
       </div>
     </div>
@@ -192,12 +192,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-15</span>
         </div>
         <ul class="version-list">
-          <li class="type-opt"><span class="update-type">优化</span>分享卡片人格字母（code）显示效果，添加内联样式保底与 !important 确保生效</li>
-          <li class="type-opt"><span class="update-type">优化</span>全部 12 种人格 DESC 描述去重，降低相似度</li>
-          <li class="type-opt"><span class="update-type">重构</span>SHARE_HOOKS 只保留动作句，由 app.js 自动拼接 slogan，避免重复</li>
-          <li class="type-opt"><span class="update-type">优化</span>部分人格 roast / heal 文案</li>
-          <li class="type-opt"><span class="update-type">重命名</span>HSQD 从"后台玩家"改为"掌局者"</li>
-          <li class="type-opt"><span class="update-type">优化</span>types.html 人格图鉴 16 条 main + 16 条 hidden 文案精简重写</li>
+          <li class="type-opt"><span class="update-type">优化</span>提升分享卡片显示效果</li>
+          <li class="type-opt"><span class="update-type">优化</span>精简人格描述，降低文案重复度</li>
+          <li class="type-opt"><span class="update-type">优化</span>调整部分人格名称与解读</li>
         </ul>
       </div>
     </div>
@@ -211,7 +208,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-15</span>
         </div>
         <ul class="version-list">
-          <li class="type-opt"><span class="update-type">优化</span>分享卡片 code 样式加强为金色渐变底、深色粗体 18px、圆角 pill、投影</li>
+          <li class="type-opt"><span class="update-type">优化</span>强化分享卡片人格代码视觉效果</li>
         </ul>
       </div>
     </div>
@@ -225,7 +222,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-05</span>
         </div>
         <ul class="version-list">
-          <li class="type-opt"><span class="update-type">移除</span>结果页"分享解锁人格图鉴"限制，改为直接查看</li>
+          <li class="type-opt"><span class="update-type">优化</span>简化人格图鉴查看流程</li>
         </ul>
       </div>
     </div>
@@ -239,11 +236,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-04</span>
         </div>
         <ul class="version-list">
-          <li class="type-opt"><span class="update-type">精简</span>首页内容重新排列，"开始测试"按钮首屏可见</li>
-          <li class="type-opt"><span class="update-type">精简</span>"什么是 BTI"缩减到 50 字以内，四维标签改为 2x2 网格</li>
-          <li class="type-opt"><span class="update-type">精简</span>人格预览从 6 张缩减为 3 张横向滑动卡片</li>
-          <li class="type-opt"><span class="update-type">精简</span>卖点从 3 个大卡片改为 1 行 3 列紧凑布局</li>
-          <li class="type-opt"><span class="update-type">优化</span>整体模块 padding、字号缩小，更适配手机屏幕</li>
+          <li class="type-opt"><span class="update-type">优化</span>精简首页布局，提升移动端体验</li>
         </ul>
       </div>
     </div>
@@ -257,16 +250,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-04</span>
         </div>
         <ul class="version-list">
-          <li class="type-feat"><span class="update-type">新增</span>顶部导航栏（Logo + 人格图鉴/关于我们/隐私政策链接）</li>
-          <li class="type-feat"><span class="update-type">新增</span>首页内容模块（什么是 BTI、12 种人格预览、3 个卖点）</li>
-          <li class="type-feat"><span class="update-type">新增</span>全局页脚含 ICP 备案号占位</li>
-          <li class="type-opt"><span class="update-type">替换</span>底部广告位预留为互动提示</li>
-          <li class="type-opt"><span class="update-type">优化</span>免责声明表述更专业，meta description 更完整</li>
-          <li class="type-fix"><span class="update-type">修复</span>移除死代码（qrious.js 加载、二维码生成函数）</li>
-          <li class="type-fix"><span class="update-type">修复</span>build.js 版本号替换正则过于激进的问题</li>
-          <li class="type-fix"><span class="update-type">修复</span>pack.py 重复目录过滤逻辑</li>
-          <li class="type-fix"><span class="update-type">修复</span>Nginx 配置添加 charset utf-8，解决中文乱码</li>
-          <li class="type-opt"><span class="update-type">优化</span>charset meta 标签前置，移除 UTF-8 BOM</li>
+          <li class="type-feat"><span class="update-type">新增</span>顶部导航栏与全局页脚</li>
+          <li class="type-feat"><span class="update-type">新增</span>首页内容模块与备案信息</li>
+          <li class="type-opt"><span class="update-type">优化</span>完善隐私说明与页面信息</li>
         </ul>
       </div>
     </div>
@@ -280,13 +266,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-06-01</span>
         </div>
         <ul class="version-list">
-          <li class="type-fix"><span class="update-type">修复</span>结果页人格字母解码区、警示栏、输入框颜色对比度不足</li>
-          <li class="type-fix"><span class="update-type">修复</span>分享卡片链接改为可点击超链接</li>
-          <li class="type-fix"><span class="update-type">移除</span>分享卡片二维码（生成不稳定）</li>
-          <li class="type-feat"><span class="update-type">新增</span>分享卡片底部链接复制区（一键复制发给好友）</li>
-          <li class="type-fix"><span class="update-type">移除</span>默契度对比页"生成对比卡片"和"我也测一个"按钮</li>
-          <li class="type-fix"><span class="update-type">修复</span>对比页分享链接改为可点击超链接</li>
-          <li class="type-fix"><span class="update-type">修复</span>shareCard 截图后清理 shareArea 残留内联样式</li>
+          <li class="type-opt"><span class="update-type">优化</span>提升结果页可读性</li>
+          <li class="type-opt"><span class="update-type">优化</span>改进分享卡片样式与链接</li>
         </ul>
       </div>
     </div>
@@ -300,8 +281,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-05-??</span>
         </div>
         <ul class="version-list">
-          <li class="type-opt"><span class="update-type">优化</span>加深结果页多处浅色文字，提升可读性</li>
-          <li class="type-feat"><span class="update-type">新增</span>人格字母解码说明 + 结果页免责声明</li>
+          <li class="type-opt"><span class="update-type">优化</span>提升结果页文字清晰度</li>
+          <li class="type-feat"><span class="update-type">新增</span>人格代码说明</li>
         </ul>
       </div>
     </div>
@@ -315,11 +296,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span class="version-date">2026-05-??</span>
         </div>
         <ul class="version-list">
-          <li class="type-feat"><span class="update-type">新增</span>BTI 反差人格测试正式上线，基于热力/冷力、外向/内向、理性/感性、掌控/随性四维模型</li>
-          <li class="type-feat"><span class="update-type">新增</span>16 道情境题，测出主人格与隐藏人格</li>
-          <li class="type-feat"><span class="update-type">新增</span>12 种人格类型图鉴，含详细解读</li>
-          <li class="type-feat"><span class="update-type">新增</span>分享卡片生成与下载功能</li>
-          <li class="type-feat"><span class="update-type">新增</span>朋友默契度对比功能</li>
+          <li class="type-feat"><span class="update-type">新增</span>BTI 反差人格测试正式上线</li>
+          <li class="type-feat"><span class="update-type">新增</span>16 道情境题、人格图鉴、分享卡片、默契度对比</li>
         </ul>
       </div>
     </div>

@@ -4,7 +4,9 @@
 <!--
 版本变更记录：
 v3.10.3 (2026-06-16)
-  - 优化：统一 articles / changelog / help 三个内容页的顶部导航，补齐「人格图鉴」入口
+  - 优化：精简顶部导航，移除人格图鉴入口
+  - 优化：简化更新日志，聚焦用户可感知变化
+  - 修复：修正文章页中人格数量的表述
 
 v3.10.2 (2026-06-15)
   - 修复：结果页"查看人格图鉴"按钮跳转链接在微信/带参数链接下解析错误，导致人格图鉴打不开
@@ -85,7 +87,7 @@ window.goTest = function() {
 <meta name="baidu_union_verify" content="417603a14bda94bb6756f214f93ff4ba">
 <title>BTI 反差人格测试 v3.10.3</title>
 <meta property="og:title" content="我测出了【%人格名称%】，你是什么反差人格？">
-<meta property="og:description" content="BTI 反差人格测试：16 题测出你的主人格与隐藏人格，探索人格图鉴中的 12 种反差类型。">
+<meta property="og:description" content="BTI 反差人格测试：16 题测出你的主人格与隐藏人格，探索人格图鉴中的 16 种反差类型。">
   <meta property="og:image" content="http://wangwangtt.top/bti/images/share-cover.jpg">
 <meta property="og:url" content="http://wangwangtt.top/bti">
 <meta property="og:type" content="website">
@@ -409,15 +411,6 @@ window.goTest = function() {
 <!-- CTA -->
 <div class="scard-cta" id="shareCta">👉 邀请好友一起测</div>
 
-<!-- 分享链接复制 -->
-<div class="scard-link-section">
-  <p class="scard-link-label">复制链接发给好友 👇</p>
-  <div class="scard-link-box">
-    <span class="scard-link-text" id="shareLinkText">http://wangwangtt.top/bti</span>
-    <button class="scard-link-btn" id="shareLinkBtn" onclick="copyShareLink()">📋 复制</button>
-  </div>
-</div>
-
 <!-- 底部品牌 -->
 <div class="scard-footer">
 <span>🔮 BTI 反差人格测试 · 发现隐藏的你 🔮</span>
@@ -450,6 +443,16 @@ window.goTest = function() {
 <div id="cardOverlay">
   <div id="cardLoading">⏳ 正在生成分享卡片...</div>
   <div id="cardPreviewWrap"><img id="cardPreview" alt="分析卡片"></div>
+
+  <!-- 预览弹窗底部真实链接（可点击 + 可复制） -->
+  <div id="cardShareLink" class="card-share-link" style="display:none">
+    <p>👇 点击链接直接进入测试页</p>
+    <div class="card-share-link-box">
+      <a id="cardShareLinkUrl" href="http://wangwangtt.top/bti" target="_blank">http://wangwangtt.top/bti</a>
+      <button id="cardShareLinkCopy" onclick="copyCardShareLink()">📋 复制</button>
+    </div>
+  </div>
+
   <div id="cardActions" style="display:none;gap:12px;margin-top:20px">
     <button onclick="downloadCard()" style="background:linear-gradient(135deg,#5f6cff,#7c5cfc);color:#fff;border:none;padding:12px 28px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold">💾 保存图片</button>
     <button onclick="closeCardPreview()" style="background:rgba(255,255,255,.1);color:#ccc;border:1px solid rgba(255,255,255,.2);padding:12px 28px;border-radius:25px;font-size:15px;cursor:pointer">关闭</button>

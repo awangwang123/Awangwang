@@ -458,11 +458,18 @@ function showResult(scores) {
   var hasQ17 = userChoices.length >= 17;
   
   if (window.triggeredHidden) {
-    // 触发了隐藏人格 → 显示解锁按钮+翻转提示，点击后卡片翻转揭晓
-    if(unlockBtn) unlockBtn.style.display = 'block';
-    if(flipFrontHint){
-      flipFrontHint.style.display = 'flex';
-      flipFrontHint.innerHTML = '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg><span>解锁后将翻转卡片揭晓隐藏人格</span>';
+    // 触发了隐藏人格
+    if(window.hasUnlockedHidden){
+      // 已解锁 → 不显示解锁按钮和翻转提示
+      if(unlockBtn) unlockBtn.style.display = 'none';
+      if(flipFrontHint) flipFrontHint.style.display = 'none';
+    } else {
+      // 未解锁 → 显示解锁按钮+翻转提示，点击后卡片翻转揭晓
+      if(unlockBtn) unlockBtn.style.display = 'block';
+      if(flipFrontHint){
+        flipFrontHint.style.display = 'flex';
+        flipFrontHint.innerHTML = '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg><span>解锁后将翻转卡片揭晓隐藏人格</span>';
+      }
     }
     // 底部裂变引导
     document.getElementById('fissureMain').textContent = '测完别走，拉个朋友下水';
@@ -552,6 +559,9 @@ function showResult(scores) {
     sessionStorage.setItem('bti_result_code', finalType);
     sessionStorage.setItem('bti_result_scores', JSON.stringify(mainScores));
     sessionStorage.setItem('bti_result_choices', JSON.stringify(userChoices));
+    sessionStorage.setItem('bti_has_hidden_question', window.hasHiddenQuestion ? '1' : '0');
+    sessionStorage.setItem('bti_has_unlocked_hidden', window.hasUnlockedHidden ? '1' : '0');
+    sessionStorage.setItem('bti_hidden_key', (window.triggeredHidden && (window.triggeredHidden.key || window.triggeredHidden.code)) || '');
     history.replaceState({page:'result'}, '', '#result=' + finalType);
   } catch(e) {}
 
@@ -690,6 +700,7 @@ function unlockHidden(){
     var flipFrontHint = document.getElementById('flipFrontHint');
     if(flipFrontHint) flipFrontHint.style.display = 'none';
     window.hasUnlockedHidden = true; // 标记已解锁
+    try { sessionStorage.setItem('bti_has_unlocked_hidden', '1'); } catch(e) {}
     var triggered = window.triggeredHidden;
     if(triggered){
       // 常规人格模块先淡出，再翻转卡片 → 溶解切换效果
@@ -722,7 +733,8 @@ function unlockHidden(){
 function shareCard(){
   if(!resultTypeData){alert('没有结果数据');return;}
   var t=resultTypeData;
-  
+  var shareUrl = 'http://wangwangtt.top/bti?ref=' + (t.code || '');
+
   // 填充分享卡片内容
   var shareImgEl = document.getElementById('shareImg');
   shareImgEl.src = t.img || '';
@@ -743,12 +755,6 @@ function shareCard(){
       : '👉 测测你是什么型';
     ctaEl.textContent = hook;
   }
-
-  // 分享链接带邀请参数（裂变）
-  var baseUrl = 'http://wangwangtt.top/bti';
-  var shareUrl = baseUrl + '?ref=' + t.code;
-  var linkTextEl = document.getElementById('shareLinkText');
-  if(linkTextEl) linkTextEl.textContent = shareUrl;
 
   // 悬念钩子：隐藏人格只露首字（三种状态）
   var suspenseText = document.getElementById('shareSuspenseText');
@@ -781,9 +787,12 @@ function shareCard(){
   var previewImg=document.getElementById('cardPreview');
   var cardActions=document.getElementById('cardActions');
   var wrap=document.getElementById('cardPreviewWrap');
+  var cardShareLink=document.getElementById('cardShareLink');
+  var cardShareLinkUrl=document.getElementById('cardShareLinkUrl');
   overlay.style.display='flex';
   previewImg.style.display='none';
   cardActions.style.display='none';
+  if(cardShareLink) cardShareLink.style.display='none';
   document.getElementById('cardLoading').style.display='block';
   
   // 清理之前的预览内容
@@ -840,6 +849,12 @@ function shareCard(){
       tip.style.cssText = 'position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(255,107,129,.9);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;z-index:10;';
       tip.textContent = '本地预览效果，部署后可保存图片';
       wrap.appendChild(tip);
+      // 显示底部真实可点击链接
+      if(cardShareLinkUrl){
+        cardShareLinkUrl.href = shareUrl;
+        cardShareLinkUrl.textContent = shareUrl;
+      }
+      if(cardShareLink) cardShareLink.style.display = 'block';
       return;
     }
     
@@ -867,6 +882,13 @@ function shareCard(){
       if(saveBtn) saveBtn.style.display = 'inline-block';
       document.getElementById('cardLoading').style.display='none';
 
+      // 显示底部真实可点击链接
+      if(cardShareLinkUrl){
+        cardShareLinkUrl.href = shareUrl;
+        cardShareLinkUrl.textContent = shareUrl;
+      }
+      if(cardShareLink) cardShareLink.style.display = 'block';
+
       // 存储下载链接
       previewImg.dataset.downloadUrl=canvas.toDataURL('image/png');
     }).catch(function(e){
@@ -890,6 +912,23 @@ function shareCard(){
 function copyShareLink(){
   var linkText = document.getElementById('shareLinkText');
   var btn = document.getElementById('shareLinkBtn');
+  if(!linkText) return;
+  var url = linkText.textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(function(){
+      showCopySuccess(btn);
+    }).catch(function(){
+      fallbackCopy(url, btn);
+    });
+  } else {
+    fallbackCopy(url, btn);
+  }
+}
+
+// 复制预览弹窗底部分享链接
+function copyCardShareLink(){
+  var linkText = document.getElementById('cardShareLinkUrl');
+  var btn = document.getElementById('cardShareLinkCopy');
   if(!linkText) return;
   var url = linkText.textContent;
   if(navigator.clipboard && navigator.clipboard.writeText){
@@ -947,6 +986,8 @@ function downloadCard(){
 // 关闭卡片预览
 function closeCardPreview(){
   document.getElementById('cardOverlay').style.display='none';
+  var cardShareLink = document.getElementById('cardShareLink');
+  if(cardShareLink) cardShareLink.style.display='none';
 }
 
 // ========== 裂变机制 ==========
@@ -1159,12 +1200,39 @@ if(typeof checkInvite === 'function') checkInvite();
     if(savedCode && savedScoresStr && savedChoicesStr) {
       var savedScores = JSON.parse(savedScoresStr);
       var savedChoices = JSON.parse(savedChoicesStr);
+      // 恢复隐藏人格状态
+      var savedHasHiddenQuestion = sessionStorage.getItem('bti_has_hidden_question') === '1';
+      var savedHasUnlockedHidden = sessionStorage.getItem('bti_has_unlocked_hidden') === '1';
+      var savedHiddenKey = sessionStorage.getItem('bti_hidden_key') || '';
+      window.hasHiddenQuestion = savedHasHiddenQuestion;
+      window.hasUnlockedHidden = savedHasUnlockedHidden;
+      if(savedHiddenKey && typeof TYPES !== 'undefined' && TYPES[savedHiddenKey]) {
+        window.triggeredHidden = TYPES[savedHiddenKey];
+      }
       // 恢复用户选择数据
       if(Array.isArray(savedChoices) && savedChoices.length > 0) {
         userChoices = savedChoices;
         // 恢复显示结果页
         document.getElementById('home').style.display = 'none';
         showResult(savedScores);
+        // 如果已解锁隐藏人格，直接应用已解锁的 UI 状态
+        if(savedHasUnlockedHidden && window.triggeredHidden){
+          var unlockBtn = document.getElementById('unlockBtn');
+          if(unlockBtn) unlockBtn.style.display = 'none';
+          var flipFrontHint = document.getElementById('flipFrontHint');
+          if(flipFrontHint) flipFrontHint.style.display = 'none';
+          var flipCardBack = document.getElementById('flipCardBack');
+          if(flipCardBack) flipCardBack.classList.remove('locked');
+          var flipCardInner = document.getElementById('flipCardInner');
+          if(flipCardInner) flipCardInner.classList.add('flipped');
+          var fadeEls = getFadeModules();
+          fadeEls.forEach(function(el){ el.style.display = 'none'; });
+          var hm = document.getElementById('hiddenModules');
+          if(hm){
+            hm.style.display = 'block';
+            hm.style.opacity = '1';
+          }
+        }
       }
     }
   } catch(e) {}

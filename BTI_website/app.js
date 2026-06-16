@@ -260,14 +260,17 @@ function renderDimBars(scores, finalType) {
   document.getElementById('dimBreakdown').innerHTML = html;
 }
 
-function showResult(scores) {
+function showResult(scores, isRestoring) {
+  // isRestoring=true 表示从图鉴页返回恢复结果，不重置解锁/触发状态
+  isRestoring = !!isRestoring;
+
   // C1方案：主人格判断排除Q17加分影响（Q17只影响隐藏人格，不影响主人格）
   var mainScores = {H:scores.H, C:scores.C, F:scores.F, S:scores.S, L:scores.L, Q:scores.Q, X:scores.X, D:scores.D};
   if (userChoices.length >= 17 && window.hiddenQ17Options) {
     var q17Data = window.hiddenQ17Options[userChoices[16]].data;
     for (var sk in q17Data.score) { mainScores[sk] -= q17Data.score[sk]; }
   }
-  
+
   var typeStr = '';
   typeStr += (mainScores.H >= mainScores.C ? 'H' : 'C');
   typeStr += (mainScores.F >= mainScores.S ? 'F' : 'S');
@@ -275,11 +278,13 @@ function showResult(scores) {
   typeStr += (mainScores.X >= mainScores.D ? 'X' : 'D');
 
   var finalType = typeStr;
-  window.triggeredHidden = null;
+  // 恢复模式下保留已恢复的 triggeredHidden，避免从图鉴返回后被清空
+  window.triggeredHidden = isRestoring ? (window.triggeredHidden || null) : null;
 
   // C1方案：隐藏人格触发检测（Q17选对即触发，选错不触发）
   // 出现条件：维度对差值≥5.0分；触发条件：Q17 2选1选对
-  if (userChoices.length >= 17 && window.hiddenQ17Correct === true) {
+  // 恢复模式下不重算，直接沿用 sessionStorage 恢复的状态
+  if (!isRestoring && userChoices.length >= 17 && window.hiddenQ17Correct === true) {
     var maxDim = window.hiddenMaxDim;
     var hiddenKey = '';
     if (maxDim === 'H') hiddenKey = 'HIDDEN_HC_HOT';
@@ -295,7 +300,8 @@ function showResult(scores) {
 
   window.finalType = finalType;
   window.hasHiddenQuestion = userChoices.length >= 17; // 是否出现了隐藏题（用于分享卡片悬念控制）
-  window.hasUnlockedHidden = false; // 重置解锁状态
+  // 恢复模式下保留已恢复的解锁状态，避免从图鉴返回后解锁按钮重新出现
+  window.hasUnlockedHidden = isRestoring ? window.hasUnlockedHidden : false;
   var t = TYPES[finalType] || TYPES[typeStr];
   if(!t) {
     t = {name:'未知人格',code:typeStr || '????',rarity:'',img:'',slogan:'',desc:'人格数据加载失败，请刷新页面重试。',roast:'',heal:'',tags:['#未知']};
@@ -1212,9 +1218,9 @@ if(typeof checkInvite === 'function') checkInvite();
       // 恢复用户选择数据
       if(Array.isArray(savedChoices) && savedChoices.length > 0) {
         userChoices = savedChoices;
-        // 恢复显示结果页
+        // 恢复显示结果页（标记为恢复模式，避免重置解锁/触发状态）
         document.getElementById('home').style.display = 'none';
-        showResult(savedScores);
+        showResult(savedScores, true);
         // 如果已解锁隐藏人格，直接应用已解锁的 UI 状态
         if(savedHasUnlockedHidden && window.triggeredHidden){
           var unlockBtn = document.getElementById('unlockBtn');

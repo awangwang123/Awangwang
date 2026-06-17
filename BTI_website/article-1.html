@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#15121f">
+<meta name="theme-color" content="#FFF8F0">
 <title>BTI 与 MBTI 有什么区别？为什么我们更关注「反差」</title>
 <meta name="description" content="BTI 和 MBTI 都是人格测试，但底层逻辑完全不同。MBTI 回答「你是什么」，BTI 回答「你表面是什么，内心又是什么」。本文从模型设计、应用场景、结果价值三个维度详细对比。">
 <meta property="og:title" content="BTI 与 MBTI 有什么区别？为什么我们更关注「反差」">
@@ -14,141 +14,183 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#15121f;
-  --surface:#1e1a2c;
-  --surface-hover:#262236;
-  --border:#2d2740;
-  --text:#f5f3fa;
-  --text-secondary:#a49fb8;
-  --text-tertiary:#6e6785;
-  --accent:#5eead4;
-  --accent-soft:rgba(94,234,212,.12);
-  --gold:#f0c674;
-  --gold-soft:rgba(240,198,116,.1);
-  --line:rgba(255,255,255,.08);
-  --radius:16px;
-  --radius-sm:10px;
+  --bg:#FFF8F0;
+  --bg-soft:#FFF3E6;
+  --card:#FFFFFF;
+  --text:#2D2A26;
+  --text-secondary:#6B6560;
+  --text-tertiary:#9A9289;
+  --coral:#F4A261;
+  --coral-light:#FFF0E1;
+  --coral-soft:rgba(244,162,97,.12);
+  --gold:#E9C46A;
+  --gold-light:#FFF6E0;
+  --sage:#2A9D8F;
+  --sage-light:#E6F5F3;
+  --rose:#E07A5F;
+  --rose-light:#FCEAE6;
+  --lavender:#9B8AA5;
+  --lavender-light:#F3EFF5;
+  --shadow:0 4px 20px rgba(139,90,43,.08);
+  --shadow-hover:0 8px 32px rgba(139,90,43,.12);
+  --radius:24px;
+  --radius-sm:16px;
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;font-size:16px;line-height:1.85;min-height:100vh}
 a{color:inherit;text-decoration:none}
 
 /* ===== 顶部导航 ===== */
-.top-nav{position:sticky;top:0;z-index:100;background:rgba(21,18,31,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.nav-inner{max-width:680px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-size:17px;font-weight:800;color:var(--text);letter-spacing:.3px}
-.nav-logo span{color:var(--accent)}
-.nav-links{display:flex;gap:18px;align-items:center}
-.nav-links a{font-size:13.5px;color:var(--text-secondary);transition:color .2s;white-space:nowrap}
-.nav-links a:hover{color:var(--text)}
-@media(max-width:420px){.nav-links{gap:12px}.nav-links a{font-size:12px}}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(255,248,240,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(244,162,97,.15)}
+.nav-inner{max-width:720px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
+.nav-logo::before{content:'🔮';font-size:20px}
+.nav-links{display:flex;gap:22px;align-items:center}
+.nav-links a{font-size:14px;color:var(--text-secondary);font-weight:500;transition:all .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--coral);border-radius:1px;transition:width .2s}
+.nav-links a:hover{color:var(--coral)}
+.nav-links a:hover::after{width:100%}
+@media(max-width:520px){.nav-links{gap:14px}.nav-links a{font-size:13px}}
 
-/* ===== 文章页头 ===== */
-.article-header{padding:56px 20px 40px;text-align:center;border-bottom:1px solid var(--line)}
-.header-inner{max-width:680px;margin:0 auto}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);margin-bottom:24px;transition:color .2s}
-.back-link:hover{color:var(--text)}
-.article-tag{display:inline-block;font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;background:var(--accent-soft);color:var(--accent);border:1px solid rgba(94,234,212,.2);margin-bottom:20px}
-.article-title{font-size:30px;font-weight:800;line-height:1.35;margin-bottom:20px;color:var(--text);letter-spacing:-.3px}
-.article-meta{display:flex;align-items:center;justify-content:center;gap:18px;font-size:13.5px;color:var(--text-secondary);flex-wrap:wrap}
+/* ===== Hero 头图区 ===== */
+.hero{position:relative;padding:64px 24px 48px;text-align:center;overflow:hidden;background:linear-gradient(160deg,var(--bg) 0%,var(--bg-soft) 50%,#FFEBD9 100%)}
+.hero-deco{position:absolute;top:40px;right:8%;width:120px;height:120px;background:radial-gradient(circle,var(--coral-soft) 0%,transparent 70%);border-radius:50%;animation:pulse 4s ease-in-out infinite}
+.hero-deco-2{position:absolute;bottom:60px;left:5%;width:80px;height:80px;background:radial-gradient(circle,rgba(233,196,106,.15) 0%,transparent 70%);border-radius:50%;animation:pulse 5s ease-in-out infinite reverse}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
+.hero-inner{position:relative;z-index:2;max-width:680px;margin:0 auto}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);margin-bottom:24px;padding:8px 16px;background:var(--card);border-radius:20px;box-shadow:var(--shadow);transition:all .2s}
+.back-link:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);color:var(--coral)}
+.article-tag{display:inline-block;font-size:12px;font-weight:700;padding:8px 18px;border-radius:30px;background:var(--coral-light);color:#D4823A;margin-bottom:20px}
+.article-title{font-size:34px;font-weight:800;line-height:1.3;margin-bottom:22px;color:var(--text);letter-spacing:-.5px}
+.article-title span{color:var(--coral)}
+.article-meta{display:flex;align-items:center;justify-content:center;gap:20px;font-size:14px;color:var(--text-secondary);flex-wrap:wrap}
 .article-meta span{display:flex;align-items:center;gap:6px}
-.article-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--text-tertiary)}
-@media(max-width:520px){.article-title{font-size:25px}.article-header{padding:44px 20px 32px}}
+.article-meta .dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+@media(max-width:520px){.article-title{font-size:26px}.hero{padding:48px 20px 36px}}
 
 /* ===== 页面容器 ===== */
-.page-wrap{max-width:680px;margin:0 auto;padding:0 20px 60px}
+.page-wrap{max-width:720px;margin:0 auto;padding:0 24px 70px}
 
-/* ===== 导语区 ===== */
-.lead-section{padding:32px 0 16px;border-bottom:1px solid var(--line);margin-bottom:36px}
-.lead-text{font-size:18px;line-height:1.9;color:var(--text);font-weight:500}
-.lead-text em{color:var(--accent);font-style:normal}
+/* ===== 导语卡片 ===== */
+.lead-card{position:relative;margin-top:-24px;margin-bottom:40px;padding:32px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);z-index:3}
+.lead-card::before{content:'“';position:absolute;top:16px;left:20px;font-size:64px;color:var(--coral);opacity:.2;font-family:Georgia,serif;line-height:1}
+.lead-text{position:relative;z-index:1;font-size:18px;line-height:1.95;color:var(--text);font-weight:500}
+.lead-text em{color:var(--coral);font-style:normal;font-weight:700}
+
+/* ===== 阅读进度条 ===== */
+.read-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--coral),var(--gold));z-index:200;width:0%;transition:width .1s}
 
 /* ===== 正文 ===== */
-.article-content{font-size:16px;color:var(--text-secondary)}
-.article-content p{margin-bottom:22px}
-.article-content h2{font-size:20px;font-weight:800;color:var(--text);margin:44px 0 18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:12px}
-.article-content h2 .section-num{font-size:13px;font-weight:700;color:var(--accent);font-family:monospace;letter-spacing:1px}
-.article-content h3{font-size:17px;font-weight:700;color:var(--text);margin:30px 0 12px}
-.article-content ul,.article-content ol{margin:0 0 22px 24px}
-.article-content li{margin-bottom:10px;padding-left:4px}
-.article-content li::marker{color:var(--accent)}
+.article-content{font-size:16.5px;color:var(--text-secondary)}
+.article-content p{margin-bottom:24px}
+.article-content h2{font-size:22px;font-weight:800;color:var(--text);margin:48px 0 22px;display:flex;align-items:center;gap:14px}
+.article-content h2 .section-num{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:var(--coral);color:#fff;border-radius:12px;font-size:14px;font-weight:800;flex-shrink:0;box-shadow:0 4px 12px rgba(244,162,97,.3)}
+.article-content h3{font-size:18px;font-weight:700;color:var(--text);margin:32px 0 14px}
+.article-content ul,.article-content ol{margin:0 0 24px 28px}
+.article-content li{margin-bottom:12px;padding-left:6px}
+.article-content li::marker{color:var(--coral)}
 .article-content strong{color:var(--text);font-weight:700}
-.article-content a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.article-content a{color:var(--coral);text-decoration:underline;text-underline-offset:4px;font-weight:600}
+
+/* 彩色模块卡片 */
+.module-card{margin:28px 0;padding:26px;border-radius:var(--radius-sm);position:relative;overflow:hidden}
+.module-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.module-card h4{font-size:16px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.module-card p{margin:0 0 12px;font-size:15.5px;line-height:1.85}
+.module-card p:last-child{margin-bottom:0}
+
+.module-coral{background:var(--coral-light)}
+.module-coral::before{background:var(--coral)}
+.module-coral h4{color:#C76A2A}
+
+.module-gold{background:var(--gold-light)}
+.module-gold::before{background:var(--gold)}
+.module-gold h4{color:#B8932F}
+
+.module-sage{background:var(--sage-light)}
+.module-sage::before{background:var(--sage)}
+.module-sage h4{color:#1F7A70}
+
+.module-rose{background:var(--rose-light)}
+.module-rose::before{background:var(--rose)}
+.module-rose h4{color:#B85A42}
+
+.module-lavender{background:var(--lavender-light)}
+.module-lavender::before{background:var(--lavender)}
+.module-lavender h4{color:#7A6A82}
 
 /* 关键句 */
-.key-statement{font-size:19px;line-height:1.8;color:var(--text);font-weight:600;margin:32px 0;padding:24px 28px;background:var(--surface);border-radius:var(--radius);border-left:3px solid var(--accent)}
+.key-statement{font-size:20px;line-height:1.8;color:var(--text);font-weight:700;margin:36px 0;padding:28px 32px;background:linear-gradient(135deg,var(--coral-light),var(--gold-light));border-radius:var(--radius);text-align:center;box-shadow:var(--shadow)}
 
 /* 引用块 */
-blockquote{margin:32px 0;padding:0 28px;border-left:2px solid var(--gold);color:var(--text-secondary);font-style:italic}
-blockquote p{margin:0;font-size:17px;line-height:1.9;color:var(--text)}
+blockquote{margin:36px 0;padding:28px 32px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);position:relative}
+blockquote::before{content:'“';position:absolute;top:12px;left:18px;font-size:56px;color:var(--coral);opacity:.25;font-family:Georgia,serif;line-height:1}
+blockquote p{margin:0;font-size:17px;line-height:1.9;color:var(--text);font-weight:500;position:relative;z-index:1}
 
 /* 对比表格 */
-.compare-table{width:100%;border-collapse:collapse;margin:28px 0;font-size:14.5px}
-.compare-table th{padding:14px 16px;text-align:left;font-weight:700;color:var(--text);background:var(--surface);border-bottom:1px solid var(--line);font-size:13px;letter-spacing:.5px}
-.compare-table td{padding:16px;border-bottom:1px solid var(--line);color:var(--text-secondary);vertical-align:top}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;margin:32px 0;font-size:14.5px;background:var(--card);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow)}
+.compare-table th{padding:16px 18px;text-align:left;font-weight:800;color:var(--text);background:var(--bg-soft);font-size:13px;letter-spacing:.5px;border-bottom:2px solid var(--coral-light)}
+.compare-table td{padding:18px;border-bottom:1px solid #F5E6D6;color:var(--text-secondary);vertical-align:top}
 .compare-table tr:last-child td{border-bottom:none}
-.compare-table td:first-child{font-weight:600;color:var(--text);width:26%}
-.compare-table tr:hover td{background:rgba(255,255,255,.02)}
+.compare-table td:first-child{font-weight:700;color:var(--text);width:24%}
+.compare-table tr:hover td{background:rgba(244,162,97,.04)}
 
 /* 提示框 */
-.tip-box{margin:28px 0;padding:22px 24px;background:var(--gold-soft);border:1px solid rgba(240,198,116,.15);border-radius:var(--radius)}
-.tip-box-title{font-size:14px;font-weight:800;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.tip-box p{margin:0;color:var(--text);font-size:15px;line-height:1.8}
-
-/* 分割线 */
-.section-divider{height:1px;background:var(--line);margin:44px 0;border:none}
+.tip-box{margin:32px 0;padding:24px 26px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);border:2px solid var(--gold-light);position:relative;padding-left:64px}
+.tip-box::before{content:'💡';position:absolute;left:22px;top:22px;font-size:26px}
+.tip-box-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:10px}
+.tip-box p{margin:0;color:var(--text-secondary);font-size:15px;line-height:1.8}
 
 /* 总结区 */
-.summary-box{margin:40px 0;padding:28px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)}
-.summary-box h3{font-size:17px;font-weight:800;color:var(--text);margin:0 0 14px;display:flex;align-items:center;gap:8px}
-.summary-box p{margin:0;color:var(--text-secondary);font-size:15.5px;line-height:1.8}
-.summary-box p + p{margin-top:14px}
+.summary-box{margin:44px 0;padding:32px;background:linear-gradient(135deg,#FFF0E1,#E6F5F3);border-radius:var(--radius);position:relative;overflow:hidden}
+.summary-box::after{content:'✦';position:absolute;bottom:-20px;right:10px;font-size:120px;color:rgba(244,162,97,.08);font-weight:800;line-height:1}
+.summary-box h3{font-size:18px;font-weight:800;color:var(--text);margin:0 0 16px;display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.summary-box p{margin:0 0 14px;color:var(--text-secondary);font-size:15.5px;line-height:1.85;position:relative;z-index:1}
+.summary-box p:last-child{margin-bottom:0}
+
+/* 小装饰 */
+.divider{text-align:center;margin:44px 0;color:var(--gold);font-size:20px;letter-spacing:8px}
 
 /* 相关阅读 */
-.related-section{margin-top:52px;padding-top:36px;border-top:1px solid var(--line)}
-.related-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:18px}
-.related-list{display:flex;flex-direction:column;gap:12px}
-.related-item{display:block;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all .2s}
-.related-item:hover{background:var(--surface-hover);border-color:var(--text-tertiary)}
-.related-item-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
-.related-item-desc{font-size:13.5px;color:var(--text-secondary);line-height:1.6}
+.related-section{margin-top:56px;padding-top:36px;border-top:2px dashed rgba(244,162,97,.25)}
+.related-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.related-title{font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px}
+.related-more{font-size:13px;color:var(--coral);font-weight:600}
+.related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.related-item{display:block;padding:22px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);transition:all .25s;border:2px solid transparent}
+.related-item:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--coral-light)}
+.related-item-tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;background:var(--coral-light);color:#C76A2A;margin-bottom:10px;display:inline-block}
+.related-item-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.5}
+.related-item-desc{font-size:13px;color:var(--text-secondary);line-height:1.65}
 
 /* 底部 CTA */
-.cta-section{text-align:center;margin-top:48px;padding:36px 28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
-.cta-section p{font-size:17px;color:var(--text);margin-bottom:8px;line-height:1.6;font-weight:600}
-.cta-section p.sub{font-size:14px;color:var(--text-secondary);font-weight:400;margin-bottom:22px}
-.btn-primary{display:inline-block;background:var(--text);color:var(--bg);border:none;padding:14px 36px;border-radius:26px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
-.btn-primary:hover{background:var(--accent);color:var(--bg)}
+.cta-section{text-align:center;margin-top:52px;padding:40px 32px;background:linear-gradient(135deg,var(--coral),#E9A87C);border-radius:var(--radius);color:#fff;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:-50%;left:-20%;width:140%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.15) 0%,transparent 60%);pointer-events:none}
+.cta-section p{position:relative;z-index:1;font-size:21px;margin-bottom:8px;line-height:1.5;font-weight:700}
+.cta-section p.sub{position:relative;z-index:1;font-size:15px;font-weight:500;opacity:.95;margin-bottom:24px}
+.btn-primary{position:relative;z-index:1;display:inline-block;background:#fff;color:#C76A2A;border:none;padding:15px 40px;border-radius:30px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(139,70,30,.2)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(139,70,30,.3)}
 
 /* ===== 底部页脚 ===== */
-.page-footer{text-align:center;padding:40px 20px 50px;color:var(--text-tertiary);font-size:12.5px;border-top:1px solid var(--line);margin-top:20px}
-.page-footer p{margin:6px 0}
-.page-footer a{color:var(--text-secondary);text-decoration:none;transition:color .2s}
-.page-footer a:hover{color:var(--text)}
+.page-footer{text-align:center;padding:50px 24px 60px;color:var(--text-tertiary);font-size:13px;background:var(--bg-soft)}
+.page-footer p{margin:8px 0}
+.page-footer a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:color .2s}
+.page-footer a:hover{color:var(--coral)}
 
-/* ===== 微信浅色模式适配 ===== */
-@media(prefers-color-scheme:light){
-  :root{--bg:#fafafc;--surface:#fff;--surface-hover:#f5f5f8;--border:#e8e8ed;--line:#e8e8ed;--text:#1a1625;--text-secondary:#4a4458;--text-tertiary:#8a8498;--accent:#0d9488;--accent-soft:rgba(13,148,136,.08);--gold:#b45309;--gold-soft:rgba(180,83,9,.06)}
-  .top-nav{background:rgba(250,250,252,.92);border-bottom-color:var(--line)}
-  .article-header{border-bottom-color:var(--line)}
-  .lead-section{border-bottom-color:var(--line)}
-  .article-content h2{border-bottom-color:var(--line)}
-  .compare-table th{background:#f5f5f8}
-  .compare-table td{border-bottom-color:var(--line)}
-  .compare-table tr:hover td{background:rgba(0,0,0,.02)}
-  .related-item{background:#fff}
-  .related-item:hover{background:#fafafa}
-  .cta-section{background:#fff}
-  .page-footer{border-top-color:var(--line)}
-}
+/* 滚动显示动画 */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 
+<!-- 阅读进度条 -->
+<div class="read-progress" id="readProgress"></div>
+
 <!-- 顶部导航 -->
 <nav class="top-nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">BTI<span>·</span>文章</a>
+    <a href="index.html" class="nav-logo">BTI</a>
     <div class="nav-links">
       <a href="articles.html">文章</a>
       <a href="changelog.html">更新日志</a>
@@ -158,98 +200,79 @@ blockquote p{margin:0;font-size:17px;line-height:1.9;color:var(--text)}
   </div>
 </nav>
 
-<!-- 文章页头 -->
-<header class="article-header">
-  <div class="header-inner">
+<!-- Hero 头图区 -->
+<header class="hero">
+  <div class="hero-deco"></div>
+  <div class="hero-deco-2"></div>
+  <div class="hero-inner">
     <a href="articles.html" class="back-link">← 返回文章列表</a>
     <span class="article-tag">BTI 解析</span>
-    <h1 class="article-title">BTI 与 MBTI 有什么区别？为什么我们更关注「反差」</h1>
+    <h1 class="article-title">BTI 与 MBTI 有什么区别？<br><span>为什么我们更关注「反差」</span></h1>
     <div class="article-meta">
-      <span>2026-06-10</span>
+      <span>📅 2026-06-10</span>
       <span class="dot"></span>
-      <span>3,842 阅读</span>
+      <span>👁 3,842 阅读</span>
       <span class="dot"></span>
-      <span>6 分钟</span>
+      <span>⏱ 6 分钟</span>
     </div>
   </div>
 </header>
 
 <div class="page-wrap">
-  <!-- 导语 -->
-  <section class="lead-section">
-    <p class="lead-text">MBTI 回答「你是什么」，BTI 回答「你表面是什么，内心又是什么」。两种测试没有绝对的好坏，只是视角不同——一个是静态标签，一个是动态反差。</p>
-  </section>
+  <!-- 导语卡片 -->
+  <div class="lead-card">
+    <p class="lead-text">MBTI 回答「你是什么」，BTI 回答「你表面是什么，内心又是什么」。两种测试没有绝对的好坏，只是视角不同——一个是静态标签，一个是<em>动态反差</em>。</p>
+  </div>
 
   <!-- 正文 -->
   <article class="article-content">
-    <p>提到人格测试，很多人第一反应就是 MBTI。这四个字母几乎成了当代年轻人的社交名片：INTJ、ENFP、ISTP……我们在社交平台上熟练地交换着这些代码，仿佛它们能精准地概括一个人。</p>
+    <p class="fade-in">提到人格测试，很多人第一反应就是 MBTI。这四个字母几乎成了当代年轻人的社交名片：INTJ、ENFP、ISTP……我们在社交平台上熟练地交换着这些代码，仿佛它们能精准地概括一个人。</p>
 
-    <p>但一个值得思考的问题是：<strong>这些标签真的足够描述你吗？</strong></p>
+    <p class="fade-in">但一个值得思考的问题是：<strong>这些标签真的足够描述你吗？</strong></p>
 
-    <p>MBTI 确实能给你一个方向，但它更擅长回答「你是什么」。而 BTI 想回答的是另一个问题——<em>「你表面是什么，内心又是什么？」</em></p>
+    <p class="fade-in">MBTI 确实能给你一个方向，但它更擅长回答「你是什么」。而 BTI 想回答的是另一个问题——<strong style="color:var(--coral)">「你表面是什么，内心又是什么？」</strong></p>
 
-    <h2><span class="section-num">01</span>MBTI：给人格贴上一个稳定的标签</h2>
+    <h2 class="fade-in"><span class="section-num">01</span>MBTI：给人格贴上一个稳定的标签</h2>
 
-    <p>MBTI 的全称是 Myers-Briggs Type Indicator，基于荣格的心理类型理论，从四个维度把人分成 16 种类型：</p>
+    <p class="fade-in">MBTI 的全称是 Myers-Briggs Type Indicator，基于荣格的心理类型理论，从四个维度把人分成 16 种类型：</p>
 
-    <ul>
-      <li>精力来源：外向（E）/ 内向（I）</li>
-      <li>信息获取：实感（S）/ 直觉（N）</li>
-      <li>决策方式：思考（T）/ 情感（F）</li>
-      <li>生活态度：判断（J）/ 感知（P）</li>
-    </ul>
+    <div class="module-card module-coral fade-in">
+      <h4>🧩 MBTI 四维模型</h4>
+      <p><strong>精力来源：</strong>外向（E）/ 内向（I）</p>
+      <p><strong>信息获取：</strong>实感（S）/ 直觉（N）</p>
+      <p><strong>决策方式：</strong>思考（T）/ 情感（F）</p>
+      <p><strong>生活态度：</strong>判断（J）/ 感知（P）</p>
+    </div>
 
-    <p>MBTI 的核心假设是：人格类型相对稳定。测出来是 INTJ，那你大概率在大多数场景下都会表现出 INTJ 的特质。这种「稳定性」让 MBTI 很好记、很好传播，也特别适合作为社交破冰的话题。</p>
+    <p class="fade-in">MBTI 的核心假设是：人格类型相对稳定。测出来是 INTJ，那你大概率在大多数场景下都会表现出 INTJ 的特质。这种「稳定性」让 MBTI 很好记、很好传播，也特别适合作为社交破冰的话题。</p>
 
-    <div class="key-statement">
+    <div class="key-statement fade-in">
       MBTI 的价值在于：它提供了一套通用的「人格语言」，让我们能快速理解彼此的行为偏好。
     </div>
 
-    <p>但问题也在这里。人是复杂的。同一个人，在会议室和在家里、在亲密关系中和在职场中，表现可能完全不同。MBTI 用一个静态标签概括了所有这些动态变化，有时会让我们觉得「这个测试结果好像对，又好像不完全对」。</p>
+    <p class="fade-in">但问题也在这里。人是复杂的。同一个人，在会议室和在家里、在亲密关系中和在职场中，表现可能完全不同。MBTI 用一个静态标签概括了所有这些动态变化，有时会让我们觉得「这个测试结果好像对，又好像不完全对」。</p>
 
-    <h2><span class="section-num">02</span>BTI：关注的是「表面」与「内心」的落差</h2>
+    <h2 class="fade-in"><span class="section-num">02</span>BTI：关注的是「表面」与「内心」的落差</h2>
 
-    <p>BTI（Battle Type Indicator，反差人格测试）的设计出发点不是「你属于哪种类型」，而是「你的行为和内心之间有多大的反差」。</p>
+    <p class="fade-in">BTI（Battle Type Indicator，反差人格测试）的设计出发点不是「你属于哪种类型」，而是「你的行为和内心之间有多大的反差」。</p>
 
-    <p>我们相信：每个人在不同场景下都会戴上不同的「面具」。这个面具不是虚伪，而是适应环境的生存策略。问题在于，戴久了面具，很多人会慢慢忘记面具下面的自己长什么样。</p>
+    <p class="fade-in">我们相信：每个人在不同场景下都会戴上不同的「面具」。这个面具不是虚伪，而是适应环境的生存策略。问题在于，戴久了面具，很多人会慢慢忘记面具下面的自己长什么样。</p>
 
-    <p>BTI 用四个维度来描述这种反差：</p>
+    <div class="module-card module-sage fade-in">
+      <h4>🌿 BTI 四维模型</h4>
+      <p><strong>热力 / 冷力：</strong>情绪表达的外显程度，不是情绪强弱。</p>
+      <p><strong>外向 / 内向：</strong>社交场景中的能量来源，不是社交能力。</p>
+      <p><strong>理性 / 感性：</strong>决策时的优先取向，不是智商或情商。</p>
+      <p><strong>掌控 / 随性：</strong>对不确定性的容忍度，不是执行力高低。</p>
+    </div>
 
-    <table class="compare-table">
-      <tr>
-        <th>维度</th>
-        <th>一端</th>
-        <th>另一端</th>
-      </tr>
-      <tr>
-        <td>情绪表达</td>
-        <td>热力：外放、易感、情绪鲜明</td>
-        <td>冷力：内敛、稳定、情绪克制</td>
-      </tr>
-      <tr>
-        <td>社交模式</td>
-        <td>外向：从人群中获取能量</td>
-        <td>内向：从独处中恢复能量</td>
-      </tr>
-      <tr>
-        <td>决策风格</td>
-        <td>理性：重逻辑、看结果</td>
-        <td>感性：重感受、看关系</td>
-      </tr>
-      <tr>
-        <td>处事方式</td>
-        <td>掌控：计划、秩序、确定性</td>
-        <td>随性：灵活、开放、流动性</td>
-      </tr>
-    </table>
+    <p class="fade-in">测试结束后，BTI 会给出两个结果：一个是你的<strong>主人格</strong>，也就是你在日常社交中最常表现出的样子；另一个是你的<strong>隐藏人格</strong>，代表你内心深处、或者特定场景下才会释放的另一面。</p>
 
-    <p>测试结束后，BTI 会给出两个结果：一个是你的<strong>主人格</strong>，也就是你在日常社交中最常表现出的样子；另一个是你的<strong>隐藏人格</strong>，代表你内心深处、或者特定场景下才会释放的另一面。</p>
+    <h2 class="fade-in"><span class="section-num">03</span>核心区别：静态标签 vs 动态反差</h2>
 
-    <h2><span class="section-num">03</span>核心区别：静态标签 vs 动态反差</h2>
+    <p class="fade-in">用一个比喻来说：MBTI 像是给你拍了一张证件照，照片里的你是清晰的、固定的；BTI 则像是给你拍了一段短视频，既能看到你在镜头前的样子，也能看到你独处时不经意流露出的另一面。</p>
 
-    <p>用一个比喻来说：MBTI 像是给你拍了一张证件照，照片里的你是清晰的、固定的；BTI 则像是给你拍了一段短视频，既能看到你在镜头前的样子，也能看到你独处时不经意流露出的另一面。</p>
-
-    <table class="compare-table">
+    <table class="compare-table fade-in">
       <tr>
         <th>对比项</th>
         <th>MBTI</th>
@@ -277,36 +300,37 @@ blockquote p{margin:0;font-size:17px;line-height:1.9;color:var(--text)}
       </tr>
     </table>
 
-    <h2><span class="section-num">04</span>为什么「反差」更贴近真实人格？</h2>
+    <h2 class="fade-in"><span class="section-num">04</span>为什么「反差」更贴近真实人格？</h2>
 
-    <p>生活中我们经常会遇到这种矛盾：</p>
+    <p class="fade-in">生活中我们经常会遇到这种矛盾：</p>
 
-    <ul>
-      <li>工作上雷厉风行的人，私下其实很怕冲突；</li>
-      <li>朋友圈里活跃热闹的人，独处时反而很疲惫；</li>
-      <li>看起来随性洒脱的人，内心深处对秩序有强烈需求。</li>
-    </ul>
+    <div class="module-card module-gold fade-in">
+      <h4>🌅 常见的反差场景</h4>
+      <p>💼 工作上雷厉风行的人，私下其实很怕冲突；</p>
+      <p>🎉 朋友圈里活跃热闹的人，独处时反而很疲惫；</p>
+      <p>🎨 看起来随性洒脱的人，内心深处对秩序有强烈需求。</p>
+    </div>
 
-    <p>这些矛盾不是「人格不稳定」，而是<strong>同一个人在不同系统中的不同呈现</strong>。MBTI 可能会把这些人分别归类为某种类型，但 BTI 会直接指出：你的主人格和隐藏人格之间存在怎样的张力。</p>
+    <p class="fade-in">这些矛盾不是「人格不稳定」，而是<strong>同一个人在不同系统中的不同呈现</strong>。MBTI 可能会把这些人分别归类为某种类型，但 BTI 会直接指出：你的主人格和隐藏人格之间存在怎样的张力。</p>
 
-    <blockquote>
+    <blockquote class="fade-in">
       <p>这种张力有时候会带来内耗，但也常常是创造力的来源。很多艺术家、创业者、领导者，正是在「表面」与「内心」的拉扯中，找到了属于自己的独特路径。</p>
     </blockquote>
 
-    <h2><span class="section-num">05</span>BTI 的结果应该怎么用？</h2>
+    <h2 class="fade-in"><span class="section-num">05</span>BTI 的结果应该怎么用？</h2>
 
-    <p>BTI 不是给你贴标签，而是帮你识别自己的「默认模式」和「潜在模式」。</p>
+    <p class="fade-in">BTI 不是给你贴标签，而是帮你识别自己的「默认模式」和「潜在模式」。</p>
 
-    <div class="tip-box">
-      <div class="tip-box-title">💡 实用建议</div>
+    <div class="tip-box fade-in">
+      <div class="tip-box-title">实用建议</div>
       <p>如果你的主人格和隐藏人格反差很大，说明你平时消耗了较多能量在「扮演」上。你可以试着在安全的关系或独处时光里，给隐藏人格更多表达空间，减少长期的自我压抑。</p>
     </div>
 
-    <p>比如，一个「表面掌控、内心随性」的人，可能在工作中表现得非常有条理，但下班后完全不想做任何计划。这并不意味着他「分裂」，而是他需要一种平衡：用掌控感应对外部世界，用随性感恢复内心秩序。</p>
+    <p class="fade-in">比如，一个「表面掌控、内心随性」的人，可能在工作中表现得非常有条理，但下班后完全不想做任何计划。这并不意味着他「分裂」，而是他需要一种平衡：用掌控感应对外部世界，用随性感恢复内心秩序。</p>
 
-    <hr class="section-divider">
+    <div class="divider fade-in">✦ ✦ ✦</div>
 
-    <div class="summary-box">
+    <div class="summary-box fade-in">
       <h3>📝 总结</h3>
       <p>MBTI 和 BTI 都是认识自己的工具，但视角不同。</p>
       <p>MBTI 告诉你：「你是这样的。」BTI 告诉你：「你表面是这样，但内心深处也可能是那样。」</p>
@@ -316,13 +340,18 @@ blockquote p{margin:0;font-size:17px;line-height:1.9;color:var(--text)}
 
   <!-- 相关阅读 -->
   <section class="related-section">
-    <div class="related-title">继续阅读</div>
+    <div class="related-header">
+      <div class="related-title">🔥 继续阅读</div>
+      <a href="articles.html" class="related-more">查看全部 →</a>
+    </div>
     <div class="related-list">
       <a href="article-2.html" class="related-item">
+        <span class="related-item-tag">深度探索</span>
         <div class="related-item-title">隐藏人格揭秘：为什么每个人内心都住着另一个自己</div>
         <div class="related-item-desc">从荣格阴影理论出发，解读 BTI 8 种隐藏人格的形成机制。</div>
       </a>
       <a href="article-3.html" class="related-item">
+        <span class="related-item-tag">职场人格</span>
         <div class="related-item-title">职场面具与真实人格：你的工作人格是演出来的吗</div>
         <div class="related-item-desc">结合 BTI 四维模型，找到工作与自我的平衡点。</div>
       </a>
@@ -346,8 +375,31 @@ blockquote p{margin:0;font-size:17px;line-height:1.9;color:var(--text)}
     <a href="about.html">关于我们</a> ·
     <a href="privacy.html">隐私政策</a>
   </p>
-  <p>鄂ICP备2026026859号-1 · &copy; 2026 BTI 反差人格测试</p>
+  <p>鄂ICP备2026026859号-1 · &copy; 2026 BTI 反差人格测试 · 愿你被温柔理解</p>
 </footer>
+
+<script>
+// 阅读进度条
+window.addEventListener('scroll', function(){
+  var scrollTop = window.scrollY || document.documentElement.scrollTop;
+  var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('readProgress').style.width = progress + '%';
+});
+
+// 滚动显示动画
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, {threshold: 0.1});
+
+document.querySelectorAll('.fade-in').forEach(function(el){
+  observer.observe(el);
+});
+</script>
 
 </body>
 </html>

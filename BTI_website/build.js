@@ -95,7 +95,7 @@ function build() {
   console.log('[+] index.html 已更新（缓存清除时间戳：' + timestamp + '）');
 
   // 复制新增页面
-  const extraPages = ['types.html', 'about.html', 'privacy.html', 'articles.html', 'changelog.html', 'help.html', 'article-1.html'];
+  const extraPages = ['types.html', 'about.html', 'privacy.html', 'articles.html', 'changelog.html', 'help.html', 'article-1.html', 'article-2.html', 'article-3.html', 'article-4.html'];
   extraPages.forEach(page => {
     const srcPath = path.join(SRC_DIR, page);
     const dstPath = path.join(DIST_DIR, page);

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1a1625">
+<meta name="theme-color" content="#FFF8F0">
 <title>隐藏人格揭秘：为什么每个人内心都住着另一个自己</title>
 <meta name="description" content="BTI 测试最独特的设计是「隐藏人格」系统。本文从荣格阴影理论出发，解读 8 种隐藏人格的形成机制，以及如何将隐藏人格转化为个人成长的动力。">
 <meta property="og:title" content="隐藏人格揭秘：为什么每个人内心都住着另一个自己">
@@ -13,161 +13,262 @@
 <meta property="og:url" content="http://wangwangtt.top/bti/article-2.html">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1625;color:#f0eef6;min-height:100vh;line-height:1.8}
-.container{max-width:520px;margin:0 auto;padding:0 16px 40px}
+:root{
+  --bg:#FFF8F0;
+  --bg-soft:#FFF3E6;
+  --card:#FFFFFF;
+  --text:#2D2A26;
+  --text-secondary:#6B6560;
+  --text-tertiary:#9A9289;
+  --coral:#F4A261;
+  --coral-light:#FFF0E1;
+  --coral-soft:rgba(244,162,97,.12);
+  --gold:#E9C46A;
+  --gold-light:#FFF6E0;
+  --sage:#2A9D8F;
+  --sage-light:#E6F5F3;
+  --rose:#E07A5F;
+  --rose-light:#FCEAE6;
+  --lavender:#9B8AA5;
+  --lavender-light:#F3EFF5;
+  --shadow:0 4px 20px rgba(139,90,43,.08);
+  --shadow-hover:0 8px 32px rgba(139,90,43,.12);
+  --radius:24px;
+  --radius-sm:16px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;font-size:16px;line-height:1.85;min-height:100vh}
+a{color:inherit;text-decoration:none}
 
 /* ===== 顶部导航 ===== */
-.navbar{position:sticky;top:0;z-index:100;background:rgba(26,22,37,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 0}
-.nav-inner{max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.nav-logo{font-size:18px;font-weight:800;letter-spacing:.5px;background:linear-gradient(90deg,#a78bfa,#f472b6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-decoration:none}
-.nav-links{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.nav-links a{color:#d1d5db;font-size:13px;text-decoration:none;transition:all .2s;white-space:nowrap;padding:6px 8px;border-radius:8px}
-.nav-links a:hover{color:#a78bfa;background:rgba(167,139,250,.1)}
-@media(max-width:360px){.nav-links a{font-size:12px;padding:5px 6px}}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(255,248,240,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(244,162,97,.15)}
+.nav-inner{max-width:720px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
+.nav-logo::before{content:'🔮';font-size:20px}
+.nav-links{display:flex;gap:22px;align-items:center}
+.nav-links a{font-size:14px;color:var(--text-secondary);font-weight:500;transition:all .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--coral);border-radius:1px;transition:width .2s}
+.nav-links a:hover{color:var(--coral)}
+.nav-links a:hover::after{width:100%}
+@media(max-width:520px){.nav-links{gap:14px}.nav-links a{font-size:13px}}
 
-/* ===== 文章页头 ===== */
-.article-header{padding:36px 0 28px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:28px}
-.article-tag{display:inline-block;font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(255,215,0,.1);color:#ffeaa7;border:1px solid rgba(255,215,0,.25);margin-bottom:14px}
-.article-title{font-size:24px;font-weight:800;line-height:1.45;margin-bottom:16px;color:#f0eef6}
-.article-meta{display:flex;align-items:center;gap:14px;font-size:13px;color:#9ca3af;flex-wrap:wrap}
-.article-meta span{display:flex;align-items:center;gap:5px}
-.article-meta .dot{width:3px;height:3px;border-radius:50%;background:#6b7280}
+/* ===== Hero 头图区 ===== */
+.hero{position:relative;padding:64px 24px 48px;text-align:center;overflow:hidden;background:linear-gradient(160deg,var(--bg) 0%,var(--bg-soft) 50%,#FFEBD9 100%)}
+.hero-deco{position:absolute;top:40px;right:8%;width:120px;height:120px;background:radial-gradient(circle,var(--coral-soft) 0%,transparent 70%);border-radius:50%;animation:pulse 4s ease-in-out infinite}
+.hero-deco-2{position:absolute;bottom:60px;left:5%;width:80px;height:80px;background:radial-gradient(circle,rgba(233,196,106,.15) 0%,transparent 70%);border-radius:50%;animation:pulse 5s ease-in-out infinite reverse}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
+.hero-inner{position:relative;z-index:2;max-width:680px;margin:0 auto}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);margin-bottom:24px;padding:8px 16px;background:var(--card);border-radius:20px;box-shadow:var(--shadow);transition:all .2s}
+.back-link:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);color:var(--coral)}
+.article-tag{display:inline-block;font-size:12px;font-weight:700;padding:8px 18px;border-radius:30px;background:var(--coral-light);color:#D4823A;margin-bottom:20px}
+.article-title{font-size:34px;font-weight:800;line-height:1.3;margin-bottom:22px;color:var(--text);letter-spacing:-.5px}
+.article-title span{color:var(--coral)}
+.article-meta{display:flex;align-items:center;justify-content:center;gap:20px;font-size:14px;color:var(--text-secondary);flex-wrap:wrap}
+.article-meta span{display:flex;align-items:center;gap:6px}
+.article-meta .dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+@media(max-width:520px){.article-title{font-size:26px}.hero{padding:48px 20px 36px}}
+
+/* ===== 页面容器 ===== */
+.page-wrap{max-width:720px;margin:0 auto;padding:0 24px 70px}
+
+/* ===== 导语卡片 ===== */
+.lead-card{position:relative;margin-top:-24px;margin-bottom:40px;padding:32px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);z-index:3}
+.lead-card::before{content:'"';position:absolute;top:16px;left:20px;font-size:64px;color:var(--coral);opacity:.2;font-family:Georgia,serif;line-height:1}
+.lead-text{position:relative;z-index:1;font-size:18px;line-height:1.95;color:var(--text);font-weight:500}
+.lead-text em{color:var(--coral);font-style:normal;font-weight:700}
+
+/* ===== 阅读进度条 ===== */
+.read-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--coral),var(--gold));z-index:200;width:0%;transition:width .1s}
 
 /* ===== 正文 ===== */
-.article-content{font-size:15px;color:#e2ddf0}
-.article-content p{margin-bottom:18px}
-.article-content h2{font-size:18px;font-weight:700;color:#a78bfa;margin:32px 0 14px;padding-left:12px;border-left:3px solid #a78bfa}
-.article-content h3{font-size:16px;font-weight:700;color:#f0eef6;margin:24px 0 10px}
-.article-content ul,.article-content ol{margin:0 0 18px 20px}
-.article-content li{margin-bottom:8px}
-.article-content strong{color:#ffd700;font-weight:600}
-.article-content em{color:#f472b6;font-style:normal}
+.article-content{font-size:16.5px;color:var(--text-secondary)}
+.article-content p{margin-bottom:24px}
+.article-content h2{font-size:22px;font-weight:800;color:var(--text);margin:48px 0 22px;display:flex;align-items:center;gap:14px}
+.article-content h2 .section-num{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:var(--coral);color:#fff;border-radius:12px;font-size:14px;font-weight:800;flex-shrink:0;box-shadow:0 4px 12px rgba(244,162,97,.3)}
+.article-content h3{font-size:18px;font-weight:700;color:var(--text);margin:32px 0 14px}
+.article-content ul,.article-content ol{margin:0 0 24px 28px}
+.article-content li{margin-bottom:12px;padding-left:6px}
+.article-content li::marker{color:var(--coral)}
+.article-content strong{color:var(--text);font-weight:700}
+.article-content a{color:var(--coral);text-decoration:underline;text-underline-offset:4px;font-weight:600}
 
-/* 引用块 */
-.quote-box{margin:24px 0;padding:18px 20px;background:rgba(167,139,250,.08);border-radius:12px;border-left:4px solid #a78bfa}
-.quote-box p{margin:0;font-size:15px;color:#e2ddf0;font-style:italic}
+/* 彩色模块卡片 */
+.module-card{margin:28px 0;padding:26px;border-radius:var(--radius-sm);position:relative;overflow:hidden}
+.module-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.module-card h4{font-size:16px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.module-card p{margin:0 0 12px;font-size:15.5px;line-height:1.85}
+.module-card p:last-child{margin-bottom:0}
 
-/* 隐藏人格列表 */
+.module-coral{background:var(--coral-light)}
+.module-coral::before{background:var(--coral)}
+.module-coral h4{color:#C76A2A}
+
+.module-gold{background:var(--gold-light)}
+.module-gold::before{background:var(--gold)}
+.module-gold h4{color:#B8932F}
+
+.module-sage{background:var(--sage-light)}
+.module-sage::before{background:var(--sage)}
+.module-sage h4{color:#1F7A70}
+
+.module-rose{background:var(--rose-light)}
+.module-rose::before{background:var(--rose)}
+.module-rose h4{color:#B85A42}
+
+.module-lavender{background:var(--lavender-light)}
+.module-lavender::before{background:var(--lavender)}
+.module-lavender h4{color:#7A6A82}
+
+/* 兼容旧文章中的卡片类名 */
+.quote-box{margin:36px 0;padding:28px 32px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);position:relative}
+.quote-box::before{content:'"';position:absolute;top:12px;left:18px;font-size:56px;color:var(--coral);opacity:.25;font-family:Georgia,serif;line-height:1}
+.quote-box p{margin:0;font-size:17px;line-height:1.9;color:var(--text);font-weight:500;position:relative;z-index:1;font-style:italic}
+
 .hidden-list{margin:20px 0}
-.hidden-item{margin-bottom:16px;padding:16px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.06)}
-.hidden-item h4{font-size:15px;font-weight:700;color:#ffd700;margin-bottom:8px}
-.hidden-item p{margin:0;font-size:14px;color:#e2ddf0;line-height:1.7}
+.hidden-item{margin-bottom:16px;padding:22px 24px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);border-left:4px solid var(--sage)}
+.hidden-item h4{font-size:16px;font-weight:800;color:#1F7A70;margin-bottom:10px}
+.hidden-item p{margin:0;font-size:15px;color:var(--text-secondary);line-height:1.8}
+
+.work-card{margin:16px 0;padding:22px 24px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);border-left:4px solid var(--coral)}
+.work-card h4{font-size:16px;font-weight:800;color:#C76A2A;margin-bottom:12px}
+.work-card p{margin:0 0 10px;font-size:15px;color:var(--text-secondary);line-height:1.8}
+.work-card p:last-child{margin-bottom:0}
+
+.love-card{margin:16px 0;padding:22px 24px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);border-left:4px solid var(--rose)}
+.love-card h4{font-size:16px;font-weight:800;color:#B85A42;margin-bottom:12px}
+.love-card p{margin:0 0 10px;font-size:15px;color:var(--text-secondary);line-height:1.8}
+.love-card p:last-child{margin-bottom:0}
+
+/* 关键句 */
+.key-statement{font-size:20px;line-height:1.8;color:var(--text);font-weight:700;margin:36px 0;padding:28px 32px;background:linear-gradient(135deg,var(--coral-light),var(--gold-light));border-radius:var(--radius);text-align:center;box-shadow:var(--shadow)}
 
 /* 提示框 */
-.tip-box{margin:22px 0;padding:16px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15);border-radius:12px}
-.tip-box-title{font-size:14px;font-weight:700;color:#ffd700;margin-bottom:8px}
-.tip-box p{margin:0;color:#e2ddf0;font-size:14px}
+.tip-box{margin:32px 0;padding:24px 26px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);border:2px solid var(--gold-light);position:relative;padding-left:64px}
+.tip-box::before{content:'💡';position:absolute;left:22px;top:22px;font-size:26px}
+.tip-box-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:10px}
+.tip-box p{margin:0;color:var(--text-secondary);font-size:15px;line-height:1.8}
+
+/* 总结区 */
+.summary-box{margin:44px 0;padding:32px;background:linear-gradient(135deg,#FFF0E1,#E6F5F3);border-radius:var(--radius);position:relative;overflow:hidden}
+.summary-box::after{content:'✦';position:absolute;bottom:-20px;right:10px;font-size:120px;color:rgba(244,162,97,.08);font-weight:800;line-height:1}
+.summary-box h3{font-size:18px;font-weight:800;color:var(--text);margin:0 0 16px;display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.summary-box p{margin:0 0 14px;color:var(--text-secondary);font-size:15.5px;line-height:1.85;position:relative;z-index:1}
+.summary-box p:last-child{margin-bottom:0}
+
+/* 小装饰 */
+.divider{text-align:center;margin:44px 0;color:var(--gold);font-size:20px;letter-spacing:8px}
+
+/* 相关阅读 */
+.related-section{margin-top:56px;padding-top:36px;border-top:2px dashed rgba(244,162,97,.25)}
+.related-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.related-title{font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px}
+.related-more{font-size:13px;color:var(--coral);font-weight:600}
+.related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.related-item{display:block;padding:22px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow);transition:all .25s;border:2px solid transparent}
+.related-item:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--coral-light)}
+.related-item-tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;background:var(--coral-light);color:#C76A2A;margin-bottom:10px;display:inline-block}
+.related-item-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.5}
+.related-item-desc{font-size:13px;color:var(--text-secondary);line-height:1.65}
 
 /* 底部 CTA */
-.cta-section{text-align:center;margin-top:36px;padding:26px 20px;background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(244,114,182,.06));border:1px solid rgba(167,139,250,.15);border-radius:16px}
-.cta-section p{font-size:15px;color:#d1d5db;margin-bottom:16px;line-height:1.6}
-.cta-section p strong{color:#a78bfa}
-.btn-home{background:linear-gradient(135deg,#a78bfa,#8b5cf6);color:#fff;border:none;padding:14px 40px;border-radius:28px;font-size:15px;cursor:pointer;font-weight:bold;transition:all .2s;box-shadow:0 4px 15px rgba(167,139,250,.3);text-decoration:none;display:inline-block}
-.btn-home:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(167,139,250,.4)}
+.cta-section{text-align:center;margin-top:52px;padding:40px 32px;background:linear-gradient(135deg,var(--coral),#E9A87C);border-radius:var(--radius);color:#fff;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:-50%;left:-20%;width:140%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.15) 0%,transparent 60%);pointer-events:none}
+.cta-section p{position:relative;z-index:1;font-size:21px;margin-bottom:8px;line-height:1.5;font-weight:700}
+.cta-section p.sub{position:relative;z-index:1;font-size:15px;font-weight:500;opacity:.95;margin-bottom:24px}
+.btn-primary{position:relative;z-index:1;display:inline-block;background:#fff;color:#C76A2A;border:none;padding:15px 40px;border-radius:30px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(139,70,30,.2)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(139,70,30,.3)}
 
-/* ===== 页脚 ===== */
-.page-footer{text-align:center;padding:30px 16px 40px;border-top:1px solid rgba(255,255,255,.06);margin-top:32px}
-.footer-links{margin-bottom:10px}
-.footer-links a{color:#a78bfa;text-decoration:none;margin:0 8px;font-size:13px;transition:color .2s}
-.footer-links a:hover{color:#c4b5fd}
-.footer-icp{font-size:12px;color:#6b7280}
-.footer-icp a{color:#6b7280;text-decoration:none}
-.footer-copyright{font-size:12px;color:#4b5563;margin-top:8px}
+/* ===== 底部页脚 ===== */
+.page-footer{text-align:center;padding:50px 24px 60px;color:var(--text-tertiary);font-size:13px;background:var(--bg-soft)}
+.page-footer p{margin:8px 0}
+.page-footer a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:color .2s}
+.page-footer a:hover{color:var(--coral)}
 
-/* ===== 微信浅色模式适配 ===== */
-@media (prefers-color-scheme: light) {
-  body{background:#fafafc;color:#1f2937}
-  .navbar{background:rgba(250,250,252,.92);border-bottom-color:rgba(0,0,0,.06)}
-  .nav-links a{color:#4b5563}
-  .nav-links a:hover{color:#7c3aed;background:rgba(167,139,250,.1)}
-  .article-header{border-bottom-color:rgba(0,0,0,.08)}
-  .article-title{color:#1f2937}
-  .article-meta{color:#6b7280}
-  .article-content{color:#374151}
-  .article-content h2{color:#7c3aed;border-left-color:#7c3aed}
-  .article-content h3{color:#1f2937}
-  .quote-box{background:rgba(167,139,250,.06);border-left-color:#7c3aed}
-  .quote-box p{color:#374151}
-  .hidden-item{background:#fff;border-color:rgba(0,0,0,.06)}
-  .hidden-item p{color:#4b5563}
-  .tip-box{background:rgba(255,215,0,.05);border-color:rgba(255,215,0,.2)}
-  .tip-box-title{color:#d97706}
-  .tip-box p{color:#374151}
-  .cta-section{background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(244,114,182,.06));border-color:rgba(167,139,250,.2)}
-  .cta-section p{color:#4b5563}
-  .page-footer{border-top-color:rgba(0,0,0,.06)}
-  .footer-icp,.footer-copyright{color:#6b7280}
-}
+/* 滚动显示动画 */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 
+<!-- 阅读进度条 -->
+<div class="read-progress" id="readProgress"></div>
+
 <!-- 顶部导航 -->
-<nav class="navbar">
+<nav class="top-nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">BTI</a>
     <div class="nav-links">
       <a href="articles.html">文章</a>
       <a href="changelog.html">更新日志</a>
       <a href="help.html">帮助</a>
-      <a href="about.html">关于我们</a>
-      <a href="privacy.html">隐私政策</a>
+      <a href="about.html">关于</a>
     </div>
   </div>
 </nav>
 
-<div class="container">
-  <!-- 文章页头 -->
-  <header class="article-header">
+<!-- Hero 头图区 -->
+<header class="hero">
+  <div class="hero-deco"></div>
+  <div class="hero-deco-2"></div>
+  <div class="hero-inner">
+    <a href="articles.html" class="back-link">← 返回文章列表</a>
     <span class="article-tag">深度探索</span>
-    <h1 class="article-title">隐藏人格揭秘：为什么每个人内心都住着另一个自己</h1>
+    <h1 class="article-title">隐藏人格揭秘：<br><span>为什么每个人内心都住着另一个自己</span></h1>
     <div class="article-meta">
-      <span>📅 2026-05-28</span>
+      <span>📅 2026-06-17</span>
       <span class="dot"></span>
       <span>👁 6,431 阅读</span>
       <span class="dot"></span>
-      <span>⏱ 约 7 分钟</span>
+      <span>⏱ 7 分钟</span>
     </div>
-  </header>
+  </div>
+</header>
+
+<div class="page-wrap">
+  <!-- 导语卡片 -->
+  <div class="lead-card">
+    <p class="lead-text">主人格是你在社会中学会扮演的角色，隐藏人格是你内心深处真实的渴望。BTI 不是给你贴更多标签，而是帮你更<em>完整地理解自己</em>。</p>
+  </div>
 
   <!-- 正文 -->
   <article class="article-content">
-    <p>你有没有过这种体验：明明平时很外向，某个瞬间却突然只想一个人待着；或者平日里理性冷静，遇到某个人、某件事时，情绪却像决堤一样失控。</p>
+    <p class="fade-in">你有没有过这种体验：明明平时很外向，某个瞬间却突然只想一个人待着；或者平日里理性冷静，遇到某个人、某件事时，情绪却像决堤一样失控。</p>
 
-    <p>这些「不像我」的时刻，其实并不是你变了，而是你内心深处的<strong>隐藏人格</strong>在说话。</p>
+    <p class="fade-in">这些「不像我」的时刻，其实并不是你变了，而是你内心深处的<strong>隐藏人格</strong>在说话。</p>
 
-    <h2>一、什么是隐藏人格？</h2>
+    <h2 class="fade-in"><span class="section-num">01</span>什么是隐藏人格？</h2>
 
-    <p>在 BTI 测试中，完成 16 道常规题目后，你会得到一个<strong>主人格</strong>。但如果你答对了额外的一道隐藏题，就会解锁一个与主人格截然相反的<strong>隐藏人格</strong>。</p>
+    <p class="fade-in">在 BTI 测试中，完成 16 道常规题目后，你会得到一个<strong>主人格</strong>。但如果你答对了额外的一道隐藏题，就会解锁一个与主人格截然相反的<strong>隐藏人格</strong>。</p>
 
-    <p>这不是简单的「另一面」。隐藏人格代表了你潜意识中被压抑、被忽视，或者尚未充分发展的特质。它可能是你成长环境塑造的防御机制，也可能是你内心真正渴望成为的样子。</p>
+    <p class="fade-in">这不是简单的「另一面」。隐藏人格代表了你潜意识中被压抑、被忽视，或者尚未充分发展的特质。它可能是你成长环境塑造的防御机制，也可能是你内心真正渴望成为的样子。</p>
 
-    <div class="quote-box">
+    <blockquote class="quote-box fade-in">
       <p>主人格是你在社会中学会扮演的角色，隐藏人格是你内心深处真实的渴望。</p>
-    </div>
+    </blockquote>
 
-    <p>比如，一个在工作中总是照顾别人情绪、努力维持和谐的「热力型」人格，内心可能住着一个疲惫的「冷力型」人格——它渴望被照顾，渴望不必一直微笑。</p>
+    <p class="fade-in">比如，一个在工作中总是照顾别人情绪、努力维持和谐的「热力型」人格，内心可能住着一个疲惫的「冷力型」人格——它渴望被照顾，渴望不必一直微笑。</p>
 
-    <h2>二、隐藏人格的心理学基础</h2>
+    <h2 class="fade-in"><span class="section-num">02</span>隐藏人格的心理学基础</h2>
 
-    <p>瑞士心理学家荣格提出过「阴影」（Shadow）的概念：每个人的人格中都有一些被自己或社会认为「不合适」的部分，我们会有意无意地把它们压抑到潜意识中。</p>
+    <p class="fade-in">瑞士心理学家荣格提出过「阴影」（Shadow）的概念：每个人的人格中都有一些被自己或社会认为「不合适」的部分，我们会有意无意地把它们压抑到潜意识中。</p>
 
-    <p>这些被压抑的部分不会消失，它们会以各种方式重新出现：</p>
+    <p class="fade-in">这些被压抑的部分不会消失，它们会以各种方式重新出现：</p>
 
-    <ul>
+    <ul class="fade-in">
       <li>在梦里，你变成了完全不同的人</li>
       <li>在亲密关系中，你暴露出平时不会展现的一面</li>
       <li>在压力状态下，你做出让自己都惊讶的决定</li>
       <li>在某些人面前，你突然变得不像平时的自己</li>
     </ul>
 
-    <p>BTI 的隐藏人格系统，就是用更通俗、更可操作的方式，把这种心理学现象呈现出来。它不是算命，而是一面镜子，让你看到自己平时看不到的部分。</p>
+    <p class="fade-in">BTI 的隐藏人格系统，就是用更通俗、更可操作的方式，把这种心理学现象呈现出来。它不是算命，而是一面镜子，让你看到自己平时看不到的部分。</p>
 
-    <h2>三、BTI 的 8 种隐藏人格</h2>
+    <h2 class="fade-in"><span class="section-num">03</span>BTI 的 8 种隐藏人格</h2>
 
-    <p>BTI 的隐藏人格基于四个维度的极端反差。如果你的主人格偏向某一端，隐藏人格就会出现在另一端：</p>
+    <p class="fade-in">BTI 的隐藏人格基于四个维度的极端反差。如果你的主人格偏向某一端，隐藏人格就会出现在另一端：</p>
 
-    <div class="hidden-list">
+    <div class="hidden-list fade-in">
       <div class="hidden-item">
         <h4>🔥 极端热力型 / 🧊 极端冷力型</h4>
         <p>平时外放的人，隐藏面可能是极度内敛；平时克制的人，隐藏面可能藏着强烈的情绪火山。</p>
@@ -186,68 +287,113 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
 
-    <p>每个人只会在 8 种隐藏人格中解锁一种，但它足够说明问题：<strong>你远比自己以为的更丰富。</strong></p>
+    <div class="key-statement fade-in">
+      每个人只会在 8 种隐藏人格中解锁一种，但它足够说明问题：你远比自己以为的更丰富。
+    </div>
 
-    <h2>四、隐藏人格是怎么形成的？</h2>
+    <h2 class="fade-in"><span class="section-num">04</span>隐藏人格是怎么形成的？</h2>
 
-    <p>隐藏人格通常来自三种力量的共同作用：</p>
+    <p class="fade-in">隐藏人格通常来自三种力量的共同作用：</p>
 
-    <h3>1. 成长环境的塑造</h3>
-    <p>如果你从小被教育「要懂事」「不要哭」，你可能会把感性、脆弱的一面压到心底，发展出一个理性、克制的主人格外壳。但那个被压下去的感性部分，就成了你的隐藏人格。</p>
+    <h3 class="fade-in">1. 成长环境的塑造</h3>
+    <p class="fade-in">如果你从小被教育「要懂事」「不要哭」，你可能会把感性、脆弱的一面压到心底，发展出一个理性、克制的主人格外壳。但那个被压下去的感性部分，就成了你的隐藏人格。</p>
 
-    <h3>2. 社会角色的要求</h3>
-    <p>职场要求你专业、理性，家庭要求你温柔、体贴。为了扮演好这些角色，你会不断强化某些特质，同时弱化另一些。被弱化的那些特质不会消失，它们会转入地下。</p>
+    <h3 class="fade-in">2. 社会角色的要求</h3>
+    <p class="fade-in">职场要求你专业、理性，家庭要求你温柔、体贴。为了扮演好这些角色，你会不断强化某些特质，同时弱化另一些。被弱化的那些特质不会消失，它们会转入地下。</p>
 
-    <h3>3. 自我保护的需要</h3>
-    <p>有时候，隐藏人格是一种保护。一个经历过背叛的人，可能会把信任的能力隐藏起来，用冷漠和防备面对世界。那个「愿意信任」的自己，就住在了隐藏人格里。</p>
+    <h3 class="fade-in">3. 自我保护的需要</h3>
+    <p class="fade-in">有时候，隐藏人格是一种保护。一个经历过背叛的人，可能会把信任的能力隐藏起来，用冷漠和防备面对世界。那个「愿意信任」的自己，就住在了隐藏人格里。</p>
 
-    <h2>五、发现隐藏人格有什么用？</h2>
+    <h2 class="fade-in"><span class="section-num">05</span>发现隐藏人格有什么用？</h2>
 
-    <p>知道自己的隐藏人格，不是为了给自己贴更多标签，而是为了更完整地理解自己。</p>
+    <p class="fade-in">知道自己的隐藏人格，不是为了给自己贴更多标签，而是为了更完整地理解自己。</p>
 
-    <p>它的价值至少体现在三个方面：</p>
+    <p class="fade-in">它的价值至少体现在三个方面：</p>
 
-    <ul>
+    <ul class="fade-in">
       <li><strong>减少内耗：</strong>当你发现自己「不像自己」的时候，不再恐慌，而是知道这是隐藏人格在表达需求。</li>
       <li><strong>改善关系：</strong>理解自己的隐藏面，也能更好地理解伴侣、朋友、家人的反差行为。</li>
       <li><strong>个人成长：</strong>隐藏人格里往往藏着你被忽视的天赋和渴望，适当接纳它，能让你变得更完整。</li>
     </ul>
 
-    <div class="tip-box">
-      <div class="tip-box-title">💡 接纳隐藏人格，不等于放纵它</div>
+    <div class="tip-box fade-in">
+      <div class="tip-box-title">接纳隐藏人格，不等于放纵它</div>
       <p>隐藏人格里可能有冲动、脆弱、攻击性等不那么「体面」的部分。我们的目标不是让它完全掌控行为，而是承认它的存在，给它一个被看见的机会。</p>
     </div>
 
-    <h2>六、写在最后</h2>
+    <h2 class="fade-in"><span class="section-num">06</span>写在最后</h2>
 
-    <p>人格测试最有价值的地方，从来不是告诉你「你是什么」，而是提醒你：<strong>你不是只有一个样子。</strong></p>
+    <p class="fade-in">人格测试最有价值的地方，从来不是告诉你「你是什么」，而是提醒你：<strong>你不是只有一个样子。</strong></p>
 
-    <p>主人格是你在这个世界上的名片，隐藏人格是你内心深处未被签收的快递。BTI 帮你把它找回来，至于要不要拆开、怎么使用，那是你的选择。</p>
+    <p class="fade-in">主人格是你在这个世界上的名片，隐藏人格是你内心深处未被签收的快递。BTI 帮你把它找回来，至于要不要拆开、怎么使用，那是你的选择。</p>
 
-    <div class="quote-box">
+    <blockquote class="quote-box fade-in">
       <p>真正的成熟，不是活成某一种人格，而是学会让表面的自己和内心的自己和平共处。</p>
-    </div>
+    </blockquote>
   </article>
 
+  <!-- 相关阅读 -->
+  <section class="related-section">
+    <div class="related-header">
+      <div class="related-title">🔥 继续阅读</div>
+      <a href="articles.html" class="related-more">查看全部 →</a>
+    </div>
+    <div class="related-list">
+      <a href="article-3.html" class="related-item">
+        <span class="related-item-tag">职场人格</span>
+        <div class="related-item-title">职场面具与真实人格：你的工作人格是演出来的吗</div>
+        <div class="related-item-desc">结合 BTI 四维模型，找到工作与自我的平衡点。</div>
+      </a>
+      <a href="article-4.html" class="related-item">
+        <span class="related-item-tag">恋爱人格</span>
+        <div class="related-item-title">恋爱中的人格反差：为什么你在喜欢的人面前判若两人</div>
+        <div class="related-item-desc">分析恋爱场景下人格反差的心理机制与应对建议。</div>
+      </a>
+    </div>
+  </section>
+
   <!-- 底部 CTA -->
-  <div class="cta-section">
-    <p>想解锁你的隐藏人格？<br><strong>16 题测出你的主人格与隐藏人格</strong></p>
-    <a href="index.html" class="btn-home">开始测试 →</a>
-  </div>
+  <section class="cta-section">
+    <p>想解锁你的隐藏人格？</p>
+    <p class="sub">16 题测出你的主人格与隐藏人格</p>
+    <a href="index.html" class="btn-primary">开始测试 →</a>
+  </section>
 </div>
 
 <!-- 页脚 -->
 <footer class="page-footer">
-  <div class="footer-links">
-    <a href="index.html">首页</a>
-    <a href="types.html">人格图鉴</a>
-    <a href="articles.html">文章</a>
-    <a href="about.html">关于我们</a>
+  <p>
+    <a href="index.html">首页</a> ·
+    <a href="types.html">人格图鉴</a> ·
+    <a href="articles.html">文章</a> ·
+    <a href="about.html">关于我们</a> ·
     <a href="privacy.html">隐私政策</a>
-  </div>
-  <div class="footer-icp">鄂ICP备2026026859号-1</div>
-  <div class="footer-copyright">&copy; 2026 BTI 反差人格测试 · 发现隐藏的你</div>
+  </p>
+  <p>鄂ICP备2026026859号-1 · &copy; 2026 BTI 反差人格测试 · 愿你被温柔理解</p>
 </footer>
+
+<script>
+// 阅读进度条
+window.addEventListener('scroll', function(){
+  var scrollTop = window.scrollY || document.documentElement.scrollTop;
+  var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('readProgress').style.width = progress + '%';
+});
+
+// 滚动显示动画
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, {threshold: 0.1});
+
+document.querySelectorAll('.fade-in').forEach(function(el){
+  observer.observe(el);
+});
+</script>
 
 </body>
 </html>

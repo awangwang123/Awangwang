@@ -184,6 +184,19 @@ a{color:inherit;text-decoration:none}
 .page-footer a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:color .2s}
 .page-footer a:hover{color:var(--coral)}
 
+/* 书籍推荐模块 */
+.book-recommend{margin:48px 0;padding:28px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:2px solid var(--coral-light)}
+.book-rec-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.book-card{display:flex;gap:18px;align-items:flex-start;margin-bottom:20px}
+.book-cover{width:72px;height:96px;background:linear-gradient(135deg,var(--coral-light),var(--gold-light));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;box-shadow:var(--shadow)}
+.book-info{flex:1}
+.book-name{font-size:17px;font-weight:800;color:var(--text);margin-bottom:4px}
+.book-author{font-size:13px;color:var(--text-tertiary);margin-bottom:8px}
+.book-desc{font-size:14px;color:var(--text-secondary);line-height:1.7}
+.book-buy-btn{display:block;width:100%;text-align:center;padding:14px;background:linear-gradient(135deg,var(--coral),#E9A87C);color:#fff;border-radius:30px;font-size:15px;font-weight:800;transition:all .2s;box-shadow:0 4px 14px rgba(244,162,97,.3)}
+.book-buy-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(244,162,97,.4)}
+@media(max-width:520px){.book-card{gap:14px}.book-cover{width:60px;height:80px;font-size:28px}}
+
 /* 滚动显示动画 */
 .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
 .fade-in.visible{opacity:1;transform:translateY(0)}
@@ -331,6 +344,20 @@ a{color:inherit;text-decoration:none}
       <p>真正的成熟，不是活成某一种人格，而是学会让表面的自己和内心的自己和平共处。</p>
     </blockquote>
   </article>
+
+  <!-- 书籍推荐 -->
+  <div class="book-recommend fade-in">
+    <div class="book-rec-title">📚 读完这篇，你可能会喜欢</div>
+    <div class="book-card">
+      <div class="book-cover">📖</div>
+      <div class="book-info">
+        <div class="book-name">《荣格心理学入门》</div>
+        <div class="book-author">河合隼雄 著</div>
+        <div class="book-desc">从荣格的阴影、原型与自性出发，带你理解隐藏人格与潜意识的语言。</div>
+      </div>
+    </div>
+    <a href="https://s.click.taobao.com/placeholder_article2" class="book-buy-btn" target="_blank" rel="noopener">去淘宝购买 →</a>
+  </div>
 
   <!-- 相关阅读 -->
   <section class="related-section">

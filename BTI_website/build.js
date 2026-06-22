@@ -84,11 +84,18 @@ function build() {
   copyDir(path.join(SRC_DIR, 'images'), path.join(DIST_DIR, 'images'));
   console.log('[+] 图片资源已复制');
 
+  // 复制第三方库
+  if (fs.existsSync(path.join(SRC_DIR, 'libs'))) {
+    copyDir(path.join(SRC_DIR, 'libs'), path.join(DIST_DIR, 'libs'));
+    console.log('[+] 第三方库已复制');
+  }
+
   // 处理 index.html：添加缓存清除时间戳
   let html = fs.readFileSync(path.join(SRC_DIR, 'index.html'), 'utf8');
   html = html.replace(/styles\.css/g, 'styles.css?v=' + timestamp);
   html = html.replace(/data\.js/g, 'data.js?v=' + timestamp);
   html = html.replace(/app\.js/g, 'app.js?v=' + timestamp);
+  html = html.replace(/libs\/html2canvas\.min\.js/g, 'libs/html2canvas.min.js?v=' + timestamp);
   // 更新版本号（支持 v3.6 / v3.10.3 / v3.10.10.10 任意段数）
   html = html.replace(/(<title>.*?BTI 反差人格测试 )v[0-9]+(?:\.[0-9]+)*/, '$1' + version);
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), html);

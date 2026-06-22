@@ -6,6 +6,10 @@
 <title>BTI 人格图鉴 - 你的专属人格详情</title>
 <meta name="theme-color" content="#1a1625">
 <link rel="stylesheet" href="styles.css">
+<script>
+// 标记用户是从人格图鉴页进入/返回首页，用于首页恢复结果页
+try { sessionStorage.setItem('bti_from_types', '1'); } catch(e) {}
+</script>
 <style>
   :root{
     --bg:#1a1625;

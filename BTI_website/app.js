@@ -333,12 +333,18 @@ function showResult(scores, isRestoring) {
   // 重置翻转
   if(flipCardInner) flipCardInner.classList.remove('flipped');
   
-  // 处理图片路径：Windows绝对路径添加file:///前缀
+  // 处理图片路径：Windows绝对路径添加file:///前缀；相对路径转为绝对路径，避免部分浏览器/微信解析异常
   function fixImgPath(p){
     if(!p) return p;
     p = p.replace(/\\/g,'/');
     if(/^\w:\//.test(p) && !p.startsWith('file:///')){
       p = 'file:///' + p;
+    }
+    // 相对路径转为绝对路径
+    if(p && !p.startsWith('http') && !p.startsWith('file:///') && !p.startsWith('/')){
+      var base = window.location.href.split('?')[0].split('#')[0];
+      if(!base.endsWith('/')) base = base.substring(0, base.lastIndexOf('/') + 1);
+      p = base + p;
     }
     return p;
   }
@@ -1233,6 +1239,15 @@ if(typeof checkInvite === 'function') checkInvite();
 
 // 从图鉴页返回时恢复结果页
 (function restoreResult(){
+  // 只有从人格图鉴页返回时才自动恢复结果；直接打开首页不恢复
+  var fromTypes = false;
+  try { fromTypes = sessionStorage.getItem('bti_from_types') === '1'; } catch(e) {}
+  if(!fromTypes){
+    try { fromTypes = document.referrer && document.referrer.indexOf('types.html') !== -1; } catch(e) {}
+  }
+  if(!fromTypes) return;
+  try { sessionStorage.removeItem('bti_from_types'); } catch(e) {}
+
   var restored = false;
   try {
     var savedCode = sessionStorage.getItem('bti_result_code') || localStorage.getItem('bti_result_code');

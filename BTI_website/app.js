@@ -1245,7 +1245,11 @@ if(typeof checkInvite === 'function') checkInvite();
   if(!fromTypes){
     try { fromTypes = document.referrer && document.referrer.indexOf('types.html') !== -1; } catch(e) {}
   }
-  if(!fromTypes) return;
+  if(!fromTypes){
+    // 不是从图鉴页返回，直接显示首页，移除预隐藏样式
+    try { document.documentElement.classList.remove('bti-restoring'); } catch(e) {}
+    return;
+  }
   try { sessionStorage.removeItem('bti_from_types'); } catch(e) {}
 
   var restored = false;
